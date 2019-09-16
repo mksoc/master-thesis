@@ -1,0 +1,60 @@
+\documentclass[%
+corpo=12pt,
+tipotesi=magistrale,
+%libro,
+twoside
+]{toptesi}
+
+% Frontespizio in inglese
+\CorsoDiLaureaIn{Master's Degree in}
+\TesiDiLaurea{Master Thesis}
+\CandidateName{Candidate}
+\AdvisorName{Supervisor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Impostazioni per comporre con pdfLaTeX
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{newtxtext}% o altro font
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Link
+\usepackage{hyperref}
+\hypersetup{%
+    pdfpagemode={UseOutlines},
+    bookmarksopen,
+    pdfstartview={FitH},
+    colorlinks,
+    linkcolor={blue},
+    citecolor={blue},
+    urlcolor={blue}
+  }
+
+\usepackage{lipsum}
+
+\begin{document}
+\english
+
+\begin{frontespizio*}
+    \ateneo{Politecnico di Torino}
+    \logosede{img/polito_logo.png}
+    \corsodilaurea{Electronic Engineering}
+    \titolo{Ciao RISC-V}
+    \sottotitolo{Chissà se mai finiremo}
+    \relatore{Prof. Maurizio \textsc{Martina}}
+    \sedutadilaurea{Academic year 2018-2019}
+    \candidato{Marco \textsc{Andorno}}    
+\end{frontespizio*}
+
+\sommario
+\lipsum[1-1]
+
+\ringraziamenti
+\lipsum[2-2]
+
+\indici
+
+\chapter{Introduction}
+\lipsum[1-4]
+
+\end{document}
