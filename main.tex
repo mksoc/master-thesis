@@ -1,15 +1,10 @@
 \documentclass[%
 corpo=12pt,
 tipotesi=magistrale,
+evenboxes,
 %libro,
 twoside
 ]{toptesi}
-
-% Frontespizio in inglese
-\CorsoDiLaureaIn{Master's Degree in}
-\TesiDiLaurea{Master Thesis}
-\CandidateName{Candidate}
-\AdvisorName{Supervisor}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Impostazioni per comporre con pdfLaTeX
@@ -35,16 +30,24 @@ twoside
 \begin{document}
 \english
 
-\begin{frontespizio*}
-    \ateneo{Politecnico di Torino}
-    \logosede{img/polito_logo.png}
+%%%%%%%%%%%%%%%% Frontespizio %%%%%%%%%%%%%%%%
+% Frontespizio in inglese
+\CorsoDiLaureaIn{Master's Degree in}
+\TesiDiLaurea{Master Thesis}
+\CandidateName{Candidate}
+\AdvisorName{Supervisor}
+
+\begin{frontespizio}
+    %\ateneo{Politecnico di Torino}
+    \logosede[30mm]{img/polito_logo.png}
     \corsodilaurea{Electronic Engineering}
     \titolo{Ciao RISC-V}
     \sottotitolo{Chissà se mai finiremo}
     \relatore{Prof. Maurizio \textsc{Martina}}
     \sedutadilaurea{Academic year 2018-2019}
     \candidato{Marco \textsc{Andorno}}    
-\end{frontespizio*}
+\end{frontespizio}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \sommario
 \lipsum[1-1]
@@ -52,9 +55,13 @@ twoside
 \ringraziamenti
 \lipsum[2-2]
 
+\figurespagetrue
+\tablespagetrue
 \indici
 
 \chapter{Introduction}
 \lipsum[1-4]
+
+\input{biblio.tex}
 
 \end{document}
