@@ -1,0 +1,7 @@
+- Cache hit on first PC, then subsequent reads from same line, issue ready: fetch01.json
+- Cache hit on first PC, then subsequent reads from same line, issue not ready during WAIT_DATA: fetch02.json
+- Cache hit on first PC, then subsequent reads from same line, issue not ready during FETCH: fetch03.json
+- Subsequent cache hits, issue ready: 
+- Cache hit, cache miss, issue ready:
+- Cache miss, issue ready:
+- Cache hit, cache miss, issue not ready:

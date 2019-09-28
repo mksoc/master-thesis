@@ -1,0 +1,26 @@
+{"signal": 
+	[
+    {"name": "clk",               "wave": "p...."},
+    {"name": "state",             "wave": "====.", "data": ["RESET", "FETCH", "WAIT_DATA", "FETCH"]},
+    {"name": "fetch_ready",       "wave": "1...."},
+    {"name": "pc",                "wave": "x====", "data": ["PC0", "PC1", "PC2", "PC3"]},
+    {"name": "prev_pc_reg_enable", "wave": "01..."},
+    {"name": "prev_pc_reg",        "wave": "x.===", "data": ["PC0", "PC1", "PC2"]},
+    {"name": "here",              "wave": "0..1."},
+    {"name": "will_be_here",      "wave": "0.10."},
+    {"name": "addr_valid",        "wave": "010.."},
+    {"name": "addr_ready",        "wave": "x1x.."},
+    {"name": "data_valid",        "wave": "0.10."},
+    {"name": "data_ready",        "wave": "0.10."},
+    {"name": "data",              "wave": "x.=x.", "data": ["PC0|L0"]},
+    {"name": "line_reg_enable",   "wave": "0.10."},
+    {"name": "line",              "wave": "0..=.", "data": ["PC0|L0"]},
+    {"name": "selector_pc",       "wave": "x.=..", "data": ["prev_pc", "current_pc"]},
+    {"name": "selector_line",     "wave": "x.==.", "data": ["line_reg", "cache_out", "line_reg"]},
+    {"name": "issue_ready",       "wave": "x1..."},
+    {"name": "issue_valid",       "wave": "0.1.."},
+    {"name": "instruction",       "wave": "0.===", "data": ["L0[PC0]", "L0[PC1]", "L0[PC2]"]}
+ 	],
+  
+  "config": {"hscale": 2}
+}
