@@ -1,0 +1,27 @@
+{"signal": 
+	[
+    {"name": "clk",               "wave": "p...."},
+    {"name": "state",             "wave": "=.==.", "data": ["FETCH_LINE", "CACHE_REQ", "FETCH_LINE"]},
+    {"name": "fetch_ready",       "wave": "1...."},
+    {"name": "pc",                "wave": "=====", "data": ["PC4", "PC16", "PC17", "PC18", "PC19"]},
+    {"name": "prev_pc_reg_enable", "wave": "1...."},
+    {"name": "prev_pc_reg",        "wave": "=====", "data": ["PC3", "PC4", "PC16", "PC17", "PC18"]},
+    {"name": "here",              "wave": "10.1."},
+    {"name": "will_be_here",      "wave": "0.10."},
+    {"name": "addr_valid",        "wave": "010.."},
+    {"name": "addr_ready",        "wave": "x1x.."},
+    {"name": "data_valid",        "wave": "0.10."},
+    {"name": "data_ready",        "wave": "0.10."},
+    {"name": "data",              "wave": "x.=x.", "data": ["PC16|L1"]},
+    {"name": "line_reg_enable",   "wave": "0.10."},
+    {"name": "line",              "wave": "=..=.", "data": ["PC0|L0", "PC16|L1"]},
+    {"name": "line_bak",          "wave": "=...=", "data": ["PC0|L0", "PC16|L1"]},
+    {"name": "selector_pc",       "wave": "=....", "data": ["prev_pc", "current_pc"]},
+    {"name": "selector_line",     "wave": "=.==.", "data": ["line_reg", "cache_out", "line_reg"]},
+    {"name": "issue_ready",       "wave": "1...."},
+    {"name": "issue_valid",       "wave": "1...."},
+    {"name": "instruction",       "wave": "=====", "data": ["L0[PC3]", "L0[PC4]", "L1[PC16]", "L1[PC17]", "L1[PC18]"]}
+ 	],
+  
+  "config": {"hscale": 3}
+}

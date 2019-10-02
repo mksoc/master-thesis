@@ -1,7 +1,18 @@
-- Cache hit on first PC, then subsequent reads from same line, issue ready: fetch01.json
+STARTUP:
+- Reset, cache ready, hit, following from same line, issue ready:                         fetch01.json
+- Reset, cache NOT ready, hit, following from same line, issue ready:                     fetch05.json
+
+FETCH_LINE/CACHE_REQ
+- Fetch line, cache ready, hit, following from same line, issue ready:                    fetch06.json
+- Fetch line, cache ready, hit, hit, hit, issue ready:                                    fetch07.json  
+- Fetch line, cache ready, hit, following from same line, issue NOT ready in FETCH_LINE:  fetch08.json
+
 - Cache hit on first PC, then subsequent reads from same line, issue not ready during WAIT_DATA: fetch02.json
 - Cache hit on first PC, then subsequent reads from same line, issue not ready during FETCH: fetch03.json
+- Cache not ready for address:
+- Cache hit, then read from old line reg: fetch04.json
 - Subsequent cache hits, issue ready: 
 - Cache hit, cache miss, issue ready:
 - Cache miss, issue ready:
 - Cache hit, cache miss, issue not ready:
+

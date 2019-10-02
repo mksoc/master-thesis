@@ -1,0 +1,18 @@
+{"signal": 
+	[
+    {"name": "clk",               "wave": "p..."},
+    {"name": "rst_n",             "wave": "01.."},
+    {"name": "state",             "wave": "==.=.", "data": ["RESET", "WAIT_ADDR", "ADDR_BUSY", "WAIT_DATA"]},
+    {"name": "flush",             "wave": "x0.."},
+    {"name": "read_req",          "wave": "x01x"},
+    {"name": "pc = addr",         "wave": "xx=.", "data": ["A0", "A1", "A2"]},
+    {"name": "addr_valid",        "wave": "0.1.."},
+    {"name": "addr_ready",        "wave": "x.0.1"},
+    {"name": "data_valid",        "wave": "x0.1"},
+    {"name": "data_ready",        "wave": "0..1"},
+    {"name": "data = line",       "wave": "x..=", "data": ["L0"]},
+    {"name": "read_done",         "wave": "0..1"},
+ 	],
+  
+  "config": {"hscale": 3}
+}
