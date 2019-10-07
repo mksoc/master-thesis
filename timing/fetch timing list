@@ -1,18 +1,11 @@
-STARTUP:
-- Reset, cache ready, hit, following from same line, issue ready:                         fetch01.json
-- Reset, cache NOT ready, hit, following from same line, issue ready:                     fetch05.json
-
-FETCH_LINE/CACHE_REQ
-- Fetch line, cache ready, hit, following from same line, issue ready:                    fetch06.json
-- Fetch line, cache ready, hit, hit, hit, issue ready:                                    fetch07.json  
-- Fetch line, cache ready, hit, following from same line, issue NOT ready in FETCH_LINE:  fetch08.json
-
-- Cache hit on first PC, then subsequent reads from same line, issue not ready during WAIT_DATA: fetch02.json
-- Cache hit on first PC, then subsequent reads from same line, issue not ready during FETCH: fetch03.json
-- Cache not ready for address:
-- Cache hit, then read from old line reg: fetch04.json
-- Subsequent cache hits, issue ready: 
-- Cache hit, cache miss, issue ready:
-- Cache miss, issue ready:
-- Cache hit, cache miss, issue not ready:
+- Reset, cache hit following from same line, issue ready:                         fetch01.json
+- Reset, cache not ready/miss, following from same line, issue ready:             fetch02.json
+- Sel in line, cache hit, following from same line, issue ready:                  fetch06.json
+- Sel in line, cache hit, sel in backup, sel in line, issue ready:                fetch09.json
+- Sel in line, cache hit, hit, hit, issue ready (full read pipeline):             fetch07.json  
+- Sel in line, issue not ready during selection:                                  fetch03.json
+- Sel in line, issue not ready during read req:                                   fetch04.json
+- Cache hit, issue not ready when will be here:                                   fetch05.json
+- Cache hit, issue not ready when here (WARNING: loss):                           fetch08.json
+- Sel in backup, issue not ready:                                                 fetch10.json
 

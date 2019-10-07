@@ -1,0 +1,23 @@
+{"signal": 
+	[
+    {"name": "clk",               "wave": "p...."},
+    {"name": "state",             "wave": "=====", "data": ["SEL_IN_LINE", "CACHE_REQ", "SEL_IN_LINE", "CACHE_REQ", "SEL_IN_BACKUP"]},
+    {"name": "fetch_ready",       "wave": "101.."},
+    {"name": "pc",                "wave": "==.==", "data": ["PC16", "PC5", "PC17", "PC18"]},
+    {"name": "prev_pc_reg",       "wave": "==.==", "data": ["PC4", "PC16", "PC5", "PC17"]},
+    {"name": "here",              "wave": "01010"},
+    {"name": "will_be_here",      "wave": "0...."},
+    {"name": "read_req",          "wave": "10101"},
+    {"name": "read_done",         "wave": "01010"},
+    {"name": "cache_out",         "wave": "x=x=x", "data": ["PC16|L1", "PC5|L0"]},
+    {"name": "line_reg",          "wave": "=.=.=", "data": ["PC0|L0", "PC16|L1", "PC5|L0"]},
+    {"name": "line_bak",          "wave": "=..=.", "data": ["PC0|L0", "PC16|L1"]},
+    {"name": "selector_pc",       "wave": "=....", "data": ["prev_pc", "current_pc"]},
+    {"name": "selector_line",     "wave": "=..==", "data": ["line_reg", "cache_out", "line_bak", "line_reg"]},
+    {"name": "issue_ready",       "wave": "101.."},
+    {"name": "issue_valid",       "wave": "1...."},
+    {"name": "instruction",       "wave": "=x===", "data": ["L0[PC4]", "L1[PC16]", "L0[PC5]", "L1[PC17]"]}
+ 	],
+  
+  "config": {"hscale": 3}
+}

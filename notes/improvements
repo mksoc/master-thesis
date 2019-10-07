@@ -1,0 +1,13 @@
+- FIFO di linee di cache lette, al posto di soli 2 registri. Ha davvero senso se
+  la cache funziona bene? Ha davvero senso tenere comunque 2 registri? 
+  È una miglioria solo in un caso particolare. Pensare.
+  
+- Issue not ready in sel in line mentre pc è not here. La richiesta alla cache 
+  si ritarda finchè issue non torna ready. La richiesta potrebbe partire già 
+  prima e in caso di miss si risparmia tempo. Però se c'è hit? Ci si trova con
+  2 istruzioni da issuare nello stesso clock. Pensare.
+  
+- Perdita di istruzioni se issue è not ready in CACHE_REQ con here, oppure 
+  SEL_IN_BACKUP. Sticazzi?
+  
+- Stall se la issue queue è piena. C'è soluzione?
