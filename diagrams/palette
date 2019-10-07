@@ -1,0 +1,8 @@
+Font = Ubuntu Mono
+Block name size = 16
+Signal name size = 10
+Port name size = 8
+
+Input signal color = 0000c8ff
+Output signal color = c80000ff
+Width color = 4b4b4bff
