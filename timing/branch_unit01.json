@@ -1,0 +1,21 @@
+{"signal": 
+	[
+    {"name": "clk_i",             "wave": "p....."},
+    {"name": "state",             "wave": "==.=", "data": ["RESET", "WAIT_OPS", "BAD_T", "SEL_IN_LINE"]},
+    {"name": "ops_valid_i",       "wave": "0.1"},
+    {"name": "ops_ready_o",       "wave": "1.."},
+    {"name": "rs1/rs2/imm",       "wave": "x.=", "data": ["OPS_0", "PC1", "PC2", "PC3"]},
+    {"name": "pred_target_i",     "wave": "x.=", "data": ["XX", "PC1", "PC2"]},
+    {"name": "pred_taken_i",      "wave": "0.1"},
+    {"name": "target",            "wave": "x.=", "data": ["YY"]},
+    {"name": "taken",             "wave": "0.1"},
+    {"name": "wrong_taken",       "wave": "0.."},
+    {"name": "wrong_target",      "wave": "0.1"},
+    {"name": "out_reg_en",        "wave": "0.1"},
+    {"name": "target_o",          "wave": "0..=", "data": ["YY", "current_pc"]},
+    {"name": "taken_o",           "wave": "0..1"},
+    {"name": "mispredict_o",      "wave": "0..1"},
+ 	],
+  
+  "config": {"hscale": 3}
+}

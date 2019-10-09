@@ -1,0 +1,19 @@
+PREDICTION      ACTUAL          TARGET          ACTION                                                        SIGNALS           STATE
+
+Taken           Taken           Correct         Increment C2B                                                 taken = 1         GOOD_T
+                                                                                                              mispredict = 0
+
+Taken           Taken           Wrong           Increment C2B                                                 taken = 1         BAD_T
+                                                Flush pipeline and restart from target                        mispredict = 1
+                                                Update BTB
+                                                
+Taken           Not taken       -               Decrement C2B                                                 taken = 0         BAD_NT
+                                                Flush pipeline and restart from PC+4                          mispredict = 1
+                                                Remove entry from BTB (saves one further misprediction)
+                                                
+Not taken       Not taken       -               Decrement C2B                                                 taken = 0         GOOD_NT
+                                                                                                              mispredict = 0
+
+Not taken       Taken           -               Increment C2B                                                 taken = 1         BAD_T
+                                                Flush pipeline and restart from target                        mispredict = 1
+                                                Add entry to BTB (entry is added twice if C2B was at 0)
