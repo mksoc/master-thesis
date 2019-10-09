@@ -341,16 +341,16 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52341843px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#c80000;fill-opacity:1;stroke:none;stroke-width:0.26425639;"
-         x="54.004818"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52341843px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#c80000;fill-opacity:1;stroke:none;stroke-width:0.26425639"
+         x="50.833748"
          y="77.060051"
          id="text3569-0-9"
          transform="scale(0.99876432,1.0012372)"><tspan
            sodipodi:role="line"
            id="tspan3567-9-2"
-           x="54.004818"
+           x="50.833748"
            y="77.060051"
-           style="stroke-width:0.26425639;fill:#c80000;fill-opacity:1;">index_o</tspan></text>
+           style="fill:#c80000;fill-opacity:1;stroke-width:0.26425639">pred_index_o</tspan></text>
       <path
          style="fill:none;stroke:#000000;stroke-width:0.26425639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-3-6)"
          d="M 80.870323,60.197919 V 73.427086"
@@ -358,16 +358,16 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52341843px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#c80000;fill-opacity:1;stroke:none;stroke-width:0.26425639;"
-         x="74.352562"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52341843px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#c80000;fill-opacity:1;stroke:none;stroke-width:0.26425639"
+         x="76.466606"
          y="77.060051"
          id="text3569-6-8"
          transform="scale(0.99876432,1.0012372)"><tspan
            sodipodi:role="line"
            id="tspan3567-2-9"
-           x="74.352562"
+           x="76.466606"
            y="77.060051"
-           style="stroke-width:0.26425639;fill:#c80000;fill-opacity:1;">pred_taken_o</tspan></text>
+           style="fill:#c80000;fill-opacity:1;stroke-width:0.26425639">taken_o</tspan></text>
       <path
          style="fill:none;stroke:#4b4b4b;stroke-width:0.26425639px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 33.099036,57.552086 2.639299,-2.645833"
