@@ -38,29 +38,20 @@ module gshare
     c2b_t count;
   } pht_d[PHT_ROWS], pht_q[PHT_ROWS];
   
-  logic [HLEN-1:0] bht_d, history;
+  logic [HLEN-1:0] history;
 
   // --------------------------
   // Branch History Table (BHT)
   // --------------------------
-  always_comb begin: bht_update
-    // By default, store previous value
-    bht_d = history;
-
-    // If a valid branch resolution arrives, shift it in
-    if (res_valid_i) begin
-      bht_d = {res_taken_i, history >> 1};
-    end
-  end
-
   always_ff @(posedge clk_i or negedge rst_n_i) begin: bht
     if (!rst_n_i) begin
       history <= '0; // Async reset
     end else begin
       if (flush_i) begin
         history <= '0; // Sync flush
-      end else begin
-        history <= bht_d;
+      end else if (res_valid_i) begin
+        history <= history >> 1;
+        history[HLEN-1] <= res_taken_i;
       end
     end
   end
@@ -109,13 +100,16 @@ module gshare
   always_ff @(posedge clk_i or negedge rst_n_i) begin
     if (!rst_n_i) begin // Async reset
       for (int i = 0; i < PHT_ROWS; i++) begin
-        pht_q[i] <= '0;
+        pht_q[i].valid <= 1'b0;
+        if (i % 2) pht_q[i].count <= WEAK_NT;
+        else pht_q[i].count <= WEAK_T;
       end
     end
     else if (flush_i) begin // Sync flush
       for (int i = 0; i < PHT_ROWS; i++) begin
         pht_q[i].valid <= 1'b0;
-        pht_q[i].count <= WEAK_NT;
+        if (i % 2) pht_q[i].count <= WEAK_NT;
+        else pht_q[i].count <= WEAK_T;
       end
     end
     else pht_q <= pht_d;

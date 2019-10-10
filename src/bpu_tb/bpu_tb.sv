@@ -20,8 +20,8 @@ module bpu_tb;
 
   // Declarations
   localparam PERIOD = 10;
-  logic clk = '0;
-  logic rst_n = '1;
+  logic clk = '1;
+  logic rst_n = '0;
   logic [XLEN-1:0] pc, res_pc, res_target;
   logic res_valid, res_taken, res_mispredict;
   logic [HLEN-1:0] res_index;
@@ -30,6 +30,11 @@ module bpu_tb;
   // Clock generator
   always #(PERIOD/2) clk = ~clk;
 
+  // Reset
+  initial begin
+    #11 rst_n = '1;
+  end
+
   // DUT instantiation
   bpu dut
   (
@@ -37,33 +42,43 @@ module bpu_tb;
     .rst_n_i          (rst_n),
     .flush_i          ('0),
     .pc_i             (pc),
-    .res_valid_i      (res_valid_i),
+    .res_valid_i      (res_valid),
     .res_pc_i         (res_pc),
-    .res_index_i      (res_index_i),
-    .res_target_i     (res_target_i),
-    .res_taken_i      (res_taken_i),
-    .res_mispredict_i (res_mispredict_i),
+    .res_index_i      (res_index),
+    .res_target_i     (res_target),
+    .res_taken_i      (res_taken),
+    .res_mispredict_i (res_mispredict),
 
-    .pred_pc_o        (pred_pc_o),
-    .pred_index_o     (pred_index_o),
-    .pred_target_o    (pred_target_o),
-    .pred_taken_o     (pred_taken_o)
+    .pred_pc_o        (),
+    .pred_index_o     (),
+    .pred_target_o    (),
+    .pred_taken_o     ()
   );
-
+  
   initial begin
-    pc = '1;
+    // Initialize inputs
+    pc = '0;
+    res_valid = '0;
+    res_pc = '0;
+    res_index = '0;
+    res_target = '0;
+    res_taken = '0;
+    res_mispredict = '0;
 
-    #2 rst_n = '0;
-    #15 rst_n = '1;
+    // Let reset settle
+    #(3*PERIOD);
+
+    // PC under exam
+    pc = 'd12;
 
     // Read resolutions file
-    fd_res = $fopen("tb/bpu_resolutions.txt", "r");
+    fd_res = $fopen("bpu_resolutions.txt", "r");
     while (!$feof(fd_res)) begin
       scan = $fscanf(fd_res, "%h %h %h %h %h %h\n",
           res_valid, res_pc, res_index, res_target, res_taken, res_mispredict);
       $display("Branch resolution: %h %h %h %h %h %h",
           res_valid, res_pc, res_index, res_target, res_taken, res_mispredict);
-      #PERIOD;
+      @(posedge clk);
     end
     $fclose(fd_res);
     $stop;
