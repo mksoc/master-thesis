@@ -1,30 +1,33 @@
-from enum import Enum
-from dataclasses import dataclass
+import bpu_utils as u
 
-# Definitions
-class Counter(Enum):
-  NT = 0
-  WEAK_NT = 1
-  WEAK_T = 2
-  T = 3
+# Function definitions
 
-HLEN = 16
-BTB_BITS = 10
-OFFSET = 2
 
-@dataclass
-class PhtEntry:
-  valid: bool = False
-  count: Counter = Counter.WEAK_NT
+def predict(pc):
+    pred = u.Prediction()
+    pred.pc = pc
+    pred.index = history.bht ^ history.get_index(pc)
+    btb_result = btb.query(pc)
+    pred.target = btb_result[1]
+    pred.taken = pht.query(pred.index) and btb_result[0]
+    return pred
 
-pht = [PhtEntry(0, Counter.WEAK_NT) if (row % 2) else \
-    PhtEntry(0, Counter.WEAK_T) for row in range(2**HLEN)]
 
-@dataclass
-class BtbEntry:
-  valid: int = 0
-  tag: int
-  target: int
+def resolve(res):
+    if res.valid:
+        history.shift(res.taken)
+        pht.update(res.index, res.taken)
+        if res.mispredict:
+            btb.update(res.pc, res.target, not res.taken)
 
-btb = [BtbEntry(0, 0, 0) for row in range(2**BTB_BITS)]
 
+# Define structures
+history = u.History()
+pht = u.Pht()
+btb = u.Btb()
+
+res = u.Resolution(True, 10, 0, 15, True, True)
+resolve(res)
+
+print(history)
+print(btb.query(10))
