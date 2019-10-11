@@ -5,9 +5,23 @@ HLEN = 16
 BTB_BITS = 10
 OFFSET = 2
 
+# Function definitions
+
 
 def hexpad(number, length):
     return hex(number)[2:].zfill(length // 4)
+
+
+def res_parser(line):
+    res = Resolution()
+    fields = line.split()
+    res.valid = bool(fields[0])
+    res.pc = int(fields[1], 16)
+    res.index = int(fields[2], 16)
+    res.target = int(fields[3], 16)
+    res.taken = bool(fields[4])
+    res.mispredict = bool(fields[5])
+    return res
 
 
 # PHT definitions
@@ -89,7 +103,7 @@ class Btb:
     def query(self, address):
         if (self.table[self.get_index(address)].valid) and \
                 (self.table[self.get_index(address)].tag == self.get_tag(address)):
-            return (True, hexpad(self.table[self.get_index(address)].target & self.target_mask, XLEN))
+            return (True, self.table[self.get_index(address)].target & self.target_mask)
         else:
             return (False, 0)
 
@@ -112,6 +126,9 @@ class Prediction:
     index: int = 0
     target: int = 0
     taken: bool = False
+
+    def __str__(self):
+        return f"{hexpad(self.pc, XLEN)} {hexpad(self.index, HLEN)} {hexpad(self.target, XLEN)} {int(self.taken)}"
 
 
 @dataclass

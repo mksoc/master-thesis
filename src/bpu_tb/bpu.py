@@ -26,8 +26,12 @@ history = u.History()
 pht = u.Pht()
 btb = u.Btb()
 
-res = u.Resolution(True, 10, 0, 15, True, True)
-resolve(res)
+# Read resolutions file
+with open('bpu_resolutions.txt', 'r') as res_file:
+    for line in enumerate(res_file):
+        resolve(u.res_parser(line[1].strip()))
 
-print(history)
-print(btb.query(10))
+# Output predictions
+with open('bpu_predictions.txt', 'w') as pred_file:
+    for i in range(32):
+        pred_file.write(f'{str(predict(12))}\n')
