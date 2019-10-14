@@ -19,15 +19,15 @@ module presence_checker
   input   logic [XLEN-1:0]  pc_i,
   input   logic [XLEN-1:0]  prev_pc_i,
   input   logic [XLEN-1:0]  line_pc_i,
+  input   logic             line_valid_i,
 
   output  logic             here_o,
   output  logic             will_be_here_o
 );
 
-  logic here_int;
-
-  assign here_int = (pc_i[XLEN-1:ICACHE_OFFSET] === line_pc_i[XLEN-1:ICACHE_OFFSET]);
-  assign here_o = here_int;
-  assign will_be_here_o = (pc_i[XLEN-1:ICACHE_OFFSET] === prev_pc_i[XLEN-1:ICACHE_OFFSET]) & (!here_int);
+  assign here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ===
+                    line_pc_i[XLEN-1:ICACHE_OFFSET+OFFSET]) & line_valid_i;
+  assign will_be_here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ===
+                    prev_pc_i[XLEN-1:ICACHE_OFFSET+OFFSET]) & (!here_o);
 
 endmodule

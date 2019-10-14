@@ -20,6 +20,7 @@ module pc_gen_stage
   input   logic             rst_n_i,
   input   logic             pred_taken_i,
   input   logic [XLEN-1:0]  pred_target_i,
+  input   logic             res_valid_i,
   input   logic             res_taken_i,
   input   logic [XLEN-1:0]  res_target_i,
   input   logic             res_mispredict_i,   
@@ -32,10 +33,11 @@ module pc_gen_stage
   logic [XLEN-1:0] current_pc, next_pc;
 
   // Priority list for choosing next PC:
-  // 1) Branch prediction
-  // 2) Default PC+4
+  // 1) Misprediction
+  // 2) Branch prediction
+  // 3) Default PC+4
   always_comb begin
-    if (res_mispredict_i) begin
+    if (res_valid_i && res_mispredict_i) begin
       if (res_taken_i) begin
         next_pc = res_target_i;
       end else begin

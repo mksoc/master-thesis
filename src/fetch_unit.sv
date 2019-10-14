@@ -36,11 +36,10 @@ module fetch_unit
 );
 
   // Signal declarations
-  logic read_req, read_done;
-  icache_out_t line_reg_d, line_reg_q;
-  icache_out_t line_bak_d, line_bak_q;
+  icache_out_t line_reg;
+  icache_out_t line_bak;
   logic fetch_ready;
-  logic here, will_be_here;
+  logic here, will_be_here, line_valid;
   pc_src_t selector_pc;
   line_src_t selector_line;
   logic [XLEN-1:0] prev_pc_d, prev_pc_q;
@@ -48,24 +47,35 @@ module fetch_unit
   // --------
   // Line reg
   // --------
-  assign line_reg_d = read_done ? cache_out_i : line_reg_q;
-
-  always_ff @ (posedge clk_i or negedge rst_n_i) begin: line_reg
-    if (!rst_n_i)     line_reg_q <= '0;
-    else if (flush_i) line_reg_q <= '0;
-    else              line_reg_q <= line_reg_d;
-  end: line_reg
+  always_ff @ (posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i) begin
+      line_valid <= '0;
+      line_reg <= '0;
+    end else begin
+      if (flush_i) begin
+        line_valid <= '0;
+        line_reg <= '0;
+      end else if (read_done_i) begin
+        line_valid <= '1;
+        line_reg <= cache_out_i;
+      end
+    end
+  end
 
   // --------
   // Line reg
   // --------
-  assign line_bak_d = fetch_ready ? line_reg_q : line_bak_q;
-
-  always_ff @ (posedge clk_i or negedge rst_n_i) begin: line_bak
-    if (!rst_n_i)     line_bak_q <= '0;
-    else if (flush_i) line_bak_q <= '0;
-    else              line_bak_q <= line_bak_d;
-  end: line_bak
+  always_ff @ (posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i) begin
+      line_bak <= '0;
+    end else begin
+      if (flush_i) begin
+        line_bak <= '0;
+      end else if (fetch_ready) begin
+        line_bak <= line_reg;
+      end
+    end
+  end
 
   // ----------------
   // Fetch controller
@@ -105,7 +115,8 @@ module fetch_unit
   (
     .pc_i           (pc_i),
     .prev_pc_i      (prev_pc_q),
-    .line_pc_i      (line_reg_q.pc),
+    .line_pc_i      (line_reg.pc),
+    .line_valid_i   (line_valid),
 
     .here_o         (here),
     .will_be_here_o (will_be_here)
@@ -117,11 +128,11 @@ module fetch_unit
   instruction_selector u_instruction_selector
   (
     .cache_out_i    (cache_out_i.line),
-    .line_reg_i     (line_reg_q.line),
-    .line_bak_i     (line_bak_q.line),
+    .line_reg_i     (line_reg.line),
+    .line_bak_i     (line_bak.line),
     .pc_i           (pc_i[ICACHE_OFFSET-1:0]),
     .prev_pc_i      (prev_pc_q[ICACHE_OFFSET-1:0]),
-    .line_pc_i      (line_reg_q.pc[ICACHE_OFFSET-1:0]),
+    .line_pc_i      (line_reg.pc[ICACHE_OFFSET-1:0]),
     .pc_sel_i       (selector_pc),
     .line_sel_i     (selector_line),
 

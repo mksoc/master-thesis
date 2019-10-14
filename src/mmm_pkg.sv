@@ -21,6 +21,7 @@ package mmm_pkg;
   localparam FLEN = 64;
   logic [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
   localparam B_IMM = 12; // B-type immediate length
+  logic [ILEN-1:0] NOP = 'h13;
 
   // --------------
   // I-cache
