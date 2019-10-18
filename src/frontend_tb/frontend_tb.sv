@@ -104,8 +104,12 @@ module frontend_tb;
   // Dummy icache
   always_comb begin
     data.pc = pc;
-    data.line = {ICACHE_INSTR{NOP}};
-    data_valid = '1;
+    // addr_ready = '1;
+    // data_valid = '1;
+    for (int i = 0; i < ICACHE_INSTR; i += 1) begin
+      data.line[ILEN*i +: ILEN] = i + 1;
+    end
+    //data.line = {ICACHE_INSTR{NOP}};
   end
 
   initial begin
@@ -113,6 +117,8 @@ module frontend_tb;
       @(posedge clk);
     end
     addr_ready = '1;
+    @(posedge clk)
+    data_valid = '1;
   end
 
 

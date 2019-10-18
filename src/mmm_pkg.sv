@@ -16,18 +16,24 @@
 package mmm_pkg;
 
   // Global constants
-  localparam ILEN = 32; // instruction length
-  localparam XLEN = 64;
-  localparam FLEN = 64;
+  //localparam ILEN = 32; // instruction length
+  localparam ILEN = 8;
+  localparam OFFSET = $clog2(ILEN/8); // 2 LSB of addresses are always 0, so no use in using them for indexing
+  //localparam XLEN = 64;
+  localparam XLEN = 16;
+  //localparam FLEN = 64;
+  localparam FLEN = 16;
   logic [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
-  localparam B_IMM = 12; // B-type immediate length
+  //localparam B_IMM = 12; // B-type immediate length
+  localparam B_IMM = 4;
   logic [ILEN-1:0] NOP = 'h13;
 
   // --------------
   // I-cache
   // --------------
-  localparam ICACHE_OFFSET = 4; // for 16-instruction lines
-  localparam ICACHE_INSTR = 2 << ICACHE_OFFSET;
+  //localparam ICACHE_OFFSET = 4; // for 16-instruction lines
+  localparam ICACHE_OFFSET = 2;
+  localparam ICACHE_INSTR = 1 << ICACHE_OFFSET;
   localparam ICACHE_LINE_LEN = ICACHE_INSTR * ILEN;
 
   // icache output struct
@@ -39,9 +45,10 @@ package mmm_pkg;
   // --------------
   // Frontend
   // --------------
-  localparam HLEN = 16;    // length of the history register
-  localparam BTB_BITS = 10; // BTB has  2**BTB_BITS entries
-  localparam OFFSET = 2; // 2 LSB of addresses are always 0, so no use in using them for indexing
+  //localparam HLEN = 16;    // length of the history register
+  localparam HLEN = 4;
+  //localparam BTB_BITS = 10; // BTB has  2**BTB_BITS entries
+  localparam BTB_BITS = 4;
 
   // instruction selector enums
   typedef enum logic [1:0] { current_pc = 'h0, prev_pc = 'h1, line_pc = 'h2 } pc_src_t;

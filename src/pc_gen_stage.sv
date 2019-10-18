@@ -41,12 +41,12 @@ module pc_gen_stage
       if (res_taken_i) begin
         next_pc = res_target_i;
       end else begin
-        next_pc = current_pc + 4;
+        next_pc = current_pc + ILEN/8;
       end
     end else if (pred_taken_i) begin
       next_pc = pred_target_i;
     end else begin
-      next_pc = current_pc + 4;
+      next_pc = current_pc + ILEN/8;
     end
   end
 
