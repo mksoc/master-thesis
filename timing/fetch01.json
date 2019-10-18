@@ -2,8 +2,8 @@
 	[
     {"name": "clk",               "wave": "p...."},
     {"name": "state",             "wave": "====.", "data": ["RESET", "STARTUP", "CACHE_REQ", "SEL_IN_LINE"]},
-    {"name": "fetch_ready",       "wave": "1...."},
-    {"name": "pc",                "wave": "x====", "data": ["PC0", "PC1", "PC2", "PC3"]},
+    {"name": "fetch_ready",       "wave": "01..."},
+    {"name": "pc",                "wave": "=.===", "data": ["PC0", "PC1", "PC2", "PC3"]},
     {"name": "prev_pc_reg",       "wave": "x.===", "data": ["PC0", "PC1", "PC2"]},
     {"name": "here",              "wave": "0..1."},
     {"name": "will_be_here",      "wave": "0.10."},

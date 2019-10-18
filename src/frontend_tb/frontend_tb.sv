@@ -103,11 +103,18 @@ module frontend_tb;
 
   // Dummy icache
   always_comb begin
-    addr_ready = '1;
     data.pc = pc;
     data.line = {ICACHE_INSTR{NOP}};
     data_valid = '1;
   end
+
+  initial begin
+    for (int i = 0; i < 6; i += 1) begin
+      @(posedge clk);
+    end
+    addr_ready = '1;
+  end
+
 
   // Dummy issue queue
   assign issue_ready = '1;

@@ -119,11 +119,6 @@ module fetch_cu
     issue_valid_o = 'b0;
 
     case (present_state)
-      RESET: begin
-        // Moore outputs
-        fetch_ready_o = 'b1;
-      end
-
       STARTUP: begin
         // Moore outputs
         fetch_ready_o = 'b1;

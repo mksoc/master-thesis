@@ -52,8 +52,13 @@ module pc_gen_stage
 
   // PC update
   always_ff @ (posedge clk_i or negedge rst_n_i) begin
-    if (!rst_n_i) current_pc <= BOOT_PC;
-    else current_pc <= next_pc;
+    if (!rst_n_i) begin
+      current_pc <= BOOT_PC;
+    end else begin
+      if (fetch_ready_i) begin
+        current_pc <= next_pc;
+      end
+    end
   end
 
   assign pc_o = current_pc;
