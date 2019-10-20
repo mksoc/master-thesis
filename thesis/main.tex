@@ -28,7 +28,7 @@ twoside
 \usepackage{lipsum}
 
 \begin{document}
-\english
+\english 
 
 %%%%%%%%%%%%%%%% Frontespizio %%%%%%%%%%%%%%%%
 % Frontespizio in inglese
@@ -41,8 +41,8 @@ twoside
     %\ateneo{Politecnico di Torino}
     \logosede[30mm]{img/polito_logo.png}
     \corsodilaurea{Electronic Engineering}
-    \titolo{Ciao RISC-V}
-    \sottotitolo{Chissà se mai finiremo}
+    \titolo{Titolo}
+    \sottotitolo{Sottotitolo}
     \relatore{Prof. Maurizio \textsc{Martina}}
     \sedutadilaurea{Academic year 2018-2019}
     \candidato{Marco \textsc{Andorno}}    
@@ -59,9 +59,10 @@ twoside
 \tablespagetrue
 \indici
 
-\chapter{Introduction}
-\lipsum[1-4]
+% Capitoli
+\input{introduction.tex}
 
+% Bibliografia
 \input{biblio.tex}
 
 \end{document}
