@@ -6,6 +6,12 @@ evenboxes,
 twoside
 ]{toptesi}
 
+\usepackage{xspace}
+\newcommand{\ooo}{Out-of-Order\xspace}
+\newcommand{\riscv}{RISC-V\xspace}
+
+\setlength{\parskip}{0pt}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Impostazioni per comporre con pdfLaTeX
 \usepackage[utf8]{inputenc}
@@ -14,18 +20,21 @@ twoside
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Link
+\usepackage[dvipsnames,svgnames,x11names,hyperref,table]{xcolor}
 \usepackage{hyperref}
 \hypersetup{%
     pdfpagemode={UseOutlines},
     bookmarksopen,
     pdfstartview={FitH},
     colorlinks,
-    linkcolor={blue},
-    citecolor={blue},
+    linkcolor={NavyBlue},
+    citecolor={NavyBlue},
     urlcolor={blue}
   }
 
 \usepackage{lipsum}
+\usepackage{booktabs}
+\usepackage{todonotes}
 
 \begin{document}
 \english 
@@ -49,11 +58,20 @@ twoside
 \end{frontespizio}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\sommario
-\lipsum[1-1]
+\begin{abstract}
+\riscv is a free and open source Instruction Set Architecture, which has sparked interest all over the community of computer architects, as it paves the way for a previously unseen era of extensible software and hardware design freedom. One of its main strength points is the vast modularity implemented in terms of different ISA extensions, which aim to cover a very broad range of applications. This allows designers to tailor the architecture according to their specific needs, without constraining them to support unnecessary instructions.
+
+Being \riscv a relatively new ISA, a limited number of cores is available at the moment, and in particular very few of them are open sourced. So the main motivation for this work is the contribution to this open source hardware community, by means of the design of an Out-of-Order \riscv core as general purpose as possible.
+
+The core is a 64-bit processor, supporting the G extension, which is a short- hand for the base integer (I), multiply and divide (M), floating point (F) and atomic (A) extensions. One goal of this project, which will be carried out alongside two colleagues, is to eventually include support also for the operating system, by implementing the yet unstandardized Privileged ISA, for the experimental vector extension (V) and possibly for a matrix extension to be defined from scratch. These last design choices are motivated by the lack of open source cores supporting them, and the great advantage that such vectorized computation can provide in a world where the popularity and the performance needs of artificial intelligence and machine learning are ever-growing.
+
+Moreover, the choice of designing an \ooo core arises mainly as all modern processors are of such kind, as it has been the best compromise to efficiently exploit instruction level parallelism for decades. The goal is to implement both instruction issue and execution to be performed Out-of-Order, because this allows the highest performance gain. This design choice, of course, comes with a series of implications that will need accurate analysis and bench- marking, possibly by keeping everything as parametric and modular as possible: branch prediction, instruction queue management, memory hierarchy and cache organization are just some examples.
+
+The final outcome of this work will be an in-depth exploration of the design space offered by such complex architectures, to actually experience firsthand the main issues and tradeoffs designers must face and to be prepared to offer a significant contribution to the state of the art of processor design. Moreover, the common hope is for this project to serve as the basis for future in-house development of a complete \riscv-based platform here at Politecnico di Torino. As mentioned above, the entire work will be open source and available on a GitHub repository.
+\end{abstract}
 
 \ringraziamenti
-\lipsum[2-2]
+Thanks everybody!
 
 \figurespagetrue
 \tablespagetrue
