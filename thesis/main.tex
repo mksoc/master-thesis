@@ -1,26 +1,29 @@
 \documentclass[%
-corpo=12pt,
-tipotesi=magistrale,
-evenboxes,
-%libro,
-twoside
+  corpo=12pt,
+  tipotesi=magistrale,
+  evenboxes,
+  %libro,
+  twoside
 ]{toptesi}
 
+%%% Font %%%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{newtxtext}% o altro font
+\usepackage{amsmath}
+
+%%% Colors %%%
+\usepackage[dvipsnames,svgnames,x11names,hyperref,table]{xcolor}
+
+%%% Shorthand commands %%%
 \usepackage{xspace}
 \newcommand{\ooo}{Out-of-Order\xspace}
 \newcommand{\riscv}{RISC-V\xspace}
 
+%%% Set paragraph spacing %%%
 \setlength{\parskip}{0pt}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Impostazioni per comporre con pdfLaTeX
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-%\usepackage{newtxtext}% o altro font
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Link
-\usepackage[dvipsnames,svgnames,x11names,hyperref,table]{xcolor}
+%%% Hyperref %%%
 \usepackage{hyperref}
 \hypersetup{%
     pdfpagemode={UseOutlines},
@@ -32,15 +35,17 @@ twoside
     urlcolor={blue}
   }
 
-\usepackage{lipsum}
+%%% Nice tables %%%
 \usepackage{booktabs}
+
+%%% Utils (can be removed at the end) %%%
+\usepackage{lipsum}
 \usepackage{todonotes}
 
 \begin{document}
 \english 
 
-%%%%%%%%%%%%%%%% Frontespizio %%%%%%%%%%%%%%%%
-% Frontespizio in inglese
+%%% Front matter %%%
 \CorsoDiLaureaIn{Master's Degree in}
 \TesiDiLaurea{Master Thesis}
 \CandidateName{Candidate}
@@ -56,8 +61,8 @@ twoside
     \sedutadilaurea{Academic year 2018-2019}
     \candidato{Marco \textsc{Andorno}}    
 \end{frontespizio}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%% Abstract %%%
 \begin{abstract}
 \riscv is a free and open source Instruction Set Architecture, which has sparked interest all over the community of computer architects, as it paves the way for a previously unseen era of extensible software and hardware design freedom. One of its main strength points is the vast modularity implemented in terms of different ISA extensions, which aim to cover a very broad range of applications. This allows designers to tailor the architecture according to their specific needs, without constraining them to support unnecessary instructions.
 
@@ -70,17 +75,20 @@ Moreover, the choice of designing an \ooo core arises mainly as all modern proce
 The final outcome of this work will be an in-depth exploration of the design space offered by such complex architectures, to actually experience firsthand the main issues and tradeoffs designers must face and to be prepared to offer a significant contribution to the state of the art of processor design. Moreover, the common hope is for this project to serve as the basis for future in-house development of a complete \riscv-based platform here at Politecnico di Torino. As mentioned above, the entire work will be open source and available on a GitHub repository.
 \end{abstract}
 
+%%% Acknowledgements %%%
 \ringraziamenti
 Thanks everybody!
 
+%%% Indices %%%
 \figurespagetrue
 \tablespagetrue
 \indici
 
-% Capitoli
+%%% Chapters %%%
 \input{introduction.tex}
+\input{sota.tex}
 
-% Bibliografia
+%%% Bibliography %%%
 \input{biblio.tex}
 
 \end{document}
