@@ -11,7 +11,11 @@
 // File: mmm_pkg.sv
 // Author: Marco Andorno
 //         Matteo Perotti
+//         Michele Caon
 // Date: 26/07/2019
+
+`ifndef MMM_PKG
+`define MMM_PKG
 
 package mmm_pkg;
 
@@ -28,7 +32,7 @@ package mmm_pkg;
   // I-cache
   // --------------
   localparam ICACHE_OFFSET = 4; // for 16-instruction lines
-  localparam ICACHE_INSTR = 1 << ICACHE_OFFSET;
+  localparam ICACHE_INSTR = 2 << ICACHE_OFFSET;
   localparam ICACHE_LINE_LEN = ICACHE_INSTR * ILEN;
 
   // icache output struct
@@ -64,9 +68,31 @@ package mmm_pkg;
   //-----\\
 
   typedef enum logic [1:0] {
-    m, // machine mode
-    s, // supervisor mode
-    u  // user mode
-  } priv_t;
+    M, // machine mode
+    S, // supervisor mode
+    U  // user mode
+  } priv_e;
+
+
+
+  //------------------------------\\
+  //----- EXECUTION PIPELINE -----\\
+  //------------------------------\\
+  
+  // GLOBAL
+  localparam XREG_NUM = 32; // number of gp integer registers
+  localparam REG_IDX_LEN = $clog2(XREG_NUM); // Register file address width
+
+  // ISSUE QUEUE
+  localparam IQ_DEPTH = 8; // number of entries in the issue queue. This may or may not be a power of 2 (power of 2 recommended)
+
+  // LOAD/STORE UNIT
+  localparam LDBUFF_DEPTH = 8; // number of entries in the load buffer
+  localparam STBUFF_DEPTH = 8; // number of entries in the store buffer
+
+  // ROB
+  localparam ROB_DEPTH = 16; // Number of entries in the ROB. This also tells the number of instruction that coexist in the execution pipeline at the same time
 
 endpackage
+
+`endif
