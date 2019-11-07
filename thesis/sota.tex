@@ -1,4 +1,4 @@
-\chapter{Improving processor performance}
+\chapter{State-of-the-art processor architectures}
 The performance of a processor is defined by the the time it takes to execute a program. This time span, called \emph{\acsu{CPU} time}, can be expressed as:
 
 \begin{equation*}
@@ -88,7 +88,7 @@ All the processors seen in the previous sections adopted a so called \emph{stati
   sub    x5,x1,x4
   mul    x12,x18,x19
 \end{verbatim}
-In a classic 5-stage statically scheduled pipeline, instructions are executed in-order, and that means that the \texttt{mul} instruction cannot begin execution until the data dependence between \texttt{add} and \texttt{sub} is resolved by stalling the pipeline, as the execution takes place in program order. By using dynamic scheduling, on the other hand, if there are no structural hazards (and we can safely assume that that is the case, as the multiplier is likely to be a separate block from the \acsu{ALU}), the \texttt{mul} can be executed and maybe even completed before the \texttt{sub}. Instructions are then still issued in-order to the execution stage from the window of execution, but they can begin and complete execution \ooo. Of course, the semantics of the program still have to be ensured and, as such, instruction \emph{commit}, that is the actual update of registers and memory, is always performed in-order.
+In a classic 5-stage statically scheduled pipeline, instructions are executed in-order, and that means that the \texttt{mul} instruction cannot begin execution until the data dependence between \texttt{add} and \texttt{sub} is resolved by stalling the pipeline, as the execution takes place in program order. By using dynamic scheduling, on the other hand, if there are no structural hazards (and we can safely assume that that is the case, as the multiplier is likely to be a separate block from the \acsu{ALU}), the \texttt{mul} can be executed and maybe even completed before the \texttt{sub}. Instructions are then still issued in-order to the execution stage from the window of execution, but they can begin and complete execution \ooo.
 
 Dynamic scheduling is almost always used in conjunction with superscalar processors, because the advantages given by the \ooo execution and the availability of multiple functional units go hand in hand. This combination offers several strengths compared to static scheduling or \ac{VLIW} processors \cite[p.~192]{hennessy17}. For instance, it allows compiled code to run in an efficient way on different microarchitectures, as the pipeline can manage itself and exploit \ac{ILP} without needing the help of the compiler. Moreover, it can handle cases where dependencies cannot be found at compile time, such as memory operations or dynamic branches. But the most important advantage of all is that an \ooo processor is able to mask the effect of unpredictable delays in the pipeline by executing later instructions without stalling. Remember that cache misses can easily take hundreds of clock cycles to resolve, which would turn into hundreds of wasted cycles in an in-order processor, but are instead taken advantage of to carry out unrelated tasks in an \ooo one.
 
@@ -178,6 +178,61 @@ In the end, the steps that each instruction must get through are similar to the 
   \item \textbf{Write result}: as soon as an operation completes, the result is written on the \ac{CDB} and from there to the register file and reservation stations.
 \end{itemize}
 
-\section{Speculation}
-\todo{Insert table at p.219}
+Tomasulo's algorithm is today used in many high-performance processors and it has been chosen also for the design of LEN5.
 
+\section{Hardware-based speculation}
+For typical \acp{ISA} around 10--20\% of instructions are branches, meaning that an average basic block will not contain more than 5 to 10 instructions. This is obviously a significant constraint, as the amount of \ac{ILP} that can be exploited in such a small set of instructions without incurring in control dependencies is quite limited. From these reason the idea of \emph{hardware-based speculation} was born, based on three principles \cite[p.~208]{hennessy17}:
+\begin{itemize}
+  \item Dynamic branch prediction, to fetch and issue instructions before the outcome of a branch is determined (refer to section \ref{sec:dynbp} for details).
+  \item Speculative execution, to allow the execution of such instructions even if their control dependencies are not resolved yet.
+  \item Dynamic scheduling, to schedule instructions crossing the boundary of a single basic block.
+\end{itemize}
+
+This represents an important improvement over mere dynamic scheduling and even branch prediction alone, because this way instructions are executed as if the guesses on the taken direction were always correct, leading to a \emph{data flow execution} of the program, where operations are executed as soon as their operands are available, irrespective of control flow.
+
+Of course, some precautions must be taken in order to handle the situation when the speculated flow was predicted incorrectly, as to restore the original state of the processor and proceed down the right path. For this reason, an additional stage after the write result must be inserted in order to decouple the production of a result by a functional unit and the actual irreversible update of the register file and data memory, that can take place only when an instruction is no longer speculative. This last step is called \emph{instruction commit} and must always be performed in-order.
+
+\subsection{\acl{ROB}}
+In both scoreboarding and Tomasulo's approach, instruction commit can be handled using a dedicated hardware structure called \ac{ROB}. As the name implies, the \ac{ROB} acts as a buffer between the functional unit outputs and the register file and memory, storing speculative results until the speculation is resolved and thus effectively increasing the number of registers available, similarly to reservation stations. A general scheme of an architecture using the \ac{ROB} is shown in figure \ref{fig:robpipe}, highlighting which parts of the pipeline are in-order and which \ooo.
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/robpipe.pdf}
+  \caption{An \ooo pipeline featuring register renaming and \acs{ROB}}
+  \label{fig:robpipe}
+\end{figure}
+
+\subsubsection{\acs{ROB} with Tomasulo's algorithm}
+As stated above, the \ac{ROB} extends the number of available registers and thus provides renaming on its own by substituting the register file before instruction commit. Moreover, alongside the reservation stations and the \ac{CDB}, the \ac{ROB} serves as another source of operands, as figure \ref{fig:robtomasulo} shows. Finally, for its intrinsic nature, the \ac{ROB} also serves almost the same purpose of the store buffer as a reservation station before the data memory.
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/robtomasulo.pdf}
+  \caption{\acs{FPU} example architecture using Tomasulo's algorithm and \acs{ROB} \cite[p.~210]{hennessy17}}
+  \label{fig:robtomasulo}
+\end{figure}
+
+In terms of algorithm steps, what changes is that during execution the results are broadcast on the \ac{CDB} and to the \ac{ROB} instead of to the register file. In addition, during the added step of instruction commit, an instruction is removed when it reaches the head of the \ac{ROB} (which acts as a circular buffer) and, if it is a branch with a wrong prediction to reach the commit stage, then the \ac{ROB} gets flushed and execution resumes at the correct target of the branch.
+
+\section{Summary of \acs{ILP} techniques}
+To summarize this overview of multiple-issue processors and techniques to exploit \ac{ILP}, table \ref{tab:multissue} provides all the important differences at a glance.
+\begin{table}[hbtp]
+  \centering
+  \rowcolors{1}{}{gray!10}
+  \makebox[\textwidth][c]{
+    \begin{tabular}{p{\dimexpr 0.16\linewidth}
+                    p{\dimexpr 0.13\linewidth}
+                    p{\dimexpr 0.13\linewidth}
+                    p{\dimexpr 0.14\linewidth}
+                    >{\raggedright}p{\dimexpr 0.18\linewidth}
+                    >{\raggedright\arraybackslash}p{\dimexpr 0.22\linewidth}}
+      \toprule
+      \textbf{Name} & \textbf{Issue structure} & \textbf{Hazard detection} & \textbf{Scheduling} & \textbf{Relevant features} & \textbf{Examples} \\ \hline
+      Superscalar (static) & Dynamic & Hardware & Static & In-order    execution & Embedded MIPS and ARM cores \\
+      Superscalar (dynamic) & Dynamic & Hardware & Dynamic & Out-of-order execution, but no speculation & None \\
+      Superscalar (speculative) & Dynamic & Hardware & Dynamic & Out-of-order execution and speculation & Intel Core i3, i5, i7, AMD Ryzen \\
+      \ac{VLIW} & Static & Software & Static & Hazards detected by the compiler & Signal processors like the TI C6x \\
+      \bottomrule
+    \end{tabular}
+  }
+  \caption{Summary table of multiple-issue approaches \cite[p.~219]{hennessy17}}
+  \label{tab:multissue}
+\end{table}
