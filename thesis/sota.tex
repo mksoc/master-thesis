@@ -1,12 +1,12 @@
 \chapter{Improving processor performance}
-The performance of a processor is defined by the the time it takes to execute a program. This time span, called \emph{CPU time}, can be expressed as:
+The performance of a processor is defined by the the time it takes to execute a program. This time span, called \emph{\acsu{CPU} time}, can be expressed as:
 
 \begin{equation*}
   \text{CPU time} = \frac{\text{Seconds}}{\text{Program}} = \frac{\text{Clock cycles}}{\text{Program}} \cdot T_{ck}
 \end{equation*}
 where $T_{ck}$ is the clock period.
 
-The first term can be decomposed further by computing the total number of instructions inside a program, called \emph{instruction count} (IC), which is known given the assembly code of the program. From this figure and the total number of clock cycles, the average number of \emph{clock cycles per instruction} (CPI)\footnote{Sometimes, also the inverse figure can be used, that is \emph{instructions per clock} (IPC).} can be derived. By factoring in these quantities, the final expression of CPU time is as follows \cite[p.~53]{hennessy17}:
+The first term can be decomposed further by computing the total number of instructions inside a program, called \acfi{IC}, which is known given the assembly code of the program. From this figure and the total number of clock cycles, the average number of \acfi{CPI}\footnote{Sometimes, also the inverse figure can be used, that is \acfi{IPC}.} can be derived. By factoring in these quantities, the final expression of \ac{CPU} time is as follows \cite[p.~53]{hennessy17}:
 
 \begin{equation}\label{eq:perf}
   \text{CPU time} = \text{IC} \cdot \text{CPI} \cdot T_{ck} 
@@ -15,12 +15,12 @@ The first term can be decomposed further by computing the total number of instru
 Equation \eqref{eq:perf} shows that the processor performance is directly and equally dependent on three factors:
 \begin{itemize}
   \item Clock period, which depends mainly on the implementation technology and the microarchitectural choices (e.g. pipeline depth).
-  \item Instruction count, which is determined for the most part by the ISA (see section \ref{sec:isas}) and compiler technology.
-  \item CPI, which is dependant on both the ISA and the architecture.
+  \item \acsu{IC}, which is determined for the most part by the \ac{ISA} (see section \ref{sec:isas}) and compiler technology.
+  \item \acsu{CPI}, which is dependant on both the \ac{ISA} and the architecture.
 \end{itemize}
 The goal is then to minimize each of these terms, but it is evident that none of these parameters can be modified without affecting the others, as many design choices influence many of them.
 
-\section{Instruction-level parallelism}
+\section{Instruction-level parallelism}\label{sec:ilp}
 Earliest processors executed instructions one at a time, fetching a new one only after the previous has finished, leading to a number of clock cycles per instruction greater than one, and in particular equal to the number of stages an instruction must get through. These processors, where $\text{CPI} > 1$, are called \emph{subscalar}. To illustrate the situation, in the example of the classic 5-stage RISC pipeline (fetch, decode, execute, memory access, write back), a subscalar processor would execute three consecutive instructions as shown in figure \ref{fig:subscalar}, taking a total of 15 clock cycles.
 
 \begin{figure}[hbtp]
@@ -30,7 +30,7 @@ Earliest processors executed instructions one at a time, fetching a new one only
   \label{fig:subscalar}
 \end{figure}
 
-Starting from the mid 80s, processor architects introduced \emph{pipelining} to improve performance by overlapping the execution of different instructions. This overlap means that at any given point in time there can be multiple instructions running in different stages of the processor, that is \emph{in parallel}, hence the term \emph{instruction-level parallelism} (ILP), which is a fundamental concept in developing techniques to enhance processor performance. For the same example of figure \ref{fig:subscalar}, a pipelined processor could theoretically achieve a CPI of 1, executing one instruction for each clock cycle (see figure \ref{fig:scalar}). Processors of this kind are called \emph{scalar}.
+Starting from the mid 80s, processor architects introduced \emph{pipelining} to improve performance by overlapping the execution of different instructions. This overlap means that at any given point in time there can be multiple instructions running in different stages of the processor, that is \emph{in parallel}, hence the term \acfi{ILP}\acused{ILP}, which is a fundamental concept in developing techniques to enhance processor performance. For the same example of figure \ref{fig:subscalar}, a pipelined processor could theoretically achieve a \ac{CPI} of 1, executing one instruction for each clock cycle (see figure \ref{fig:scalar}). Processors of this kind are called \emph{scalar}.
 
 \begin{figure}[hbtp]
   \centering
@@ -44,14 +44,14 @@ In practice however, data and control dependencies between successive instructio
   \item \textbf{Structural hazards} arise when a hardware block is needed by two or more instructions at the same point in time. For instance, if a processor features only one memory block for both instructions and data, then two different instructions executing in the fetch and memory access stages could generate a structural hazard when trying to read from memory. Such hazards can either be easily solved (e.g. separate instruction and data memory in this example) or are known and accepted by the designers, given the limited hardware available.
   \item \textbf{Data hazards} in a simple pipelined processor occur when there is a \emph{data dependence} between instructions, that is one instruction needs to read a value that provided by a previous instruction. For example, in
       \begin{verbatim}
-        add    x1, x2, x3
-        sub    x4, x5, x1
+        add    x1,x2,x3
+        sub    x4,x5,x1
       \end{verbatim}
       the \texttt{sub} instruction needs the value of register \texttt{x1} in the decode stage, but the previous \texttt{add} has not yet reached the write back stage and a data hazard is generated.
   \item \textbf{Control hazards} arise in the case of conditional flow changing instructions, such as branches, that prevent following instructions to be fetched until the new direction is resolved.
 \end{itemize}
 
-The real CPI a pipelined processor can achieve is then given by the sum of the ideal CPI and all the delays introduced by pipeline stalls caused by hazards io vole\cite[p.~168]{hennessy17}:
+The real \ac{CPI} a pipelined processor can achieve is then given by the sum of the ideal \ac{CPI} and all the delays introduced by pipeline stalls caused by hazards \cite[p.~168]{hennessy17}:
 \begin{equation}\label{eq:pipe_cpi}
   \begin{split}
     \text{CPI}  & = \text{Ideal CPI} + \text{Structural stalls} + \text{Data hazard stalls} + \text{Control stalls} \\
@@ -62,7 +62,7 @@ The real CPI a pipelined processor can achieve is then given by the sum of the i
 Those hazards become more frequent and more expensive to manage the more pipeline stages are introduced and that is a clear example of a tradeoff between two factors of the performance equation \eqref{eq:perf}: a deeper pipeline shortens the critical path and thus reduces the clock period, but at the same time it increases the CPI. That is the reason why designers at some point had to find other architectural solutions to improve performance.
 
 \subsection{Multiple-issue processors}
-A processor featuring a single execution pipeline can only achieve a theoretical CPI of 1, but by duplicating the pipeline to include multiple execution units more than one instruction per clock cycle could be delivered. That is the idea that lies behind \emph{multiple-issue} processors, that exploit ILP by executing independent instructions on separate execution pipelines.
+A processor featuring a single execution pipeline can only achieve a theoretical \ac{CPI} of 1, but by duplicating the pipeline to include multiple execution units more than one instruction per clock cycle could be delivered. That is the idea that lies behind \emph{multiple-issue} processors, that exploit \ac{ILP} by executing independent instructions on separate execution pipelines.
 
 Instructions that can be issued independently to the different pipelines are selected among a so called \emph{basic block}, that is a sequence of instructions comprised between single entry and exit points (i.e. with no branches or jumps in between). Recalling the examples of the previous section, figure \ref{fig:superscalar} shows the execution scheme for a multiple issue processor.
 
@@ -75,13 +75,82 @@ Instructions that can be issued independently to the different pipelines are sel
 
 Two main different approaches exist to multiple issue processors:
 \begin{itemize}
-  \item \textbf{VLIW (Very Long Instruction Word)} processors, also known as \emph{static} multiple-issue, rely on software to discover ILP chances at compile time, thus avoiding increased hardware complexity. The compiler groups instructions that can be executed in parallel in a single long packet-like instruction (hence the name VLIW), that is then split and issued to the different execution units at run time. Despite many efforts, however, such static techniques reveal efficient only for specific applications presenting a high level of data parallelism \cite[p.~168]{hennessy17}, mainly because the compiler software needs a perfect knowledge of the underlying architecture in order to efficiently exploit ILP.
-  \item \textbf{Superscalar} processors, also known as \emph{dynamic} multiple-issue, on the other hand, rely on dedicated hardware to exploit ILP at run time. Instructions belonging to a basic block are inserted into a \emph{window of execution} (WOE), from where instruction that can run in parallel thanks to no data dependence are selected and issued to the respective following pipeline stages. This dynamic approach has been shown to work better than a static one, at the cost of a significant hardware complexity overhead.
+  \item \textbf{\ac{VLIW}} processors, also known as \emph{static} multiple-issue, rely on software to discover ILP chances at compile time, thus avoiding increased hardware complexity. The compiler groups instructions that can be executed in parallel in a single long packet-like instruction (hence the name \ac{VLIW}), that is then split and issued to the different execution units at run time. Despite many efforts, however, such static techniques reveal efficient only for specific applications presenting a high level of data parallelism \cite[p.~168]{hennessy17}, mainly because the compiler software needs a perfect knowledge of the underlying architecture in order to efficiently exploit \ac{ILP}.
+  \item \textbf{Superscalar} processors, also known as \emph{dynamic} multiple-issue, on the other hand, rely on dedicated hardware to exploit \ac{ILP} at run time. Instructions belonging to a basic block are inserted into a \ac{WOE}, from where instruction that can run in parallel thanks to no data dependence are selected and issued to the respective following pipeline stages. This dynamic approach has been shown to work better than a static one, at the cost of a significant hardware complexity overhead.
 \end{itemize}
 
-Multiple-issue processors can achieve a CPI lower than 1 (usually expressed at this point as IPC, greater than 1) thanks to duplicate hardware units that also lower the impact of structural hazards, but they are nonetheless subject to data and control hazards. Instructions belonging to the same basic block are very likely to depend upon one another, as they are part of the same piece of program, and as such the amount of ILP in contiguous instructions of a basic block is usually very small, neglecting almost totally the performance improvements of multiple issues.
+Multiple-issue processors can achieve a \ac{CPI} lower than 1 (usually expressed at this point as \ac{IPC}, greater than 1) thanks to duplicate hardware units that also lower the impact of structural hazards, but they are nonetheless subject to data and control hazards. Instructions belonging to the same basic block are very likely to depend upon one another, as they are part of the same piece of program, and as such the amount of \ac{ILP} in contiguous instructions of a basic block is usually very small, leading to a low usage of the additional pipelines, and that is the reason why allowing multiple issues is not very useful by itself, but is almost always paired with the techniques analyzed in the next section.
 
 \section{Dynamic scheduling}
+All the processors seen in the previous sections adopted a so called \emph{static scheduling} of the pipeline, meaning that instructions are issued and executed along the pipe strictly in program order. To really extract the benefits of \ac{ILP}, however, all modern high-end processor employ a \emph{dynamically scheduled} pipeline, that can execute instructions out of order with respect to the assembled program. As an example consider the following code:
+\begin{verbatim}
+  add    x1,x2,x3
+  sub    x5,x1,x4
+  mul    x12,x18,x19
+\end{verbatim}
+In a classic 5-stage statically scheduled pipeline, instructions are executed in-order, and that means that the \texttt{mul} instruction cannot begin execution until the data dependence between \texttt{add} and \texttt{sub} is resolved by stalling the pipeline, as the execution takes place in program order. By using dynamic scheduling, on the other hand, if there are no structural hazards (and we can safely assume that that is the case, as the multiplier is likely to be a separate block from the \acsu{ALU}), the \texttt{mul} can be executed and maybe even completed before the \texttt{sub}. Instructions are then still issued in-order to the execution stage from the window of execution, but they can begin and complete execution \ooo. Of course, the semantics of the program still have to be ensured and, as such, instruction \emph{commit}, that is the actual update of registers and memory, is always performed in-order.
+
+Dynamic scheduling is almost always used in conjunction with superscalar processors, because the advantages given by the \ooo execution and the availability of multiple functional units go hand in hand. This combination offers several strengths compared to static scheduling or \ac{VLIW} processors \cite[p.~192]{hennessy17}. For instance, it allows compiled code to run in an efficient way on different microarchitectures, as the pipeline can manage itself and exploit \ac{ILP} without needing the help of the compiler. Moreover, it can handle cases where dependencies cannot be found at compile time, such as memory operations or dynamic branches. But the most important advantage of all is that an \ooo processor is able to mask the effect of unpredictable delays in the pipeline by executing later instructions without stalling. Remember that cache misses can easily take hundreds of clock cycles to resolve, which would turn into hundreds of wasted cycles in an in-order processor, but are instead taken advantage of to carry out unrelated tasks in an \ooo one.
+
+In order to do so, the \ac{WOE} acts as a buffer between the fetch stages (called \emph{frontend}) and the execution and commit stages (called \emph{backend}), that hopefully always contains enough instructions to ensure a constant flow to the functional units, even when earlier instructions are waiting for some event. This is obviously possible only if the frontend is able to maintain a high enough bandwidth of fetched instructions to the \ac{WOE}.
+
+\subsection{Dependencies and hazards}
+Out-of-order processors are subject to all the dependencies listed in section \ref{sec:ilp}, but due to the reordering of instructions, other hazards can arise from so called \emph{name dependencies}. In this context, a useful taxonomy to categorize such hazards is defined\footnote{Structural and control hazards are not considered here, as they are the same as in an in-order processor.}. Let $D(i)$ be the \emph{domain} and $R(i)$ be the \emph{range} of instruction $i$, meaning respectively the registers or memory locations read and written by instruction $i$, and consider two instructions $i$ and $j$, with $j$ following $i$ in the program order. Then, there are three possible kinds of data hazards:
+\begin{itemize}
+  \item \textbf{\ac{RAW}} hazards are the only true data hazards arising from a data dependence and occur, as seen previously, when instruction $j$ is trying to read a piece of data before $i$ writes it, leading to a wrong value read by $j$, as in the following example:
+      \begin{verbatim}
+        add    x1,x2,x3
+        sub    x4,x5,x1
+      \end{verbatim}
+      More formally, \ac{RAW} hazards occur if:
+      \begin{equation*}
+        R(i) \cap D(j) \neq \varnothing
+      \end{equation*}
+  \item \textbf{\ac{WAR}} hazards arise from the name dependence called \emph{anti-dependence}, that occurs when instruction $j$ writes the same location that $i$ reads, causing $i$ to read the wrong value if $j$ is executed first, as in:
+      \begin{verbatim}
+        add    x1,x2,x3
+        mul    x2,x5,x6
+      \end{verbatim}
+      More formally, \ac{WAR} hazards occur if:
+      \begin{equation*}
+        D(i) \cap R(j) \neq \varnothing
+      \end{equation*}
+  \item \textbf{\ac{WAW}} hazards arise from the name dependence called \emph{output dependence}, that occurs when instructions $i$ and $j$ write their outputs on the same storage locations, leaving the final wrong value written by $i$, if $j$ is executed first, like in the following:
+      \begin{verbatim}
+        add    x1,x2,x3
+        mul    x1,x5,x6
+      \end{verbatim}
+      More formally, \ac{WAW} hazards occur if:
+      \begin{equation*}
+        R(i) \cap R(j) \neq \varnothing
+      \end{equation*}
+\end{itemize}
+
+It is hopefully clear that \ac{WAR} and \ac{WAW} hazards occur only in dynamically scheduled processors where instruction order can be rearranged and that the dependencies that cause them are called name dependencies, because it is only a matter of storage location used and not an issue with the correct outcome of the program. In the examples above, if the \texttt{mul} instruction could (temporarily) write its output on a different register, until the \texttt{add} completes, then the semantics of the program would respected and the hazards resolved without stalling. That is the idea that lies behind \emph{register renaming}, which is the technique used in \ooo processors at the decode stage to detect and solve \ac{WAR} and \ac{WAW} hazards by converting the architectural registers that instructions refer to to different physical registers hidden to the programmer and compiler.\todo{Expand on renaming}
+
+\subsection{Scheduling techniques}
+Out-of-order execution needs dedicated hardware to select instructions inside the \ac{WOE} and detect and prevent hazards. For this purpose, several schemes and algorithms exist, among which are \emph{scoreboarding} and \emph{Tomasulo's algorithm} that are described in the following.
+
+\subsubsection{Scoreboarding}
+Scoreboarding is a centralized scheduling technique first introduced in the CDC 6600 in the 60s \cite{scoreboard} and still widely used today. The algorithm provides the following stages for each instruction after the decoding:
+\begin{itemize}
+  \item \textbf{Issue}: instructions stall in this stage until there are no structural hazards and all the output dependencies with previously issued instructions are resolved, to avoid \ac{WAW} hazards.
+  \item \textbf{Read operands}: instructions can proceed when their operands are available, resolving \ac{RAW} hazards, in an \ooo fashion.
+  \item \textbf{Execute}: operands are passed to the functional units that perform the requested operations.
+  \item \textbf{Write result}: the write back operation is stalled until all earlier instructions that are anti-dependent have read the previous value, resolving \ac{WAR} hazards. 
+\end{itemize}
+
+Each of these stages can take an arbitrary number of cycles, thus, in order to control the progress of all instructions, a set of three data structures is used as shown in figure \ref{fig:scoreboard}.
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/scoreboard.pdf}
+  \caption{Scoreboard structure}
+  \label{fig:scoreboard}
+\end{figure}
+The first one is the \emph{instruction status} table, that keeps track of which of the four stages each instruction is currently in. Then, there is the \emph{functional unit status} table, which has nine fields for each functional unit, indicating if that unit is busy, what operation it has to perform, the destination register, the source operands registers, the functional units that will produce the operands and two flags indicating when those operands are ready. Finally, the \emph{register result status} table indicates for each register which functional unit will write its result to it.
+
+\todo{Add renaming}
 
 \section{Speculation}
+\todo{Insert table at p.219}
 

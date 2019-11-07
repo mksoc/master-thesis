@@ -11,6 +11,7 @@
 \usepackage[T1]{fontenc}
 %\usepackage{newtxtext}% o altro font
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{inconsolata}
 
 %%% Colors %%%
@@ -18,8 +19,9 @@
 
 %%% Shorthand commands %%%
 \usepackage{xspace}
-\newcommand{\ooo}{Out-of-Order\xspace}
+\newcommand{\ooo}{out-of-order\xspace}
 \newcommand{\riscv}{RISC-V\xspace}
+\newcommand{\lens}{LEN5\xspace}
 
 %%% Set paragraph spacing %%%
 \setlength{\parskip}{0pt}
@@ -38,6 +40,9 @@
 
 %%% Nice tables %%%
 \usepackage{booktabs}
+
+%%% Acronyms %%%
+\usepackage[printonlyused,nohyperlinks]{acronym}
 
 %%% Utils (can be removed at the end) %%%
 \usepackage{lipsum}
@@ -84,6 +89,7 @@ Thanks everybody!
 \figurespagetrue
 \tablespagetrue
 \indici
+\input{acronyms.tex}
 
 %%% Chapters %%%
 \input{introduction.tex}
