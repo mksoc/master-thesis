@@ -75,7 +75,7 @@ Instructions that can be issued independently to the different pipelines are sel
 
 Two main different approaches exist to multiple issue processors:
 \begin{itemize}
-  \item \textbf{\ac{VLIW}} processors, also known as \emph{static} multiple-issue, rely on software to discover ILP chances at compile time, thus avoiding increased hardware complexity. The compiler groups instructions that can be executed in parallel in a single long packet-like instruction (hence the name \ac{VLIW}), that is then split and issued to the different execution units at run time. Despite many efforts, however, such static techniques reveal efficient only for specific applications presenting a high level of data parallelism \cite[p.~168]{hennessy17}, mainly because the compiler software needs a perfect knowledge of the underlying architecture in order to efficiently exploit \ac{ILP}.
+  \item \textbf{\ac{VLIW}} processors, also known as \emph{static} multiple-issue, rely on software to discover \ac{ILP} chances at compile time, thus avoiding increased hardware complexity. The compiler groups instructions that can be executed in parallel in a single long packet-like instruction (hence the name \ac{VLIW}), that is then split and issued to the different execution units at run time. Despite many efforts, however, such static techniques reveal efficient only for specific applications presenting a high level of data parallelism \cite[p.~168]{hennessy17}, mainly because the compiler software needs a perfect knowledge of the underlying architecture in order to efficiently exploit \ac{ILP}.
   \item \textbf{Superscalar} processors, also known as \emph{dynamic} multiple-issue, on the other hand, rely on dedicated hardware to exploit \ac{ILP} at run time. Instructions belonging to a basic block are inserted into a \ac{WOE}, from where instruction that can run in parallel thanks to no data dependence are selected and issued to the respective following pipeline stages. This dynamic approach has been shown to work better than a static one, at the cost of a significant hardware complexity overhead.
 \end{itemize}
 
@@ -126,7 +126,7 @@ Out-of-order processors are subject to all the dependencies listed in section \r
       \end{equation*}
 \end{itemize}
 
-It is hopefully clear that \ac{WAR} and \ac{WAW} hazards occur only in dynamically scheduled processors where instruction order can be rearranged and that the dependencies that cause them are called name dependencies, because it is only a matter of storage location used and not an issue with the correct outcome of the program. In the examples above, if the \texttt{mul} instruction could (temporarily) write its output on a different register, until the \texttt{add} completes, then the semantics of the program would respected and the hazards resolved without stalling. That is the idea that lies behind \emph{register renaming}, which is the technique used in \ooo processors at the decode stage to detect and solve \ac{WAR} and \ac{WAW} hazards by converting the architectural registers that instructions refer to to different physical registers hidden to the programmer and compiler.\todo{Expand on renaming}
+It is hopefully clear that \ac{WAR} and \ac{WAW} hazards occur only in dynamically scheduled processors where instruction order can be rearranged and that the dependencies that cause them are called name dependencies, because it is only a matter of storage location used and not an issue with the correct outcome of the program. In the examples above, if the \texttt{mul} instruction could (temporarily) write its output on a different register, until the \texttt{add} completes, then the semantics of the program would respected and the hazards resolved without stalling. That is the idea that lies behind \emph{register renaming}, which is the technique used in \ooo processors at the decode stage to detect and solve \ac{WAR} and \ac{WAW} hazards by converting the architectural registers that instructions refer to to different physical registers hidden to the programmer and compiler.
 
 \subsection{Scheduling techniques}
 Out-of-order execution needs dedicated hardware to select instructions inside the \ac{WOE} and detect and prevent hazards. For this purpose, several schemes and algorithms exist, among which are \emph{scoreboarding} and \emph{Tomasulo's algorithm} that are described in the following.
@@ -149,7 +149,34 @@ Each of these stages can take an arbitrary number of cycles, thus, in order to c
 \end{figure}
 The first one is the \emph{instruction status} table, that keeps track of which of the four stages each instruction is currently in. Then, there is the \emph{functional unit status} table, which has nine fields for each functional unit, indicating if that unit is busy, what operation it has to perform, the destination register, the source operands registers, the functional units that will produce the operands and two flags indicating when those operands are ready. Finally, the \emph{register result status} table indicates for each register which functional unit will write its result to it.
 
-\todo{Add renaming}
+The original scoreboarding algorithm did not include register renaming and so \ac{WAW} and \ac{WAR} hazards could potentially cause the pipeline to stall in the issue and write result stages respectively. For this reason, register renaming can still be implemented, but it must be carried out in the issue stage, by a dedicated renaming unit, like the one shown in figure \ref{fig:renaming}, based on the one included in the MIPS 10000.
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/renaming.pdf}
+  \caption{Renaming unit}
+  \label{fig:renaming}
+\end{figure}
+The \emph{rename table} keeps track of the mapping between architectural and physical registers, to maintain correct value references, while the \emph{register free list} contains the names of all available physical registers to be used for renaming. As this unit renames two instructions in parallel, it has to check for \ac{RAW} hazards between them, and in case there is one, rename the second instruction with the newly assigned physical registers to the other one. 
+
+Using this scheme, also known as \emph{explicit} register renaming, \ac{WAW} and \ac{WAR} hazards are completely avoided as early as an instruction is decoded and issued, meaning that no further checks must be performed in the later stages of the algorithm.
+
+\subsubsection{Tomasulo's algorithm}
+Invented by Robert Tomasulo for the IBM 360/91 \ac{FPU}, this algorithm offers a different approach to dynamic scheduling, by adopting a \emph{distributed} control instead of a centralized one, as present in scoreboarding. This idea is based around the concept of \emph{reservation stations}, which are buffers placed in front of each functional unit, including load and store units, to store instruction operands. A generic architecture based on Tomasulo's approach is shown in figure \ref{fig:tomasulo}.
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/tomasulo.pdf}
+  \caption{\acs{FPU} example architecture using Tomasulo's algorithm \cite[p.~198]{hennessy17}}
+  \label{fig:tomasulo}
+\end{figure}
+
+Each reservation station contains several fields providing similar information with respect to functional unit status data structure used in scoreboarding: which operation to perform, the reservation stations from which the source operands will come, the value of the operands and the busy status. The key difference with scoreboarding is, however, that the results of the functional units are broadcast to the register file as well as to all the reservation stations through a \ac{CDB}, while the scoreboarding technique only writes results to registers. This, in turn, provides the great advantage of allowing \emph{implicit} register renaming at each reservation station, because register names are discarded when an instruction is issued to a reservation station, as operands will come from another reservation station of from the \ac{CDB} as soon as they become available. Moreover, if multiple instructions are waiting on the same result, they can all be started simultaneously when such result arrives because of the presence of multiple reservation stations, while on the other hand, using scoreboarding, they would wait in turn for the register file bus to be free, possibly wasting clock cycles \cite[p.~201]{hennessy17}.
+
+In the end, the steps that each instruction must get through are similar to the one in scoreboarding, but the actions performed are different:
+\begin{itemize}
+  \item \textbf{Issue}: instructions are fetched in-order from the issue queue stall in this stage until there is a matching reservation station available (no structural hazards) and then are issued to the reservation station with implicit renaming.
+  \item \textbf{Execute}: the \ac{CDB} is monitored until all operands are available (avoid \ac{RAW} hazards), at which point the functional unit executes the instruction.
+  \item \textbf{Write result}: as soon as an operation completes, the result is written on the \ac{CDB} and from there to the register file and reservation stations.
+\end{itemize}
 
 \section{Speculation}
 \todo{Insert table at p.219}
