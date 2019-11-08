@@ -29,14 +29,14 @@
 %%% Hyperref %%%
 \usepackage{hyperref}
 \hypersetup{%
-    pdfpagemode={UseOutlines},
-    bookmarksopen,
-    pdfstartview={FitH},
-    colorlinks,
-    linkcolor={NavyBlue},
-    citecolor={NavyBlue},
-    urlcolor={blue}
-  }
+  pdfpagemode={UseOutlines},
+  bookmarksopen,
+  pdfstartview={FitH},
+  colorlinks,
+  linkcolor={NavyBlue},
+  citecolor={NavyBlue},
+  urlcolor={blue}
+}
 
 %%% Nice tables %%%
 \usepackage{booktabs}
@@ -45,6 +45,14 @@
 %%% Acronyms %%%
 \usepackage{relsize}
 \usepackage[printonlyused,nohyperlinks,smaller]{acronym}
+
+%%% Code listing %%%
+\usepackage{listings}
+\lstset{%
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  commentstyle=\color{gray}
+}
 
 %%% Utils (can be removed at the end) %%%
 \usepackage{lipsum}
