@@ -10,17 +10,17 @@ bench=("fp_1" "fp_2" "int_1" "int_2" "mm_1" "mm_2")
 # Run all the trace benchmarks
 declare -a results
 echo "Running benchmark fp_1..."
-results+=("$(bunzip2 -kc $BENCH_PATH/fp_1.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/fp_1.bz2 | ./predictor --hlen:$1 --btb:$2)")
 echo "Running benchmark fp_2..."
-results+=("$(bunzip2 -kc $BENCH_PATH/fp_2.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/fp_2.bz2 | ./predictor --hlen:$1 --btb:$2)")
 echo "Running benchmark int_1..."
-results+=("$(bunzip2 -kc $BENCH_PATH/int_1.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/int_1.bz2 | ./predictor --hlen:$1 --btb:$2)")
 echo "Running benchmark int_2..."
-results+=("$(bunzip2 -kc $BENCH_PATH/int_2.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/int_2.bz2 | ./predictor --hlen:$1 --btb:$2)")
 echo "Running benchmark mm_1..."
-results+=("$(bunzip2 -kc $BENCH_PATH/mm_1.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/mm_1.bz2 | ./predictor --hlen:$1 --btb:$2)")
 echo "Running benchmark mm_2..."
-results+=("$(bunzip2 -kc $BENCH_PATH/mm_2.bz2 | ./predictor --hlen:$1)")
+results+=("$(bunzip2 -kc $BENCH_PATH/mm_2.bz2 | ./predictor --hlen:$1 --btb:$2)")
 
 # Create result arrays
 declare -a accuracy
@@ -60,3 +60,5 @@ for i in "${mpki[@]}"
 do
   printf "%s," $i
 done | sed 's/,$/\n/' >> $REPORT_FILE
+
+echo Done.

@@ -14,7 +14,8 @@ void usage()
   fprintf(stderr, " Options:\n");
   fprintf(stderr, " --help       Print this message\n");
   fprintf(stderr, " --verbose    Print predictions on stdout\n");
-  fprintf(stderr, " --hlen:<N>     Branch prediction scheme:\n");
+  fprintf(stderr, " --hlen:<N>     Global history length:\n");
+  fprintf(stderr, " --btb:<N>     BTB index bits (0 for no BTB):\n");
 }
 
 // Process an option and update the predictor
@@ -22,9 +23,13 @@ void usage()
 // Returns True if Successful
 int handle_option(char *arg)
 {
-  if (!strncmp(arg, "--hlen:", 7)) 
+  if (!strncmp(arg, "--hlen:", 7))
   {
-    sscanf(arg+7, "%d", &hlen);
+    sscanf(arg+7, "%d", &hLen);
+  }
+  else if (!strncmp(arg, "--btb:", 6)) 
+  {
+    sscanf(arg+6, "%d", &btbBits);
   } 
   else if (!strcmp(arg, "--verbose")) 
   {
@@ -41,7 +46,7 @@ int handle_option(char *arg)
 // Reads a line from the input stream and extracts the
 // PC and Outcome of a branch
 // Returns True if Successful 
-int read_branch(uint32_t *pc, uint8_t *outcome)
+int read_branch(uint64_t *pc, uint8_t *outcome)
 {
   if (getline(&line, &len, trace_fp) == -1)
   {
@@ -49,7 +54,7 @@ int read_branch(uint32_t *pc, uint8_t *outcome)
   }
 
   uint32_t tmp;
-  sscanf(line, "0x%x %d\n", pc, &tmp);
+  sscanf(line, "0x%lx %d\n", pc, &tmp);
   *outcome = tmp;
 
   return 1;
@@ -86,7 +91,7 @@ int main(int argc, char *argv[])
   }
 
   // Initialize predictor
-  uint32_t pc;
+  uint64_t pc;
   uint8_t outcome, prediction;
   int branch_count = 0;
   int mispred_count = 0;
