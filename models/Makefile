@@ -1,14 +1,14 @@
 CC=gcc
 OPTS=-g -Wall
 
-all: main.o bpu.o
-	$(CC) $(OPTS) -lm -o bpu main.o bpu.o
+all: main.o predictor.o
+	$(CC) $(OPTS) -lm -o predictor main.o predictor.o
 
-main.o: main.c bpu.h
+main.o: main.c predictor.h
 	$(CC) $(OPTS) -c main.c
 
-bpu.o: bpu.h bpu.c
-	$(CC) $(OPTS) -c bpu.c
+predictor.o: predictor.h predictor.c
+	$(CC) $(OPTS) -c predictor.c
 
 clean:
-	rm -f *.o bpu;
+	rm -f *.o predictor;

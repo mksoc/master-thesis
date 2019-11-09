@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "bpu.h"
+#include "predictor.h"
 
 FILE *trace_fp;
 char *line = NULL;
@@ -114,8 +114,11 @@ int main(int argc, char *argv[])
   // Print out the mispredict statistics
   printf("Branches:        %10d\n", branch_count);
   printf("Incorrect:       %10d\n", mispred_count);
-  float mispredict_rate = 100*((float)mispred_count / (float)branch_count);
-  printf("Misprediction Rate: %7.3f\n", mispredict_rate);
+  float accuracy = 100 * (((float)branch_count - mispred_count) /
+                            (float)branch_count);
+  float mpki = 1000 * ((float)mispred_count / (float)branch_count);
+  printf("Accuracy:           %7.3f\n", accuracy);
+  printf("MPKI:               %7.3f\n", mpki);
 
   // Cleanup
   fclose(trace_fp);

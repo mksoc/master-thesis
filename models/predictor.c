@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "bpu.h"
+#include "predictor.h"
 
 // Define global variables
 int hlen;
@@ -19,7 +19,15 @@ void initialize()
   pht = (uint32_t*) malloc(sizeof(uint32_t) * pht_size);
   for (int i = 0; i < pht_size; i++)
   {
-    pht[i] = 1;
+    if (ALTERNATE)
+    {
+      if (i % 2)
+        pht[i] = 2;
+      else
+        pht[i] = 1;
+    }
+    else
+      pht[i] = 1;
   }
 
   hmask = (1 << hlen) - 1;
