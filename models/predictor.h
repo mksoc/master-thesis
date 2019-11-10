@@ -6,7 +6,7 @@
 
 // Conditional compilation directives
 // #define ALTERNATE
-#define USE_VALID
+// #define USE_VALID
 
 // Useful defines
 #define TAKEN     1
