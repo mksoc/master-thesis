@@ -49,6 +49,7 @@ module fetch_cu
   end
 
   // State update
+  /* verilator lint_off CASEINCOMPLETE */
   always_comb begin
     // Defaults
     next_state = RESET;
@@ -187,5 +188,6 @@ module fetch_cu
       end
     endcase
   end
+  /* verilator lint_on CASEINCOMPLETE */
     
 endmodule

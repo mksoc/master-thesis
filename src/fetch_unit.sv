@@ -12,6 +12,7 @@
 // Author: Marco Andorno
 // Date: 03/10/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module fetch_unit
