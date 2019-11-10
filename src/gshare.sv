@@ -31,7 +31,7 @@ module gshare
   // Definitions
   typedef enum logic [1:0] {SNT, WNT, WT, ST} c2b_t; // 2-bit counter enum
   localparam c2b_t INIT_C2B = SNT;
-  localparam PHT_ROWS = 2 << HLEN;
+  localparam PHT_ROWS = 1 << HLEN;
   c2b_t pht_d[PHT_ROWS], pht_q[PHT_ROWS];
   
   logic [HLEN-1:0] ghr;

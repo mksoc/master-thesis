@@ -12,6 +12,7 @@
 // Author: Marco Andorno
 // Date: 7/8/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module bpu

@@ -30,23 +30,23 @@ module btb
 );
 
   // Definitions
-  localparam BTB_ROWS = 2 << BTB_BITS;
+  localparam BTB_ROWS = 1 << BTB_BITS;
 
   struct packed {
-    logic                         valid;
-    logic [XLEN - BTB_BITS - 1:0] tag;
-    logic [XLEN-1:0]              target;
+    logic                                   valid;
+    logic [XLEN - BTB_BITS - OFFSET - 1:0]  tag;
+    logic [XLEN-1:0]                        target;
   } btb_d[BTB_ROWS], btb_q[BTB_ROWS];
 
-  logic [BTB_BITS-1:0]          addr_r, addr_w;
-  logic [XLEN - BTB_BITS - 1:0] tag_r, tag_w;
+  logic [BTB_BITS-1:0]              addr_r, addr_w;
+  logic [XLEN-BTB_BITS-OFFSET-1:0]  tag_r, tag_w;
 
   // --------------------------
   // Branch Target Buffer (BTB)
   // --------------------------
   // Write
   assign addr_w = update_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
-  assign tag_w = update_pc_i[XLEN-(BTB_BITS + OFFSET)-1:BTB_BITS + OFFSET];
+  assign tag_w = update_pc_i[XLEN - 1:BTB_BITS + OFFSET];
 
   always_comb begin: btb_update
     // By default, store previous value
@@ -80,7 +80,7 @@ module btb
 
   // Read
   assign addr_r = pc_i[BTB_BITS + OFFSET - 1:OFFSET];
-  assign tag_r = pc_i[XLEN-(BTB_BITS + OFFSET)-1:BTB_BITS + OFFSET];
+  assign tag_r = pc_i[XLEN - 1:BTB_BITS + OFFSET];
   
   assign hit_o = btb_q[addr_r].valid & (btb_q[addr_r].tag == tag_r);
   assign pred_target_o = btb_q[addr_r].target;

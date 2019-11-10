@@ -18,7 +18,7 @@ elaborate $topName -lib WORK > elaborate.txt
 uniquify
 link
 
-# Apply clock contraints
+# Apply contraints
 create_clock -name CLOCK -period $targetPeriod $clkName
 set_dont_touch_network CLOCK
 set_clock_uncertainty 0.07 [get_clocks CLOCK]
@@ -26,6 +26,7 @@ set_input_delay 0.5 -max -clock CLOCK [remove_from_collection [all_inputs] CLOCK
 set_output_delay 0.5 -max -clock CLOCK [all_outputs]
 set outputLoad [load_of uk65lscllmvbbr_120c25_tc/BUFM10R/A]
 set_load $outputLoad [all_outputs]
+set hdlin_preserve_sequential true
 
 # Compile design
 compile
