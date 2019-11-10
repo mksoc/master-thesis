@@ -36,7 +36,7 @@ module icache_interface
 );
 
   // State definition
-  typedef enum { RESET, WAIT_ADDR, ADDR_BUSY, WAIT_DATA } state_t;
+  typedef enum logic [1:0] { RESET, WAIT_ADDR, ADDR_BUSY, WAIT_DATA } state_t;
   state_t present_state, next_state;
   
   // Data assignment

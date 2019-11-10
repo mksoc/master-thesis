@@ -34,7 +34,7 @@ module bpu
 );
 
   // Signal definitions
-  logic btb_res_valid, btb_hit;
+  logic btb_res_valid, btb_hit, btb_update, btb_del_entry;
   logic gshare_taken;
 
   // Module instantiations
@@ -44,11 +44,11 @@ module bpu
     .rst_n_i        (rst_n_i),
     .flush_i        (flush_i),
     .pc_i           (pc_i),
-    .res_valid_i    (res_valid_i),
-    .res_index_i    (res_index_i),
-    .res_taken_i    (res_taken_i),
+    .valid_i        (res_valid_i),
+    .index_i        (res_index_i),
+    .taken_i        (res_taken_i),
 
-    .taken_o        (gshare_taken),
+    .pred_taken_o   (gshare_taken),
     .pred_index_o   (pred_index_o)
   );
 
@@ -58,10 +58,10 @@ module bpu
     .rst_n_i          (rst_n_i),
     .flush_i          (flush_i),
     .pc_i             (pc_i),
-    .update_valid_i   (btb_update),
+    .valid_i          (btb_update),
     .del_entry_i      (btb_del_entry),
-    .res_pc_i         (res_pc_i),
-    .res_target_i     (res_target_i),
+    .update_pc_i      (res_pc_i),
+    .target_i         (res_target_i),
 
     .hit_o            (btb_hit),
     .pred_target_o    (pred_target_o)

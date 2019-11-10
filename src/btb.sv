@@ -20,10 +20,10 @@ module btb
   input   logic             rst_n_i,
   input   logic             flush_i,
   input   logic [XLEN-1:0]  pc_i,
-  input   logic             update_valid_i,
+  input   logic             valid_i,
   input   logic             del_entry_i,
-  input   logic [XLEN-1:0]  res_pc_i,
-  input   logic [XLEN-1:0]  res_target_i,
+  input   logic [XLEN-1:0]  update_pc_i,
+  input   logic [XLEN-1:0]  target_i,
 
   output  logic             hit_o,
   output  logic [XLEN-1:0]  pred_target_o
@@ -45,32 +45,32 @@ module btb
   // Branch Target Buffer (BTB)
   // --------------------------
   // Write
-  assign addr_w = res_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
-  assign tag_w = res_pc_i[XLEN-(BTB_BITS + OFFSET)-1:BTB_BITS + OFFSET];
+  assign addr_w = update_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
+  assign tag_w = update_pc_i[XLEN-(BTB_BITS + OFFSET)-1:BTB_BITS + OFFSET];
 
   always_comb begin: btb_update
     // By default, store previous value
     btb_d = btb_q;
 
     // If a valid branch resolution arrives, update BTB
-    if (update_valid_i) begin
+    if (valid_i) begin
       if (del_entry_i) begin
         btb_d[addr_w] = '0;
       end else begin
         btb_d[addr_w].valid = 'b1;
         btb_d[addr_w].tag = tag_w;
-        btb_d[addr_w].target = res_target_i;
+        btb_d[addr_w].target = target_i;
       end
     end
   end
 
   always_ff @(posedge clk_i or negedge rst_n_i) begin
-    if (!rst_n_i) begin // Async reset
+    if (!rst_n_i) begin: btb_async_rst
       for (int i = 0; i < BTB_ROWS; i++) begin
         btb_q[i] <= '0;
       end
     end
-    else if (flush_i) begin // Sync flush
+    else if (flush_i) begin: btb_sync_flush
       for (int i = 0; i < BTB_ROWS; i++) begin
         btb_q[i] <= '0;
       end
@@ -82,7 +82,7 @@ module btb
   assign addr_r = pc_i[BTB_BITS + OFFSET - 1:OFFSET];
   assign tag_r = pc_i[XLEN-(BTB_BITS + OFFSET)-1:BTB_BITS + OFFSET];
   
-  assign hit_o = btb_q[addr_r].valid & (btb_q[addr_r].tag === tag_r);
+  assign hit_o = btb_q[addr_r].valid & (btb_q[addr_r].tag == tag_r);
   assign pred_target_o = btb_q[addr_r].target;
   
 endmodule

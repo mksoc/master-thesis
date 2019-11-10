@@ -20,41 +20,36 @@ module gshare
   input   logic             rst_n_i,
   input   logic             flush_i,
   input   logic [XLEN-1:0]  pc_i,
-  input   logic             res_valid_i,
-  input   logic [HLEN-1:0]  res_index_i,
-  input   logic             res_taken_i,
+  input   logic             valid_i,
+  input   logic [HLEN-1:0]  index_i,
+  input   logic             taken_i,
 
-  output  logic             taken_o,
+  output  logic             pred_taken_o,
   output  logic [HLEN-1:0]  pred_index_o
 );
 
   // Definitions
-  typedef enum logic [1:0] {NT, WEAK_NT, WEAK_T, T} c2b_t; // 2-bit counter enum
-
+  typedef enum logic [1:0] {SNT, WNT, WT, ST} c2b_t; // 2-bit counter enum
+  localparam c2b_t INIT_C2B = SNT;
   localparam PHT_ROWS = 2 << HLEN;
-
-  struct packed { // 2-bit counter struct
-    logic valid;
-    c2b_t count;
-  } pht_d[PHT_ROWS], pht_q[PHT_ROWS];
+  c2b_t pht_d[PHT_ROWS], pht_q[PHT_ROWS];
   
-  logic [HLEN-1:0] history;
+  logic [HLEN-1:0] ghr;
 
   // --------------------------
   // Branch History Table (BHT)
   // --------------------------
   always_ff @(posedge clk_i or negedge rst_n_i) begin: bht
-    if (!rst_n_i) begin
-      history <= '0; // Async reset
+    if (!rst_n_i) begin: bht_async_rst
+      ghr <= '0;
     end else begin
-      if (flush_i) begin
-        history <= '0; // Sync flush
-      end else if (res_valid_i) begin
-        history <= history >> 1;
-        history[HLEN-1] <= res_taken_i;
+      if (flush_i) begin: bht_sync_flush
+        ghr <= '0;
+      end else if (valid_i) begin: bht_shift
+        ghr <= {ghr[HLEN-1:1], taken_i};
       end
     end
-  end
+  end: bht
 
   // ---------------------------
   // Pattern History Table (PHT)
@@ -64,59 +59,53 @@ module gshare
     pht_d = pht_q;
 
     // If a valid branch resolution arrives, update counters
-    if (res_valid_i) begin
-      pht_d[res_index_i].valid = 1'b1;
-
-      case (pht_q[res_index_i].count)
-        NT: begin
-          if (res_taken_i)
-            pht_d[res_index_i].count = WEAK_NT;
-          else pht_d[res_index_i].count = NT;
+    if (valid_i) begin: c2b_fsm
+      case (pht_q[index_i])
+        SNT: begin
+          if (taken_i)
+            pht_d[index_i] = WNT;
+          else pht_d[index_i] = SNT;
         end
 
-        WEAK_NT: begin
-          if (res_taken_i)
-            pht_d[res_index_i].count = WEAK_T;
-          else pht_d[res_index_i].count = NT;
+        WNT: begin
+          if (taken_i)
+            pht_d[index_i] = WT;
+          else pht_d[index_i] = SNT;
         end
 
-        WEAK_T: begin
-          if (res_taken_i)
-            pht_d[res_index_i].count = T;
-          else pht_d[res_index_i].count = WEAK_NT;
+        WT: begin
+          if (taken_i)
+            pht_d[index_i] = ST;
+          else pht_d[index_i] = WNT;
         end
 
-        T: begin
-          if (res_taken_i)
-            pht_d[res_index_i].count = T;
-          else pht_d[res_index_i].count = WEAK_T;
+        ST: begin
+          if (taken_i)
+            pht_d[index_i] = ST;
+          else pht_d[index_i] = WT;
         end
 
-        default: pht_d[res_index_i].count = WEAK_NT;
+        default: pht_d[index_i] = WNT;
       endcase
-    end
-  end
+    end: c2b_fsm
+  end: pht_update
 
   always_ff @(posedge clk_i or negedge rst_n_i) begin
-    if (!rst_n_i) begin // Async reset
+    if (!rst_n_i) begin: pht_async_rst
       for (int i = 0; i < PHT_ROWS; i++) begin
-        pht_q[i].valid <= 1'b0;
-        if (i % 2) pht_q[i].count <= WEAK_NT;
-        else pht_q[i].count <= WEAK_T;
+        pht_q[i] <= INIT_C2B;
       end
     end
-    else if (flush_i) begin // Sync flush
+    else if (flush_i) begin: pht_sync_flush
       for (int i = 0; i < PHT_ROWS; i++) begin
-        pht_q[i].valid <= 1'b0;
-        if (i % 2) pht_q[i].count <= WEAK_NT;
-        else pht_q[i].count <= WEAK_T;
+        pht_q[i] <= INIT_C2B;
       end
     end
     else pht_q <= pht_d;
   end
     
   // Assignments
-  assign pred_index_o = history ^ pc_i[HLEN + OFFSET - 1:OFFSET]; // XOR hashing
-  assign taken_o = pht_q[pred_index_o].valid & pht_q[pred_index_o].count[1];
+  assign pred_index_o = ghr ^ pc_i[HLEN + OFFSET - 1:OFFSET]; // XOR hashing
+  assign pred_taken_o = pht_q[pred_index_o][1];
 
 endmodule

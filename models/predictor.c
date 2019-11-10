@@ -7,7 +7,7 @@ int btbBits;
 int verbose;
 
 // Define data structures
-uint32_t history;
+uint32_t ghr;
 
 typedef struct
 {
@@ -32,7 +32,7 @@ uint64_t btbTagMask;
 void initialize()
 {
   // Global history register
-  history = 0;
+  ghr = 0;
 
   // PHT
   size_t phtSize = 1 << hLen;
@@ -75,7 +75,7 @@ void initialize()
 
 uint8_t predict(uint64_t pc)
 {
-  uint32_t maskedHistory = history & hMask;
+  uint32_t maskedHistory = ghr & hMask;
   uint32_t maskedPc = (pc >> 2) & hMask;
   uint32_t index = maskedHistory ^ maskedPc;
   uint64_t btbAddress = (pc >> 2) & btbAddressMask;
@@ -105,7 +105,7 @@ uint8_t predict(uint64_t pc)
 
 void update(uint64_t pc, uint8_t outcome)
 {
-  uint32_t maskedHistory = history & hMask;
+  uint32_t maskedHistory = ghr & hMask;
   uint32_t maskedPc = (pc >> 2) & hMask;
   uint32_t index = maskedHistory ^ maskedPc;
   uint64_t btbAddress = (pc >> 2) & btbAddressMask;
@@ -115,9 +115,9 @@ void update(uint64_t pc, uint8_t outcome)
   
   if (outcome == TAKEN)
   {
-    // Shift history
-    history = (history << 1) | 1;
-    history &= hMask;
+    // Shift ghr
+    ghr = (ghr << 1) | 1;
+    ghr &= hMask;
 
     // Update PHT
     if (pht[index].counter < 3)
@@ -127,9 +127,9 @@ void update(uint64_t pc, uint8_t outcome)
   }
   else
   {
-    // Shift history
-    history = history << 1;
-    history &= hMask;
+    // Shift ghr
+    ghr = ghr << 1;
+    ghr &= hMask;
 
     // Update PHT
     if (pht[index].counter > 0)

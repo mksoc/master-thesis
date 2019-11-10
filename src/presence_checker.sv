@@ -25,9 +25,9 @@ module presence_checker
   output  logic             will_be_here_o
 );
 
-  assign here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ===
+  assign here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ==
                     line_pc_i[XLEN-1:ICACHE_OFFSET+OFFSET]) & line_valid_i;
-  assign will_be_here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ===
+  assign will_be_here_o = (pc_i[XLEN-1:ICACHE_OFFSET+OFFSET] ==
                     prev_pc_i[XLEN-1:ICACHE_OFFSET+OFFSET]) & (!here_o);
 
 endmodule
