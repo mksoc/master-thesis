@@ -8,13 +8,13 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: instruction_selector.sv
+// File: instr_sel.sv
 // Author: Marco Andorno
 // Date: 03/10/2019
 
 import mmm_pkg::*;
 
-module instruction_selector
+module instr_sel
 (
   input   logic [ICACHE_LINE_LEN-1:0] cache_out_i,
   input   logic [ICACHE_LINE_LEN-1:0] line_reg_i,

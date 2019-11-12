@@ -8,14 +8,14 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: fetch_unit.sv
+// File: ifu.sv
 // Author: Marco Andorno
 // Date: 03/10/2019
 
 `include "mmm_pkg.sv"
 import mmm_pkg::*;
 
-module fetch_unit
+module ifu
 (
   input   logic             clk_i,
   input   logic             rst_n_i,
@@ -64,7 +64,7 @@ module fetch_unit
   end
 
   // --------
-  // Line reg
+  // Line bak
   // --------
   always_ff @ (posedge clk_i or negedge rst_n_i) begin
     if (!rst_n_i) begin
@@ -126,7 +126,7 @@ module fetch_unit
   // --------------------
   // Instruction selector
   // --------------------
-  instruction_selector u_instruction_selector
+  instr_sel u_instr_sel
   (
     .cache_out_i    (cache_out_i.line),
     .line_reg_i     (line_reg.line),

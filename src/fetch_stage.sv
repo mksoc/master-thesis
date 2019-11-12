@@ -57,7 +57,7 @@ module fetch_stage
   // -----------------
   // I-cache interface
   // -----------------
-  icache_interface u_icache_interface
+  icache_ifc u_icache_ifc
   (
     .clk_i        (clk_i),
     .rst_n_i      (rst_n_i),
@@ -81,7 +81,7 @@ module fetch_stage
   // ----------
   // Fetch unit
   // ----------
-  fetch_unit u_fetch_unit
+  ifu u_ifu
   (
     .clk_i          (clk_i),
     .rst_n_i        (rst_n_i),

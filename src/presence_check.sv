@@ -8,13 +8,13 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: presence_checker.sv
+// File: presence_check.sv
 // Author: Marco Andorno
 // Date: 03/10/2019
 
 import mmm_pkg::*;
 
-module presence_checker
+module presence_check
 (
   input   logic [XLEN-1:0]  pc_i,
   input   logic [XLEN-1:0]  prev_pc_i,
