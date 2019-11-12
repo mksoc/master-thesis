@@ -41,8 +41,8 @@ module ifu
   icache_out_t line_bak;
   logic fetch_ready;
   logic here, will_be_here, line_valid;
-  pc_src_t selector_pc;
-  line_src_t selector_line;
+  pc_src_t pc_sel;
+  line_src_t line_sel;
   logic [XLEN-1:0] prev_pc_d, prev_pc_q;
 
   // --------
@@ -81,7 +81,7 @@ module ifu
   // ----------------
   // Fetch controller
   // ----------------
-  fetch_cu u_fetch_cu
+  fetch_controller u_fetch_controller
   (
     .clk_i            (clk_i),
     .rst_n_i          (rst_n_i),
@@ -94,8 +94,8 @@ module ifu
     .fetch_ready_o    (fetch_ready),
     .read_req_o       (read_req_o),
     .issue_valid_o    (issue_valid_o),
-    .selector_pc_o    (selector_pc),
-    .selector_line_o  (selector_line)
+    .pc_sel_o         (pc_sel),
+    .line_sel_o       (line_sel)
   );
 
   // -------
@@ -134,8 +134,8 @@ module ifu
     .pc_i           (pc_i[ICACHE_OFFSET-1:0]),
     .prev_pc_i      (prev_pc_q[ICACHE_OFFSET-1:0]),
     .line_pc_i      (line_reg.pc[ICACHE_OFFSET-1:0]),
-    .pc_sel_i       (selector_pc),
-    .line_sel_i     (selector_line),
+    .pc_sel_i       (pc_sel),
+    .line_sel_i     (line_sel),
 
     .instruction_o  (instruction_o)
   );
