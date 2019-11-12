@@ -13,9 +13,13 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{inconsolata}
+\usepackage{anyfontsize}
 
 %%% Colors %%%
 \usepackage[dvipsnames,svgnames,x11names,hyperref,table]{xcolor}
+\definecolor{input_blue}{HTML}{0000c8}
+\definecolor{output_red}{HTML}{c80000}
+\definecolor{width_gray}{HTML}{4b4b4b}
 
 %%% Shorthand commands %%%
 \usepackage{xspace}
@@ -53,6 +57,9 @@
   breaklines=true,
   commentstyle=\color{gray}
 }
+
+%%% Subfigures %%%
+\usepackage{subfig}
 
 %%% Utils (can be removed at the end) %%%
 \usepackage{lipsum}
@@ -100,11 +107,12 @@ Thanks everybody!
 \tablespagetrue
 \indici
 \input{acronyms.tex}
+%\lstlistoflistings
 
 %%% Chapters %%%
-\input{introduction.tex}
-\input{sota.tex}
-\input{bp.tex}
+% \input{introduction.tex}
+% \input{sota.tex}
+% \input{bp.tex}
 \input{design.tex}
 \input{results.tex}
 \input{conclusions.tex}

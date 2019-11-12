@@ -8,13 +8,13 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: icache_interface.sv
+// File: icache_ifc.sv
 // Author: Marco Andorno
 // Date: 02/10/2019
 
 import mmm_pkg::*;
 
-module icache_interface
+module icache_ifc
 (
   input   logic             clk_i,
   input   logic             rst_n_i,

@@ -107,7 +107,7 @@ If the output turns out to be non-negative, then the branch is predicted as take
 The weights express the degree of correlation between the current and previous branches, specifically weight $w_i$ indicates how much the current branch is biased toward the result of the last-but-$i$ branch. The input corresponding to weight $w_0$ is always 1, to indicate the intrinsic bias of the current branch (if it is more likely to be taken or not regardless of previous history). These weights are updated with a training algorithm that is executed every time a new branch resolution arrives.
 
 The structure of the complete perceptron predictor is shown in figure \ref{fig:perceptron-bp} and features a table of perceptrons indexed by the branch address, a block that computes the prediction starting from the selected perceptron and the global history and a training unit dedicated to updating the weights upon a new actual branch result.
-\begin{figure}[hbtp]
+\begin{figure}[hbt]
   \centering
   \includegraphics[width=.8\textwidth]{img/perceptron-bp.pdf}
   \caption{Perceptron-based branch predictor}

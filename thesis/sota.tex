@@ -39,7 +39,7 @@ Starting from the mid 80s, processor architects introduced \emph{pipelining} to 
   \label{fig:scalar}
 \end{figure}
 
-In practice however, data and control dependencies between successive instructions could cause hazards and force the pipeline to stall, causing CPI to rise once again at values greater than one. There are mainly three types of hazards that can take place in a pipelined processor:
+In practice however, data and control dependencies between successive instructions could cause hazards and force the pipeline to stall, causing \ac{CPI} to rise once again at values greater than one. There are mainly three types of hazards that can take place in a pipelined processor:
 \begin{itemize}
   \item \textbf{Structural hazards} arise when a hardware block is needed by two or more instructions at the same point in time. For instance, if a processor features only one memory block for both instructions and data, then two different instructions executing in the fetch and memory access stages could generate a structural hazard when trying to read from memory. Such hazards can either be easily solved (e.g. separate instruction and data memory in this example) or are known and accepted by the designers, given the limited hardware available.
   \item \textbf{Data hazards} in a simple pipelined processor occur when there is a \emph{data dependence} between instructions, that is one instruction needs to read a value that provided by a previous instruction. For example, in
