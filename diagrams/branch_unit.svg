@@ -531,9 +531,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="887.32706"
-     inkscape:cy="462.86478"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="670.78146"
+     inkscape:cy="330.83033"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -555,7 +555,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -847,13 +847,13 @@
     <text
        id="text4524-1"
        y="199.51782"
-       x="186.5354"
+       x="191.82059"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.65142822px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26491067"
        xml:space="preserve"
        transform="scale(1.0012372,0.99876433)"><tspan
          style="font-size:5.65142822px;stroke-width:0.26491067"
          y="199.51782"
-         x="186.5354"
+         x="191.82059"
          id="tspan4522-1"
          sodipodi:role="line">branch_unit_cu</tspan></text>
     <path

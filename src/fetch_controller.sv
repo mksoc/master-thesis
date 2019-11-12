@@ -8,13 +8,13 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: fetch_cu.sv
+// File: fetch_controller.sv
 // Author: Marco Andorno
 // Date: 27/09/2019
 
 import mmm_pkg::*;
 
-module fetch_cu
+module fetch_controller
 (
   input   logic       clk_i,
   input   logic       rst_n_i,
@@ -27,8 +27,8 @@ module fetch_cu
   output  logic       fetch_ready_o,
   output  logic       read_req_o,
   output  logic       issue_valid_o,
-  output  pc_src_t    selector_pc_o,
-  output  line_src_t  selector_line_o
+  output  pc_src_t    pc_sel_o,
+  output  line_src_t  line_sel_o
 );
 
   typedef enum logic [2:0] { RESET, STARTUP, CACHE_REQ, SEL_IN_LINE, SEL_IN_BACKUP } state_t;
@@ -115,8 +115,8 @@ module fetch_cu
     // Defaults
     fetch_ready_o = 'b0;
     read_req_o = 'b0;
-    selector_pc_o = prev_pc;
-    selector_line_o = line_reg;
+    pc_sel_o = prev_pc;
+    line_sel_o = line_reg;
     issue_valid_o = 'b0;
 
     case (present_state)
@@ -131,14 +131,14 @@ module fetch_cu
           if (issue_ready_i) begin
             if (here_i || will_be_here_i) begin
               fetch_ready_o = 'b1;
-              selector_pc_o = prev_pc;
-              selector_line_o = cache_out;
+              pc_sel_o = prev_pc;
+              line_sel_o = cache_out;
               issue_valid_o = 'b1;
             end else begin
               fetch_ready_o = 'b1;
               read_req_o = 'b1;
-              selector_pc_o = prev_pc;
-              selector_line_o = cache_out;
+              pc_sel_o = prev_pc;
+              line_sel_o = cache_out;
               issue_valid_o = 'b1;
             end
           end else begin
@@ -171,13 +171,13 @@ module fetch_cu
         if (issue_ready_i) begin
           if (here_i) begin
             fetch_ready_o = 'b1;
-            selector_pc_o = prev_pc;
-            selector_line_o = line_bak;
+            pc_sel_o = prev_pc;
+            line_sel_o = line_bak;
           end else begin
             fetch_ready_o = 'b1;
             read_req_o = 'b1;
-            selector_pc_o = prev_pc;
-            selector_line_o = line_bak;
+            pc_sel_o = prev_pc;
+            line_sel_o = line_bak;
           end
         end else begin
           // Line bak register must be disabled
