@@ -43,7 +43,7 @@ This predictor can be improved by introducing some hysteresis in the system usin
 
 These designs, known as \emph{one-level} or \emph{bimodal} predictors, could be extended to $n$-bit saturating counters, but solutions with more than two bits are rarely employed, because the size of the table is the limiting factor, given that, by using only a subset of \ac{PC} bits, multiple branches could index the same \ac{BHT} entry, thus producing \emph{aliasing} issues.
 
-\subsection{Two-level branch predictors}
+\subsection{Two-level branch predictors}\label{sec:twolevelbp}
 An improvement over the simple predictors of the previous section comes from the concept of \emph{correlation} between branches. Consider for example the following code:
 \begin{lstlisting}[language=C]
   if (x)        // branch 1

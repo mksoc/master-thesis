@@ -44,7 +44,7 @@ The selection of the next \ac{PC} is based on the following list of priorities, 
 \begin{enumerate}
   \item \textbf{Exception}: if an exception occurs, the \ac{PC} gen stage will receive the next starting address as the base address present in the vector table provided by the {\smaller CSR} unit.
   \item \textbf{Misprediction}: if a resolved branch is discovered to have been mispredicted, then the \ac{PC} gen stage resumes execution from the correct target if the branch was actually taken, or from the next sequential address from the branch \ac{PC} if it was actually not taken.
-  \item \textbf{Branch prediction}: if the \ac{BPU} predicts a taken branch for the current \ac{PC} then it provides this stage with the predicted target address (see \cref{sec:}), which will be fetched at the next cycle, thus allowing for zero penalty branches when predicted correctly.
+  \item \textbf{Branch prediction}: if the \ac{BPU} predicts a taken branch for the current \ac{PC} then it provides this stage with the predicted target address (see \cref{sec:btb}), which will be fetched at the next cycle, thus allowing for zero penalty branches when predicted correctly.
   \item \textbf{Default assignment}: if none of the conditions before occur, then the next \ac{PC} is selected as usual as the next sequential address, which corresponds to the current \ac{PC}+4 for word-aligned 32-bit instructions.
 \end{enumerate}
 
@@ -148,7 +148,7 @@ Two blocks, namely the \emph{presence checker} and the \emph{instruction selecto
 
 At the startup of the processor, the first fetch address will be the defined boot address which it is safe to assume that is going to need a cache access, as no line has been read and saved yet in the line register. This means that, even in the best case scenario (i.e. cache hit), the first instruction will be pushed to the issue queue one clock cycle after the corresponding \ac{PC} has entered the fetch stage, leading to a latency of a total of two clock cycles. In order to maintain the throughput of one instruction per clock, however, the \ac{PC} generation process must go on before knowing if the cache will hit or miss and that means that the first \ac{PC} must be saved in a \emph{previous \ac{PC} register} in order to push the correct instruction to the queue at the next cycle. In other words, at each clock cycle, the \ac{IFU} is simultaneously checking whether the current \ac{PC} refers to a saved instruction or if a cache access is needed and pushing the previous instruction to the issue queue. Actually, if the current instruction is already present in a line register, then it could be potentially moved to the queue in the same cycle as no cache latency must be accounted for. This, however, would complicate significantly the timing of this unit, as the latency would be variable according to the need of a cache read or not. For this reason, it has been chosen to maintain a one-cycle latency for every instruction, meaning that each instruction pushed to the queue corresponds to the \ac{PC} of the previous cycle. This is effectively an additional pipeline stage, introduced to account for the minimum cache latency and not to reduce the critical path.
 
-Finally, in case of an exceptional behavior or a branch misprediction, the \ac{IFU} must be flushed and all pending cache requests aborted, in order to resume the process at the next cycle when the new starting \ac{PC} will be provided by the \ac{PC} gen stage. In order to do so, a \texttt{flush} signal that comes from the later execution stages or from the top-level control is propagated to all the sequential elements of the \ac{IFU}. This acts as a synchronous reset for all the registers and reverts back all the \acsp{FSM} to their startup state, by acting directly on the state register. For this latter case, the effect is the same of having a check on the flush signal in each state, but leaving it as an external signal similar to the initial reset simplifies significantly the state diagram and helps readability.
+Finally, in case of an exceptional behavior or a branch misprediction, the \ac{IFU} must be flushed and all pending cache requests aborted, in order to resume the process at the next cycle when the new starting \ac{PC} will be provided by the \ac{PC} gen stage. In order to do so, a \texttt{flush} signal that comes from the later execution stages or from the top-level control is propagated to all the sequential elements of the \ac{IFU}. This acts as a synchronous reset for all the registers and reverts back all the \acsp{FSM} to their startup state \cite{resets}, by acting directly on the state register. For this latter case, the effect is the same of having a check on the flush signal in each state, but leaving it as an external signal similar to the initial reset simplifies significantly the state diagram and helps readability.
 
 \subsection{Presence checker}
 \begin{figure}[hbt]
@@ -310,5 +310,32 @@ The situation shown in \cref{fig:fetch08} is similar to the previous one, but th
 Finally, \cref{fig:fetch10} shows the last timing under analysis, that is the situation in which the issue is not ready when the instruction has to be selected inside the backup register. In similar manner to \cref{fig:fetch03}, here the stall does not cause any issues and the fetch resumes exactly as before when the queue turns ready again.
 
 \section{\acf{BPU}}
+As seen in \cref{fig:frontend}, the \ac{BPU} resides in the fetch stage and works in parallel with the \ac{IFU} on each address coming from the \ac{PC} gen stage. This unit, as shown in the high level scheme of \cref{fig:bpu-idea}, is composed of two main blocks:
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=.8\textwidth]{img/bpu-idea.pdf}
+  \caption{\acs{BPU} general idea}
+  \label{fig:bpu-idea}
+\end{figure}
+\begin{itemize}
+  \item The \textbf{gshare} is the actual branch predictor and is a variation of the two-level predictor described in \cref{sec:twolevelbp} of which a detailed explanation is provided in \cref{sec:gshare}. Being a branch predictor, its output is the predicted direction of the branch. Note that it outputs a prediction on every address, even those who potentially do not correspond to branch instructions. That is where the second block comes into play.
+  \item The \textbf{\acf{BTB}}, described in \cref{sec:btb}, is a small cache that contains the target address of taken branches only. This provides the significant advantage of being able to fetch the instruction after the taken branch with no additional delay, leading to zero overhead branches if the target is correct.
+\end{itemize}
+A branch is predicted taken by the \ac{BPU} if and only if the gshare predictor supposes the branch is taken and the \ac{BTB} contains an entry with a valid address for that specific \ac{PC}.
+
+\subsection{Top-level block diagram}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=.9\textwidth]{img/bpu-top.pdf}
+  \caption{\acs{BPU} module ports}
+  \label{fig:bpu-top}
+\end{figure}
+\Cref{fig:bpu-top}
+
+\subsection{Gshare predictor}\label{sec:gshare}
+
+\subsection{\acf{BTB}}\label{sec:btb}
+
+\subsection{Misprediction handling}
 
 \section{Branch unit}
