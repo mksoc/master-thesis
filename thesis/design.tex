@@ -233,19 +233,81 @@ To better understand the behavior of the fetch controller \acs{FSM}, a list of t
 
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=\textwidth]{img/fetch01.pdf}
+  \includegraphics[scale=.6]{img/fetch01.pdf}
   \caption[Startup and hit]{Startup and hit (\texttt{PC0} is the \texttt{BOOT\_PC} considered above)}
   \label{fig:fetch01}
 \end{figure}
 \Cref{fig:fetch01} shows the boot up after the reset, where the first \ac{PC} needs a cache access and then the next instructions are fetched consecutively from the same line, now saved in the line register. This is the most ideal situation, with a cache hit and the issue queue ready. It is clear from this timing diagram that the \texttt{fetch\_ready} signal must be active during \texttt{STARTUP} even if the outcome of the cache request is not yet known. If this were not the case, there would be a one-cycle penalty every time.
 
-\begin{figure}[hbt]
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=\textwidth]{img/fetch02.pdf}
+  \includegraphics[scale=.6]{img/fetch02.pdf}
   \caption{Startup and cache not ready/miss}
   \label{fig:fetch02}
 \end{figure}
 \Cref{fig:fetch02} shows what happens in the same situation if instead the cache is not ready or has a miss. This timing also explains why the instruction cache interface must save the address as soon as a read request is sent: if the address handshake does not occur at the second cycle when the request is made, then the address changes at the next clock and the read would happen at the new, wrong address.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch06.pdf}
+  \caption{Saved line change}
+  \label{fig:fetch06}
+\end{figure}
+\Cref{fig:fetch06} shows the situation of a cache line change. At first instructions are read consecutively from the line register, then a branch for example makes the \ac{PC} jump to a location stored on a different cache line, so a read request is sent, the cache hits and the current instruction is read from the cache output. After that, fetch continues sequentially with the other instructions in the new saved line.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch09.pdf}
+  \caption{Line backup register purpose}
+  \label{fig:fetch09}
+\end{figure}
+The purpose of the line backup register is demonstrated in the timing of \cref{fig:fetch09}, when there is a jump back and forth between two cache lines: the \texttt{here} signal during the cache request makes the next instruction be selected from the backup register. Of course, as already mentioned, the limitation of this solution is that if the same jump were to happen just right after this scenario (e.g. if \texttt{PC5} arrived again instead of \texttt{PC18} at the last shown cycle) even the backup register would have been overwritten and so a new memory access would be needed anyway.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch07.pdf}
+  \caption{Cache read pipeline}
+  \label{fig:fetch07}
+\end{figure}
+\Cref{fig:fetch07} illustrates the ability to reach a throughput on one instruction per clock cycle in a pipeline even while reading from the instruction cache, if the memory hits on every address. In this case instructions are always selected directly from the cache output.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch03.pdf}
+  \caption{Issue queue not ready during selection}
+  \label{fig:fetch03}
+\end{figure}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch04.pdf}
+  \caption{Issue queue not ready during request}
+  \label{fig:fetch04}
+\end{figure}
+\Cref{fig:fetch03,fig:fetch04} show the issue queue being not ready at two different instants. In \cref{fig:fetch03} the stall happens when the instruction is selected inside the line register and in this case no problem arises, as the fetch stage is simply stalled and no register changes until the issue queue becomes ready again. If the queue is busy when an address would require a cache read, as in \cref{fig:fetch04}, then the actual memory access is delayed until this stall is resolved. \todo{C'mon, solve this} In both cases, the \texttt{fetch\_ready} signal is deasserted to prevent the generation of new program counters.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch05.pdf}
+  \caption{Issue queue not ready when cache line arrives}
+  \label{fig:fetch05}
+\end{figure}
+\Cref{fig:fetch05} shows the case for which the issue queue is not ready when the cache hits and outputs a new line and the current address points to an instruction in that line (\texttt{will\_be\_here} asserted). In this case, there is a stall when no new \ac{PC} is generated and during which the newly read line is saved into the line register, so that when the issue queue becomes ready again the instruction will be selected from the register and not from the cache output.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch08.pdf}
+  \caption{Issue queue not ready and causing of backup}
+  \label{fig:fetch08}
+\end{figure}
+The situation shown in \cref{fig:fetch08} is similar to the previous one, but this time the issue queue is not ready when the outputs a new line and the current instruction refers to a line previously saved. In this case not even the line backup register can manage it, as as soon as the fetch resume, it is updated with the content of the line register, that is the last cache line read. So, for the old line a new memory access is required.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.6]{img/fetch10.pdf}
+  \caption{Issue queue not ready during backup}
+  \label{fig:fetch10}
+\end{figure}
+Finally, \cref{fig:fetch10} shows the last timing under analysis, that is the situation in which the issue is not ready when the instruction has to be selected inside the backup register. In similar manner to \cref{fig:fetch03}, here the stall does not cause any issues and the fetch resumes exactly as before when the queue turns ready again.
 
 \section{\acf{BPU}}
 
