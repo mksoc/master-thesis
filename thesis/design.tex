@@ -87,21 +87,29 @@ The final selected next \ac{PC} is fed into the \texttt{pc\_reg} output register
 \section{Instruction cache interface}
 \begin{figure}[hbt]
   \centering
-  \includegraphics{img/icache_ifc.pdf}
+  \includegraphics{img/icache_ifc-top.pdf}
   \caption{Instruction cache interface module ports}
+  \label{fig:icache_ifc-top}
+\end{figure}
+The instruction cache interface (\cref{fig:icache_ifc-top}) is responsible for translating the fetch requests coming from the \ac{IFU} into compliant valid/ready handshake signals for both address and data to the instruction cache. This unit basically provides two main benefits. First, it simplifies the control of the \ac{IFU}, by delegating the handshake process. Second, and more important, it provides an additional separation layer between the core frontend and the instruction cache with modularity in mind so that, should the cache block be modified, only this interface block needs to be updated, while the signals coming from the \ac{IFU} module would remain unchanged.
+
+\subsection{Datapath}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics{img/icache_ifc.pdf}
+  \caption{Instruction cache interface datapath}
   \label{fig:icache_ifc}
 \end{figure}
-The instruction cache interface (\cref{fig:icache_ifc}) is responsible for translating the fetch requests coming from the \ac{IFU} into compliant valid/ready handshake signals for both address and data to the instruction cache. This unit basically provides two main benefits. First, it simplifies the control of the \ac{IFU}, by delegating the handshake process. Second, and more important, it provides an additional separation layer between the core frontend and the instruction cache with modularity in mind so that, should the cache block be modified, only this interface block needs to be updated, while the signals coming from the \ac{IFU} module would remain unchanged.
+For what concerns data signals, the line received from the is directly connected with the \texttt{cache\_out} output, as the instruction cache is responsible for keeping its output valid until the handshake occurs. On the other hand, no assumption can be done on the timing of the input address other than the fact that it will be valid in the same cycle when \texttt{read\_req} is asserted. For this reason, given the possibility for the \ac{PC} to change at the following cycle, the requested address must be retained inside the interface by means of a register, as shown in \cref{fig:icache_ifc}. The multiplexer selects the input address if the cache is ready to receive the address in the cycle the request is sent, otherwise it selects the registered address in the following cycles.
 
 \subsection{Control \acs{FSM} and timing}
-While the data signals are as straightforward as simple wires connecting \texttt{pc\_i} and \texttt{cache\_out\_o} with \texttt{addr\_o} and \texttt{data\_i} respectively, the core of this interface lies in its control unit.
 \begin{figure}[hbt]
   \centering
   \includegraphics[scale=.8]{img/icache_ifc_fsm.pdf}
   \caption{Instruction cache interface \acs{FSM}}
   \label{fig:icache_ifc_fsm}
 \end{figure}
-It is a simple Mealy \acs{FSM} (\cref{fig:icache_ifc_fsm}) that after reset waits for a read request from the \ac{IFU}, then checks if the instruction cache is ready to receive an address and finally waits for a valid cache line to be read.
+The control unit of this block is a simple Mealy \acs{FSM} (\cref{fig:icache_ifc_fsm}) that after reset waits for a read request from the \ac{IFU}, then checks if the instruction cache is ready to receive an address and finally waits for a valid cache line to be read.
 
 \begin{figure}[hbt]
   \centering
@@ -117,7 +125,7 @@ It is a simple Mealy \acs{FSM} (\cref{fig:icache_ifc_fsm}) that after reset wait
   \caption{Cache not ready on address}
   \label{fig:cache02}
 \end{figure}
-\Cref{fig:cache02} shows another possibility when the instruction cache is not ready to receive an address at the time when a request arrives. In this case the \acs{FSM} waits until the cache become ready in the \texttt{ADDR\_BUSY} state. The state machine could just as well wait in the \texttt{WAIT\_ADDR} state, but the additional state was introduced for robustness with \texttt{addr\_valid} as a Moore output, so that this way there is no need for the \texttt{read\_req} signal to stay active until the cache is ready. This is another point in favor of a Mealy \acs{FSM} instead of the connection of combinational outputs externally.
+\Cref{fig:cache02} shows another possibility when the instruction cache is not ready to receive an address at the time when a request arrives. In this case the \acs{FSM} waits until the cache become ready in the \texttt{ADDR\_BUSY} state. The state machine could just as well wait in the \texttt{WAIT\_ADDR} state, but the additional state was introduced for robustness with \texttt{addr\_valid} as a Moore output, so that this way there is no need for the \texttt{read\_req} signal to stay active until the cache is ready. This is another point in favor of a Mealy \acs{FSM} instead of the connection of combinational outputs externally. Moreover, if the \acs{FSM} loops in this waiting state, the registered address is selected for the handshake, as the original program counter could have changed by that point. 
 
 \begin{figure}[hbt]
   \centering
@@ -131,7 +139,7 @@ Finally, \cref{fig:cache03} shows the case of a cache miss, in which the \acs{FS
 \begin{figure}[hbt]
   \centering
   \includegraphics[width=\textwidth]{img/ifu.pdf}
-  \caption[\acs{IFU} diagram]{\acs{IFU} diagram (inputs \texttt{rst\_n\_i} and \texttt{flush\_i} are shown as module port but are not connected with wires to avoid further clutter in the diagram)}
+  \caption[\acs{IFU} diagram]{\acs{IFU} diagram (inputs \texttt{rst\_n\_i} and \texttt{flush\_i} are shown as module port but are not connected with wires to avoid further clutter in the diagram, apart from the output OR gate)}
   \label{fig:ifu}
 \end{figure}
 \Cref{fig:ifu} shows the top level diagram of the \ac{IFU}, which has the ability to fetch instructions from thee different locations. The first is the direct output of the instruction cache, from which instructions are taken in case of a memory access. Then, when a cache line containing multiple instructions is read, it is saved into a \emph{line register} along with a valid bit that indicates that such line is valid. Consecutive instructions belonging to the same cache line are then fetched from this register, thus reducing the total number of cache requests. Finally, this line register is in turn saved into a \emph{line backup register} every time that a fetch takes place (i.e. the register is not updated during a stall). This additional location is used every time that the current \ac{PC} requires a cache access, but the next address refers to an instruction that was present in the previously saved cache line. Without a backup, the line register would be overwritten by the line fetched at the current \ac{PC} and so the next address would require a new cache read. Using an additional register, on the other hand, allows the \ac{IFU} to read the next instruction from the previous line. Evidently, this reasoning could be iterated to account for the second-oldest, third-oldest, etc. saved cache line, leading to a longer \acs{FIFO} of line registers among which to select the current instruction. This is definitely a possible improvement, but including more than two registers was judged out of the scope of the frontend. An actual improvement should on the other hand come from the memory system, that could for instance include a \emph{trace cache}, to account for subsequent instructions frequently fetched from different cache lines. Should such a feature be included, no other modifications would be needed on the \ac{IFU} end.
@@ -229,7 +237,15 @@ To better understand the behavior of the fetch controller \acs{FSM}, a list of t
   \caption[Startup and hit]{Startup and hit (\texttt{PC0} is the \texttt{BOOT\_PC} considered above)}
   \label{fig:fetch01}
 \end{figure}
-\Cref{fig:fetch01} shows the boot up after the reset, where the first \ac{PC} needs a cache access and then the next instructions are fetched consecutively from the same line, now saved in the line register. This is the most ideal situation, with a cache hit and the issue queue ready.
+\Cref{fig:fetch01} shows the boot up after the reset, where the first \ac{PC} needs a cache access and then the next instructions are fetched consecutively from the same line, now saved in the line register. This is the most ideal situation, with a cache hit and the issue queue ready. It is clear from this timing diagram that the \texttt{fetch\_ready} signal must be active during \texttt{STARTUP} even if the outcome of the cache request is not yet known. If this were not the case, there would be a one-cycle penalty every time.
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/fetch02.pdf}
+  \caption{Startup and cache not ready/miss}
+  \label{fig:fetch02}
+\end{figure}
+\Cref{fig:fetch02} shows what happens in the same situation if instead the cache is not ready or has a miss. This timing also explains why the instruction cache interface must save the address as soon as a read request is sent: if the address handshake does not occur at the second cycle when the request is made, then the address changes at the next clock and the read would happen at the new, wrong address.
 
 \section{\acf{BPU}}
 

@@ -35,13 +35,28 @@ module icache_ifc
   output  logic             data_ready_o
 );
 
+  // =========== Datapath ============
+  logic [XLEN-1:0] saved_pc;
+  logic addr_sel;
+
+  always_ff @(posedge clk_i or negedge rst_n_i) begin: addr_reg
+    if (!rst_n_i) begin: async_rst
+      saved_pc <= '0;
+    end else begin
+      if (read_req_i) begin
+        saved_pc <= pc_i;
+      end
+    end
+  end: addr_reg
+
+  // Data assignment
+  assign addr_o = addr_sel ? saved_pc : pc_i;
+  assign cache_out_o = data_i;
+  
+  // ========= Control unit ===========
   // State definition
   typedef enum logic [1:0] { RESET, WAIT_ADDR, ADDR_BUSY, WAIT_DATA } state_t;
   state_t present_state, next_state;
-  
-  // Data assignment
-  assign addr_o = pc_i;
-  assign cache_out_o = data_i;
 
   // State transition
   always_ff @ (posedge clk_i or negedge rst_n_i) begin
@@ -105,12 +120,15 @@ module icache_ifc
     addr_valid_o = 'b0;
     data_ready_o = 'b0;
     read_done_o = 'b0;
+    addr_sel = 'b0;
 
     case (present_state)
       WAIT_ADDR: begin
         if (read_req_i) begin
           addr_valid_o = 'b1;
         end
+        // Moore output
+        addr_sel = 'b0;
       end
 
       // This state removes the need for read_req_i to 
@@ -118,6 +136,7 @@ module icache_ifc
       ADDR_BUSY: begin
         // Moore output
         addr_valid_o = 'b1;
+        addr_sel = 'b1;
       end
 
       WAIT_DATA: begin

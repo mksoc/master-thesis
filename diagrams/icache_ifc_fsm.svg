@@ -42,8 +42,8 @@
      id="namedview480"
      showgrid="false"
      inkscape:zoom="1.2615122"
-     inkscape:cx="271.06547"
-     inkscape:cy="287.38634"
+     inkscape:cx="311.05872"
+     inkscape:cy="246.30683"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -154,21 +154,21 @@
      style="fill:#ffffff" />
   <ellipse
      id="ellipse368"
-     ry="21.1194"
+     ry="22.739103"
      rx="35.1819"
-     cy="248.293"
-     cx="363.98001"
+     cy="249.02924"
+     cx="364.42175"
      style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:1" />
   <text
      id="text372"
      y="250.145"
-     x="363.99356"
+     x="364.4353"
      style="font-style:normal;font-weight:normal;font-size:9.03110981px;font-family:'Ubuntu Mono';text-anchor:middle;fill:#000000"
      font-size="9.03111">
     <tspan
        id="tspan370"
        y="250.145"
-       x="363.99356">ADDR_BUSY</tspan>
+       x="364.4353">ADDR_BUSY</tspan>
   </text>
   <ellipse
      id="ellipse376"
@@ -258,9 +258,11 @@
   <g
      id="g424">
     <path
-       style="fill: none; fill-opacity:0; stroke-width: 1; stroke: #000000"
-       d="M 388.858,263.228 A 124.075,124.075 0 0 0 487.453,269.535"
-       id="path418" />
+       style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:1"
+       d="m 390.55133,264.25872 c 30.57482,15.66049 64.58066,16.9134 96.90167,5.27628"
+       id="path418"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
     <polygon
        style="fill: #000000"
        points="488.862,269.023 487.354,270.673 487.462,269.561 486.637,268.806 "
@@ -383,11 +385,11 @@
   <text
      font-size="6.77333"
      style="font-style:normal;font-weight:normal;font-size:6.77333021px;font-family:'Ubuntu Mono';text-anchor:start;fill:#000000"
-     x="347.09076"
+     x="347.5325"
      y="257.854"
      id="text472">
     <tspan
-       x="347.09076"
+       x="347.5325"
        y="257.854"
        id="tspan470">addr_valid</tspan>
   </text>
@@ -431,5 +433,29 @@
        x="404.38321"
        y="89.311874"
        id="tspan344-5">flush</tspan>
+  </text>
+  <text
+     font-size="6.77333"
+     style="font-style:normal;font-weight:normal;font-size:6.77333021px;font-family:'Ubuntu Mono';text-anchor:start;fill:#000000;stroke-width:1"
+     x="439.00009"
+     y="128.75638"
+     id="text472-3">
+    <tspan
+       style="stroke-width:1"
+       x="439.00009"
+       y="128.75638"
+       id="tspan470-6">~addr_sel</tspan>
+  </text>
+  <text
+     font-size="6.77333"
+     style="font-style:normal;font-weight:normal;font-size:6.77333021px;font-family:'Ubuntu Mono';text-anchor:start;fill:#000000;stroke-width:1"
+     x="350.84805"
+     y="265.64529"
+     id="text472-3-7">
+    <tspan
+       style="stroke-width:1"
+       x="350.84805"
+       y="265.64529"
+       id="tspan470-6-5">addr_sel</tspan>
   </text>
 </svg>
