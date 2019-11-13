@@ -156,9 +156,11 @@ module fetch_controller
         if (issue_ready_i) begin
           if (here_i) begin
             fetch_ready_o = 'b1;
+            line_sel_o = line_reg;
           end else begin
             fetch_ready_o = 'b1;
             read_req_o = 'b1;
+            line_sel_o = line_reg;
           end
         end else begin
           fetch_ready_o = 'b0;

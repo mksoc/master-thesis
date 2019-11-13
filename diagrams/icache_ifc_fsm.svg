@@ -12,7 +12,7 @@
    viewBox="327 13 271 278"
    version="1.1"
    id="svg478"
-   sodipodi:docname="icache_interface_fsm.svg"
+   sodipodi:docname="icache_ifc_fsm.svg"
    inkscape:version="0.92.4 5da689c313, 2019-01-14">
   <metadata
      id="metadata484">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -42,8 +42,8 @@
      id="namedview480"
      showgrid="false"
      inkscape:zoom="1.2615122"
-     inkscape:cx="304.93572"
-     inkscape:cy="250.62952"
+     inkscape:cx="271.06547"
+     inkscape:cy="287.38634"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -401,5 +401,35 @@
        x="507.31433"
        y="278.89401"
        id="tspan474">data_ready</tspan>
+  </text>
+  <g
+     transform="matrix(-1.0630524,0,0,1,930.91212,69.564479)"
+     id="g342-3"
+     style="stroke-width:0.96989042">
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:0.96989042"
+       d="m 479.9,21.6448 a 9.57463,9.57463 0 0 0 -10.328,5.3066"
+       id="path336-6" />
+    <polygon
+       style="fill:#000000;stroke-width:0.96989042"
+       points="468.359,26.1313 469.255,26.8002 470.328,26.4849 468.99,28.2766 "
+       id="polygon338-7" />
+    <polygon
+       style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:0.96989042"
+       points="468.359,26.1313 469.255,26.8002 470.328,26.4849 468.99,28.2766 "
+       id="polygon340-5" />
+  </g>
+  <text
+     font-size="6.77333"
+     style="font-style:normal;font-weight:normal;font-size:6.77333021px;font-family:'Ubuntu Mono';text-anchor:start;fill:#000000;stroke-width:1"
+     x="404.38321"
+     y="89.311874"
+     id="text346-3">
+    <tspan
+       style="stroke-width:1"
+       x="404.38321"
+       y="89.311874"
+       id="tspan344-5">flush</tspan>
   </text>
 </svg>
