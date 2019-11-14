@@ -318,7 +318,7 @@ As seen in \cref{fig:frontend}, the \ac{BPU} resides in the fetch stage and work
   \label{fig:bpu-idea}
 \end{figure}
 \begin{itemize}
-  \item The \textbf{gshare} is the actual branch predictor and is a variation of the two-level predictor described in \cref{sec:twolevelbp} of which a detailed explanation is provided in \cref{sec:gshare}. Being a branch predictor, its output is the predicted direction of the branch. Note that it outputs a prediction on every address, even those who potentially do not correspond to branch instructions. That is where the second block comes into play.
+  \item The \textbf{gshare} is the actual branch predictor and is a variation of the two-level predictor described in \cref{sec:twolevelbp} featuring a table of 2-bit counters and a global history register, of which a detailed explanation is provided in \cref{sec:gshare}. Being a branch predictor, its output is the predicted direction of the branch. Note that it outputs a prediction on every address, even those who potentially do not correspond to branch instructions. That is where the second block comes into play.
   \item The \textbf{\acf{BTB}}, described in \cref{sec:btb}, is a small cache that contains the target address of taken branches only. This provides the significant advantage of being able to fetch the instruction after the taken branch with no additional delay, leading to zero overhead branches if the target is correct.
 \end{itemize}
 A branch is predicted taken by the \ac{BPU} if and only if the gshare predictor supposes the branch is taken and the \ac{BTB} contains an entry with a valid address for that specific \ac{PC}.
@@ -330,14 +330,91 @@ A branch is predicted taken by the \ac{BPU} if and only if the gshare predictor 
   \caption{\acs{BPU} module ports}
   \label{fig:bpu-top}
 \end{figure}
-\Cref{fig:bpu-top}
+\Cref{fig:bpu-top} shows the module interface of the \ac{BPU}. Apart from reset and flush signals, used respectively at startup and in case an exception requires the internal data structures to be flushed, the module outputs a prediction based on the current address, composed by a single bit indicating if the branch is supposed to be taken or not, the predicted target and also the branch address, which is later needed to update the predictor structures.
 
-\subsection{Gshare predictor}\label{sec:gshare}
-\todo{Valid bit}
-\todo{Index as output}
+The inputs containing the \texttt{res} prefix, for resolution, are the just mentioned branch \ac{PC} to which the resolution refers, the actual target, the actual branch direction, a bit indicating if there was a misprediction and a valid bit to signal that the present one is a valid branch resolution coming from the execution stage.
+
+\begin{table}[hbt]
+  \centering
+  \makebox[\textwidth][c]{
+    \begin{tabular}{llll}
+      \toprule
+      \textbf{Prediction}         & \textbf{Resolution}         & \textbf{Target}             & \textbf{Action} \\
+      \midrule
+      Taken                       & Taken                       & Correct                     & Increment 2-bit counter \\
+      \midrule
+      \multirow{3}{*}{Taken}      & \multirow{3}{*}{Taken}      & \multirow{3}{*}{Incorrect}  & Increment 2-bit counter \\
+                                  &                             &                             & Update BTB entry \\
+                                  &                             &                             & Flush pipeline and restart from correct target \\
+      \midrule
+      \multirow{3}{*}{Taken}      & \multirow{3}{*}{Not taken}  & \multirow{3}{*}{--}         & Decrement 2-bit counter \\
+                                  &                             &                             & Remove BTB entry \\
+                                  &                             &                             & Flush pipeline and restart from branch \ac{PC}+4 \\
+      \midrule
+      Not taken                   & Not taken                   & --                          & Decrement 2-bit counter \\
+      \midrule
+      \multirow{3}{*}{Not taken}  & \multirow{3}{*}{Taken}      & \multirow{3}{*}{--}         & Increment 2-bit counter \\
+                                  &                             &                             & Add BTB entry \\
+                                  &                             &                             & Flush pipeline and restart from correct target \\
+      \bottomrule          
+    \end{tabular}
+  }
+  \caption{Predictor update actions}
+  \label{tab:bpupdate}
+\end{table}
+This information, in particular the two bits about the actual branch direction and the misprediction, is used to update the data structures and take further action as listed in \cref{tab:bpupdate}. In case of correct prediction, it is only needed to update the 2-bit counters inside the gshare predictor according to the branch direction. A misprediction, on the other hand, requires different actions to be taken depending on which event caused it. If the branch was correctly predicted taken, but the target in the \ac{BTB} was incorrect, then the \ac{BTB} entry must be updated with the correct one. If, instead, the branch was mispredicted taken, the target buffer entry is deleted in order to prevent a potential further misprediction, in the case when the 2-bit counter was in the \emph{strongly taken} state. Finally, if the branch was mispredicted not taken, then the corresponding target is added to the \ac{BTB}. This time, if the 2-bit counter was in the \emph{strongly not taken} state, the second misprediction cannot be prevented and the same entry will be written once again in the \ac{BTB}.
+
+In all the misprediction cases, the fetch and execution stages must be flushed and the next \ac{PC} must be set to the next sequential address after the branch \ac{PC} if the branch was actually not taken, or to the correct target if the branch was actually taken. Note that this flush operation is different from the flush caused by an exception because, obviously, it does not reset the branch predictor structures, which are only updated with the correct branch result.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\textwidth]{img/bpu.pdf}
+  \caption{\acs{BPU} block diagram}
+  \label{fig:bpu}
+\end{figure}
+\Cref{fig:bpu} shows the internal organization of the \ac{BPU} which is simply composed of the gshare and \ac{BTB} blocks, along with the AND gate of \cref{fig:bpu-idea} and a couple of other gates to decide the correct update action based on the results, as in \cref{tab:bpupdate}.
+
+\subsection{Gshare branch predictor}\label{sec:gshare}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics{img/gshare-top.pdf}
+  \caption{Gshare module ports}
+  \label{fig:gshare-top}
+\end{figure}
+The idea of the gshare predictor, whose interface is shown in \cref{fig:gshare-top}, was first proposed by Scott McFarling in a 1993 paper \cite{mcfarling93} and consists in a variation of the two-level predictor that combines global information from the global branch history and local information of the current branch address by hashing them with the exclusive OR of the history register and the $N$ least significant bits of the \ac{PC}, where $N$ is the history length. \todo{Expand a little on gshare?}
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=.9\textwidth]{img/gshare.pdf}
+  \caption{Gshare branch predictor}
+  \label{fig:gshare}
+\end{figure}
+The structure of this predictor is shown in \cref{fig:gshare} and is composed of a \ac{BHT} composed of a single shift register where branch resolutions are left shifted in and a \ac{PHT} that contains an array of 2-bit counters, organized as a register file, so providing synchronous write and asynchronous read. This table is indexed by the XOR of the history and the current \ac{PC} in order to read the prediction for the current branch, which comes from the most significant bit of the 2-bit counter.
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=.8\textwidth]{img/gshare01.pdf}
+  \caption{Update timing diagram}
+  \label{fig:gshare01}
+\end{figure}
+To update the \ac{PHT} when a branch is resolved the correct 2-bit counter has to be selected using the same index as the one used for the prediction. As an architectural choice, branches in LEN5 are resolved in-order during the execution stages, so that in the time span between the prediction and the resolution of a branch, no other resolution is generated and as such the branch history remains unchanged. This means that the write index used to select the 2-bit counter to be updated can be derived using the resolved branch address and the same current value of the history register. This poses no timing issues, as demonstrated by \cref{fig:gshare01}, because the history register is shifted only after the clock edge when the \texttt{res\_valid} signal is active, so at that edge the register still stores the unshifted value and the write operation on the \ac{PHT} occurs at the correct address.
+
+If branches were resolved \ooo, on the other hand, to restore the correct address to the \ac{PHT} the index at the moment of the prediction would need to be passed along in the pipeline to return at the moment of the resolution. \todo{So why in-order branches?}
+
+The initial version of the design also accounted for a column of valid bits in the \ac{PHT} to indicate if the prediction coming from each 2-bit counter is valid (i.e. if that 2-bit counter has already been used at least once). This is useful to prevent taken misprediction if the 2-bit counters are initialized in the weakly or strongly taken state. However, if the counters are instead initialized in a not taken state, then the first time they are accessed the prediction will always be ``not taken'' just as if the valid bit was included, so this bit becomes redundant and only wastes area. After a more thorough analysis, presented in \cref{sec:}, it was decided to remove the valid bits from the \ac{PHT}.
 
 \subsection{\acf{BTB}}\label{sec:btb}
-
-\subsection{Misprediction handling}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics{img/btb-top.pdf}
+  \caption{\acs{BTB} module ports}
+  \label{fig:btb-top}
+\end{figure}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/btb.pdf}
+  \caption{\acs{BTB} diagram}
+  \label{fig:btb}
+\end{figure}
 
 \section{Branch unit}

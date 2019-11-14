@@ -22,9 +22,10 @@ Most \acp{ISA} are \emph{incremental}, meaning that, in order to ensure compatib
 \begin{figure}[hbtp]
   \centering
   \includegraphics[width=0.8\textwidth]{img/x86.pdf}
-  \caption[x86 instruction count over time]{x86 instruction count over time (Data taken from \cite[p.~3]{reader})}
+  \caption[x86 instruction count over time]{x86 instruction count over time\footnotemark}
   \label{fig:x86}
 \end{figure}
+\footnotetext{Data taken from \cite[p.~3]{reader}}
 
 One the other hand, as stated above, \riscv is a \emph{modular} \ac{ISA}: a small number of base instructions (called RV32I, RV64I or RV128I for 32, 64 and 128-bit processors respectively) must be implemented by all instances of \riscv processors and are guaranteed to never change in the future, while on top of that, designers can freely choose to include support or not for each of the other optional extensions, some of which have already been frozen, while others are still in development. Table \ref{tab:extensions} contains a list of available extensions at the time of writing.
 
@@ -34,7 +35,8 @@ One the other hand, as stated above, \riscv is a \emph{modular} \ac{ISA}: a smal
   \begin{tabular}{p{\dimexpr 0.2\linewidth-2\tabcolsep}
                   p{\dimexpr 0.8\linewidth-2\tabcolsep}}
     \toprule
-    \textbf{Name} & \textbf{Description} \\ \hline
+    \textbf{Name} & \textbf{Description} \\
+    \hline
     I             & Base integer instruction set, including arithmetic and logic instructions, jump, branch and control transfer instructions and some miscellaneous general management ones. \\
     M             & Integer multiplication and division extension. \\
     A             & Atomic extension for atomic memory operations, for process synchronization. \\

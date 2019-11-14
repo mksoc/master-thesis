@@ -40,7 +40,7 @@ The most basic dynamic predictor consists of a table of $2^k$ entries (flip-flop
 
 This one-bit model is however quite weak, especially with nested loops, as the inner loop is mispredicted twice, at the last iteration when exiting and at the next first iteration when entering again.
 
-This predictor can be improved by introducing some hysteresis in the system using two bits instead of one. This way, the \ac{BHT} is composed by 2-bit entries that work as saturating counters, with their value incremented saturating at 3 every time the branch is taken and decremented saturating at 0 when the branch is not taken. The most significant bit of the counter provides the prediction, that changes only after two consecutive mispredictions.
+This predictor can be improved by introducing some hysteresis in the system using two bits instead of one. This way, the \ac{BHT} is composed by 2-bit entries that work as saturating counters, with their value incremented saturating at 3 every time the branch is taken and decremented saturating at 0 when the branch is not taken. The most significant bit of the counter provides the prediction, that changes only after two consecutive mispredictions. \todo{Add state machine}
 
 These designs, known as \emph{one-level} or \emph{bimodal} predictors, could be extended to $n$-bit saturating counters, but solutions with more than two bits are rarely employed, because the size of the table is the limiting factor, given that, by using only a subset of \ac{PC} bits, multiple branches could index the same \ac{BHT} entry, thus producing \emph{aliasing} issues.
 
