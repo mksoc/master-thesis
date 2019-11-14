@@ -1,0 +1,15 @@
+{"signal": 
+	[
+    {"name": "clk",               "wave": "p.."},
+    {"name": "history",           "wave": "=.=", "data": ["H0", "H1", "H2"]},
+    {"name": "pc",                "wave": "===", "data": ["PC1", "PC2", "PC3"]},
+    {"name": "res_valid",         "wave": "010"},
+    {"name": "res_pc",            "wave": "x=x", "data": ["RES_PC", "PC5", "PC17"]},
+    {"name": "index_r",           "wave": "===", "data": ["H0^PC1", "H0^PC2", "H1^PC3"]},
+    {"name": "taken",             "wave": "===", "data": ["pht[H0^PC1][1]", "pht[H0^PC2][1]", "pht[H1^PC3][1]"]},
+    {"name": "index_w",           "wave": "x=x", "data": ["H0^RES_PC", "PC16|L1"]},
+    {"name": "pht[index_w]",      "wave": "x==", "data": ["pht[H0^RES_PC]_old", "pht[H0^RES_PC]_new"]},
+ 	],
+  
+  "config": {"hscale": 4}
+}

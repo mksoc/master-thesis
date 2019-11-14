@@ -20,12 +20,11 @@ module gshare
   input   logic             rst_n_i,
   input   logic             flush_i,
   input   logic [XLEN-1:0]  pc_i,
-  input   logic             valid_i,
-  input   logic [HLEN-1:0]  index_i,
-  input   logic             taken_i,
+  input   logic             res_valid_i,
+  input   logic [XLEN-1:0]  res_pc_i,
+  input   logic             res_taken_i,
 
-  output  logic             pred_taken_o,
-  output  logic [HLEN-1:0]  pred_index_o
+  output  logic             taken_o,
 );
 
   // Definitions
@@ -34,19 +33,19 @@ module gshare
   localparam PHT_ROWS = 1 << HLEN;
   c2b_t pht_d[PHT_ROWS], pht_q[PHT_ROWS];
   
-  logic [HLEN-1:0] ghr;
+  logic [HLEN-1:0] history, index_r, index_w;
 
   // --------------------------
   // Branch History Table (BHT)
   // --------------------------
   always_ff @(posedge clk_i or negedge rst_n_i) begin: bht
     if (!rst_n_i) begin: bht_async_rst
-      ghr <= '0;
+      history <= '0;
     end else begin
       if (flush_i) begin: bht_sync_flush
-        ghr <= '0;
-      end else if (valid_i) begin: bht_shift
-        ghr <= {ghr[HLEN-1:1], taken_i};
+        history <= '0;
+      end else if (res_valid_i) begin: bht_shift
+        history <= {history[HLEN-1:1], res_taken_i};
       end
     end
   end: bht
@@ -59,33 +58,33 @@ module gshare
     pht_d = pht_q;
 
     // If a valid branch resolution arrives, update counters
-    if (valid_i) begin: c2b_fsm
-      case (pht_q[index_i])
+    if (res_valid_i) begin: c2b_fsm
+      case (pht_q[index_w])
         SNT: begin
           if (taken_i)
-            pht_d[index_i] = WNT;
-          else pht_d[index_i] = SNT;
+            pht_d[index_w] = WNT;
+          else pht_d[index_w] = SNT;
         end
 
         WNT: begin
           if (taken_i)
-            pht_d[index_i] = WT;
-          else pht_d[index_i] = SNT;
+            pht_d[index_w] = WT;
+          else pht_d[index_w] = SNT;
         end
 
         WT: begin
           if (taken_i)
-            pht_d[index_i] = ST;
-          else pht_d[index_i] = WNT;
+            pht_d[index_w] = ST;
+          else pht_d[index_w] = WNT;
         end
 
         ST: begin
           if (taken_i)
-            pht_d[index_i] = ST;
-          else pht_d[index_i] = WT;
+            pht_d[index_w] = ST;
+          else pht_d[index_w] = WT;
         end
 
-        default: pht_d[index_i] = WNT;
+        default: pht_d[index_w] = WNT;
       endcase
     end: c2b_fsm
   end: pht_update
@@ -105,7 +104,8 @@ module gshare
   end
     
   // Assignments
-  assign pred_index_o = ghr ^ pc_i[HLEN + OFFSET - 1:OFFSET]; // XOR hashing
-  assign pred_taken_o = pht_q[pred_index_o][1];
+  assign index_r = history ^ pc_i[HLEN + OFFSET - 1:OFFSET]; // XOR hashing
+  assign index_w = history ^ res_pc_i[HLEN + OFFSET - 1:OFFSET];
+  assign taken_o = pht_q[index_r][1];
 
 endmodule

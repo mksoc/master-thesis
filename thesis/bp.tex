@@ -33,9 +33,10 @@ The most basic dynamic predictor consists of a table of $2^k$ entries (flip-flop
 \begin{figure}[hbtp]
   \centering
   \includegraphics[width=0.8\textwidth]{img/one-level-bp.pdf}
-  \caption{One-level branch predictor}
+  \caption[One-level branch predictor]{One-level branch predictor\footnotemark}
   \label{fig:one-level-bp}
 \end{figure}
+\footnotetext{Edited from \url{https://commons.wikimedia.org/wiki/File:Two-level_branch_prediction.svg} under the license \href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{Attribution-Share Alike 3.0 Unported}}
 
 This one-bit model is however quite weak, especially with nested loops, as the inner loop is mispredicted twice, at the last iteration when exiting and at the next first iteration when entering again.
 
@@ -59,9 +60,10 @@ A design that exploits such correlations was first proposed in \cite{yeh91} and 
 \begin{figure}[hbtp]
   \centering
   \includegraphics[width=0.8\textwidth]{img/two-level-bp.pdf}
-  \caption{Two-level branch predictor}
+  \caption[Two-level branch predictor]{Two-level branch predictor\footnotemark}
   \label{fig:two-level-bp}
 \end{figure}
+\footnotetext{Taken from \url{https://commons.wikimedia.org/wiki/File:Two-level_branch_prediction.svg} under the license \href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{Attribution-Share Alike 3.0 Unported}}
 In the example above, the two-level predictor would successfully predict as not taken the third branch if the global history stored in the \ac{BHT} indicated that the previous two branches were taken.
 
 This scheme, however, has lost the \emph{local} information about the current branch instruction, relying only on the global history of branches for the prediction. Thus, nine variants were proposed \cite{yeh93} that exploit either one or both the local and global information (figure \ref{fig:yehvariations}), by storing, for instance, multiple \acp{BHT} indexed by the branch address.

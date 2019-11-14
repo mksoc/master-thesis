@@ -23,13 +23,11 @@ module bpu
   input   logic [XLEN-1:0]  pc_i,
   input   logic             res_valid_i,
   input   logic [XLEN-1:0]  res_pc_i,
-  input   logic [HLEN-1:0]  res_index_i,
   input   logic [XLEN-1:0]  res_target_i,
   input   logic             res_taken_i,
   input   logic             res_mispredict_i,
 
   output  logic [XLEN-1:0]  pred_pc_o,
-  output  logic [HLEN-1:0]  pred_index_o,
   output  logic [XLEN-1:0]  pred_target_o,
   output  logic             pred_taken_o
 );
@@ -45,12 +43,10 @@ module bpu
     .rst_n_i        (rst_n_i),
     .flush_i        (flush_i),
     .pc_i           (pc_i),
-    .valid_i        (res_valid_i),
-    .index_i        (res_index_i),
-    .taken_i        (res_taken_i),
+    .res_valid_i    (res_valid_i),
+    .res_taken_i    (res_taken_i),
 
-    .pred_taken_o   (gshare_taken),
-    .pred_index_o   (pred_index_o)
+    .taken_o        (gshare_taken),
   );
 
   btb u_btb
@@ -61,8 +57,8 @@ module bpu
     .pc_i             (pc_i),
     .valid_i          (btb_update),
     .del_entry_i      (btb_del_entry),
-    .update_pc_i      (res_pc_i),
-    .target_i         (res_target_i),
+    .res_pc_i         (res_pc_i),
+    .res_target_i     (res_target_i),
 
     .hit_o            (btb_hit),
     .pred_target_o    (pred_target_o)

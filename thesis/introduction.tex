@@ -18,11 +18,11 @@ How \riscv intends to achieve that is by leveraging its two main strengths: firs
 
 \subsection{Extensions}\label{sec:extensions}
 Most \acp{ISA} are \emph{incremental}, meaning that, in order to ensure compatibility, every new processor must implement new \ac{ISA} extensions as well as all the extensions introduced in the past, which leads to an accumulation of very rarely used instructions and a subsequent waste of hardware complexity and area. A clear example of this inflation is the growth of the number of instructions in the x86 \ac{ISA} (figure \ref{fig:x86}).
-
+  
 \begin{figure}[hbtp]
   \centering
-  \includegraphics[width=0.8\textwidth]{img/x86.png}
-  \caption{x86 instruction count over time \cite[p.~3]{reader}}
+  \includegraphics[width=0.8\textwidth]{img/x86.pdf}
+  \caption[x86 instruction count over time]{x86 instruction count over time (Data taken from \cite[p.~3]{reader})}
   \label{fig:x86}
 \end{figure}
 

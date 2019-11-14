@@ -22,8 +22,8 @@ module btb
   input   logic [XLEN-1:0]  pc_i,
   input   logic             valid_i,
   input   logic             del_entry_i,
-  input   logic [XLEN-1:0]  update_pc_i,
-  input   logic [XLEN-1:0]  target_i,
+  input   logic [XLEN-1:0]  res_pc_i,
+  input   logic [XLEN-1:0]  res_target_i,
 
   output  logic             hit_o,
   output  logic [XLEN-1:0]  pred_target_o
@@ -45,8 +45,8 @@ module btb
   // Branch Target Buffer (BTB)
   // --------------------------
   // Write
-  assign addr_w = update_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
-  assign tag_w = update_pc_i[XLEN - 1:BTB_BITS + OFFSET];
+  assign addr_w = res_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
+  assign tag_w = res_pc_i[XLEN - 1:BTB_BITS + OFFSET];
 
   always_comb begin: btb_update
     // By default, store previous value
@@ -59,7 +59,7 @@ module btb
       end else begin
         btb_d[addr_w].valid = 'b1;
         btb_d[addr_w].tag = tag_w;
-        btb_d[addr_w].target = target_i;
+        btb_d[addr_w].target = res_target_i;
       end
     end
   end
