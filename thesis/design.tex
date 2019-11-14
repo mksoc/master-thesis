@@ -6,16 +6,24 @@
   \caption{LEN5 frontend}
   \label{fig:frontend}
 \end{figure}
-\Cref{fig:frontend} shows a top-level block diagram of the LEN5 frontend, with the modules that were developed and that will be described in the following sections shown in solid black color. Gray blocks are instead the ones the frontend interfaces with.
+\Cref{fig:frontend} shows a top-level block diagram of the LEN5 frontend, with the modules that were developed and that will be described in the following sections shown in solid black color. Gray blocks are instead the ones the frontend interfaces with, that are the instruction cache, or equivalently the memory management unit, and the issue queue.
 
-The frontend is composed of two pipeline stages, name the \emph{\ac{PC} generation} and the \emph{fetch} stages. \Cref{fig:frontend} also shows the \emph{decode} stage, where the issue queue is found. This is basically a \acs{FIFO} that serves as a buffer interface between the frontend and the backend of the processor by storing a queue of instructions to be issue to the later stages of the pipeline.
+The frontend is composed of two pipeline stages, namely the \emph{\ac{PC} generation} and the \emph{fetch} stages. \Cref{fig:frontend} also shows the \emph{decode} stage, where the issue queue is found. The latter is basically a \acs{FIFO} that serves as a buffer interface between the frontend and the backend of the processor by storing a queue of instructions to be issued to the later stages of the pipeline.
 
-In the \ac{PC} generation (\ac{PC} gen) stage the next \ac{PC} is selected among a number of different options by the \ac{PC} sel block, using a predefined priority and is then written on the output register of the stage. This register also serves as the pipeline register between the two stages, and that is why \cref{fig:frontend} shows a dashed gray line crossing the \ac{PC} sel block. The selection of the new \ac{PC} is carried out by a network of combinational logic, so that this stage always takes exactly one clock cycle.
+\subsection{\acs{PC} gen stage}
+In the \ac{PC} generation (\ac{PC} gen) stage, the next \ac{PC} is selected among a number of different options by the \ac{PC} sel block, using a predefined priority, and is then written on the output register of the stage. This register also serves as the pipeline register between the two stages, and that is why \cref{fig:frontend} shows a dashed gray line crossing the \ac{PC} sel block. 
 
-In the fetch stage, the \ac{PC} is used by the \ac{IFU} to select and possibly read from memory the next instruction to be pushed to the issue queue. At the same time, the \ac{BPU} uses the current address to predict the next direction in case of branch and passes such information back to the \ac{PC} gen stage. Memory accesses are performed through the instruction cache interface which manages the control signals to the instruction cache. The latency of this stage is at least two clock cycles (see \cref{sec:ifu}), and in a normal steady state the \ac{IFU} can provide a throughput of one instruction each clock cycle to the issue queue, but in case of cache miss the number of cycles to resolve the stall can grow significantly, so the latency cannot be determined in advance. The issue queue is there exactly to provide some elasticity to the pipeline, by buffering already fetched instructions.
+The selection of the new \ac{PC} is carried out by a network of combinational logic, so that this stage always takes exactly one clock cycle.
+
+\subsection{Fetch stage}
+In the fetch stage, the \ac{PC} is used by the \acf{IFU} to select and possibly read from memory the next instruction to be pushed to the issue queue. At the same time, the \acf{BPU} uses the current address to predict the next direction in case of branch and passes such information back to the \ac{PC} gen stage. Memory accesses are performed through the instruction cache interface which manages the control signals to the instruction cache. 
+
+The latency of this stage is at least two clock cycles (see \cref{sec:ifu}); in a normal steady state the \ac{IFU} can provide a throughput of one instruction each clock cycle to the issue queue, but in case of cache miss the number of cycles to resolve the stall can grow significantly, so the latency cannot be determined in advance. The issue queue is there exactly to provide some elasticity to the pipeline, by buffering already fetched instructions, masking at least in part this unpredictable latency.
 
 \subsection{Handshake signals}\label{sec:handshake}
-The communication between each stage is always bidirectional, because in case of a stall caused for instance by a cache miss, by a full issue queue or by some other exceptional behavior down the pipeline, the \ac{PC} generation process must be interrupted along with the fetch. In order to do so, a handshake process handles the communication between each stage as well as between the instruction cache interface and the actual cache. This handshake mechanism is based on the {\smaller AXI} valid/ready protocol described below, even if it is not compliant with all the {\smaller AXI} specifications.
+The communication between each stage is always bidirectional, because in case of a stall, caused for instance by a cache miss, by a full issue queue or by some other exceptional behavior down the pipeline, the \ac{PC} generation process must be interrupted along with the fetch. In order to do so, a handshake process handles the communication between each stage as well as between the instruction cache interface and the actual cache.
+
+This handshake mechanism is based on the {\smaller AXI} valid/ready protocol described below, even if it is not compliant with all the {\smaller AXI} specifications.
 
 In each communication the source of data generates a \emph{valid} signal to indicate that the information is available, while the destination generates a \emph{ready} signal to indicate that it can accept such information \cite[p.~A3-41]{axi}. The handshake takes place and the information is successfully exchanged only at the rising clock edge when both valid and ready are asserted. For example, in \cref{fig:axi}, the handshake happens at the third rising edge of the clock.
 \begin{figure}[hbt]
@@ -85,6 +93,7 @@ In order to save resources, a single adder is used to generate both the next seq
 The final selected next \ac{PC} is fed into the \texttt{pc\_reg} output register for the later stages. The enable of this register is controlled by the signal \texttt{fetch\_ready\_i} which comes from the fetch stage and disables the \ac{PC} generation if a stall occurs. This is part of the handshake mechanism described in \cref{sec:handshake}, even if there is no \emph{valid} signal from the \ac{PC} gen stage, as it is redundant due to the fact that a valid new \ac{PC} is always present at the output register.
 
 \section{Instruction cache interface}
+\todo{Talk about FSM coding style}
 \begin{figure}[hbt]
   \centering
   \includegraphics{img/icache_ifc-top.pdf}
@@ -303,12 +312,13 @@ The situation shown in \cref{fig:fetch08} is similar to the previous one, but th
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[scale=.6]{img/fetch10.pdf}
+  \includegraphics[scale=.]{img/fetch10.pdf}
   \caption{Issue queue not ready during backup}
   \label{fig:fetch10}
 \end{figure}
 Finally, \cref{fig:fetch10} shows the last timing under analysis, that is the situation in which the issue is not ready when the instruction has to be selected inside the backup register. In similar manner to \cref{fig:fetch03}, here the stall does not cause any issues and the fetch resumes exactly as before when the queue turns ready again.
 
+\pagebreak
 \section{\acf{BPU}}
 As seen in \cref{fig:frontend}, the \ac{BPU} resides in the fetch stage and works in parallel with the \ac{IFU} on each address coming from the \ac{PC} gen stage. This unit, as shown in the high level scheme of \cref{fig:bpu-idea}, is composed of two main blocks:
 \begin{figure}[hbt]
@@ -431,3 +441,45 @@ The \ac{BTB} is perhaps one of the blocks that can organized and optimized in th
 For this reason, the same principles presented in \cref{sec:gshare} apply here, namely that the \ac{BTB} allows synchronous write and asynchronous read that in turn imply that a prediction and an update can be completed during the same cycle.
 
 \section{Branch unit}
+A unit that was not talked about until now and that is not shown in \cref{fig:frontend} because it resides in the backend is the branch unit, which is an execution unit responsible of determining the actual outcome of branch instructions. Its main tasks are the logic comparison between operand values in order to determine if the branch is taken or not and the sum of the base branch address and its immediate field to discover the target.
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=.9\textwidth]{img/branch_unit-top.pdf}
+  \caption{Branch unit module ports}
+  \label{fig:branch_unit-top}
+\end{figure}
+\Cref{fig:branch_unit-top} shows the interface ports of this unit. It receives the register operands \texttt{rs1} and \texttt{rs2}, the immediate field \texttt{imm} the branch type, encoded on three bits, and the prediction information from the corresponding reservation station, to and from which it communicates via the handshake signals \texttt{ops\_valid} and \texttt{ops\_ready} as usual.
+
+Its outputs are the information on the branch resolution, which is passed forward to the commit stage and back to the frontend to update the \ac{BPU} and potentially stall in case of misprediction.
+
+\subsection{Datapath}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/branch_unit.pdf}
+  \caption{Branch unit datapath}
+  \label{fig:branch_unit}
+\end{figure}
+The datapath of the branch unit is shown in \cref{fig:branch_unit} and is composed of two \acsp{ALU}, which are actually a separate logic unit and an adder, operating in parallel on the comparison and the target computation, which is performed, as per \riscv specifications, by adding the base address with the immediate left shifted. The output of both units is compared with the predicted taken and target respectively and the results are passed to the control unit.
+
+There are six types of branches in the \riscv \ac{ISA}, namely:
+\begin{itemize}
+  \item Branch if equal (\texttt{BEQ})
+  \item Branch if not equal (\texttt{BNE})
+  \item Branch if less than (\texttt{BLT})
+  \item Branch if greater than or equal (\texttt{BGE})
+  \item Branch if less than, unsigned (\texttt{BLTU})
+  \item Branch if greater than or equal (\texttt{BGEU})
+\end{itemize}
+
+At the following clock cycle after the \acsp{ALU} have obtained the results, the control unit outputs the correct prediction information and the branch \ac{PC} and right target are written to the output register.
+
+\subsection{Control unit}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/branch_unit_fsm.pdf}
+  \caption{Branch unit control unit}
+  \label{fig:branch_unit_fsm}
+\end{figure}
+The control unit of this module is a Moore machine that after reset starts waiting for valid operands from the reservation station in the \texttt{WAIT\_OPS} state. When they arrive, in the same clock cycle the datapath performs the required computation, so that according to the value of the control signals, the \acs{FSM} can move to one of the states named \texttt{{GOOD,BAD}\_{T,NT}}, based on whether there was misprediction and whether the branch was actually taken or not. In these states, the correct output signals are driven and then the state machine moves back to the waiting loop.
+\todo{Aggiungere timing dopo modifica}

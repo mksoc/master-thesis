@@ -23,7 +23,6 @@ module branch_unit
   input   logic [B_IMM-1:0] imm_i,
   input   logic             ops_valid_i,
   input   logic [XLEN-1:0]  pred_pc_i,
-  input   logic [HLEN-1:0]  pred_index_i,
   input   logic [XLEN-1:0]  pred_target_i,
   input   logic             pred_taken_i,
   input   branch_type_t     type_i,
@@ -31,7 +30,6 @@ module branch_unit
   output  logic             ops_ready_o,
   output  logic             res_valid_o,
   output  logic [XLEN-1:0]  res_pc_o,
-  output  logic [HLEN-1:0]  res_index_o,
   output  logic [XLEN-1:0]  res_target_o,
   output  logic             res_taken_o,
   output  logic             res_mispredict_o
@@ -78,11 +76,9 @@ module branch_unit
   always_ff @ (posedge clk_i or negedge rst_n_i) begin: out_reg
     if (!rst_n_i) begin
       res_pc_o <= '0;
-      res_index_o <= '0;
       res_target_o <= '0;
     end else if (ops_valid_i) begin
       res_pc_o <= pred_pc_i;
-      res_index_o <= pred_index_i;
       res_target_o <= target;
     end
   end: out_reg

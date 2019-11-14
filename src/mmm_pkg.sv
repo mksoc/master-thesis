@@ -54,7 +54,7 @@ package mmm_pkg;
   // -----------
   // Branch unit
   // -----------
-  typedef enum logic [5:0] {
+  typedef enum logic [3:0] {
     beq   = 'h0,
     bne   = 'h1,
     blt   = 'h2,
