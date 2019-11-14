@@ -389,7 +389,7 @@ The idea of the gshare predictor, whose interface is shown in \cref{fig:gshare-t
   \caption{Gshare branch predictor}
   \label{fig:gshare}
 \end{figure}
-The structure of this predictor is shown in \cref{fig:gshare} and is composed of a \ac{BHT} composed of a single shift register where branch resolutions are left shifted in and a \ac{PHT} that contains an array of 2-bit counters, organized as a register file, so providing synchronous write and asynchronous read. This table is indexed by the XOR of the history and the current \ac{PC} in order to read the prediction for the current branch, which comes from the most significant bit of the 2-bit counter.
+The structure of this predictor is shown in \cref{fig:gshare} and is composed of a \ac{BHT} composed of a single shift register where branch resolutions are left shifted in and a \ac{PHT} that contains an array of 2-bit counters, organized as a register file, so providing synchronous write and asynchronous read. This table is indexed by the XOR of the history and the current \ac{PC}\footnote{Actually, the 2 \acsp{LSB} of the \ac{PC} are excluded as are always zero for 32-bit instruction.} in order to read the prediction for the current branch, which comes from the most significant bit of the 2-bit counter.
 
 \begin{figure}[hbt]
   \centering
@@ -416,5 +416,18 @@ The initial version of the design also accounted for a column of valid bits in t
   \caption{\acs{BTB} diagram}
   \label{fig:btb}
 \end{figure}
+The purpose of the \ac{BTB} (interface in \cref{fig:btb-top}) is to provide the target of a predicted taken branch in order to eliminate the delay of the computation of the destination address in the later execution stages and allow the fetch to proceed immediately from the new address. The idea of a \ac{BTB} was first introduced in \cite{lee84} and was since optimized and employed a great number of processor designs.
+
+Its structure shown in \cref{fig:btb} is basically that of a direct mapped cache with $2^{\texttt{BTB\_BITS}}$ entries addressed using the the \texttt{BTB\_BITS} least significant bits of the \ac{PC}, as always excluding the offset, where each of them contains the following fields:
+\begin{itemize}
+  \item \textbf{Valid}: 1-bit field indicating if the selected entry is valid, that is if it has been previously written with the correct target of a resolved branch.
+  \item \textbf{Tag}: this field contains the remaining bits of the branch \ac{PC} not used to address the \ac{BTB}. The final evaluation on the branch address is a hit only if for the selected location the valid bit is set and the stored tag corresponds to the upper part of the \ac{PC}. This is done in order to eliminate the aliasing phenomenon, for which multiple addresses could point to the same \ac{BTB} entry and thus produce incorrect results for the target. 
+  \item \textbf{Target}: the actual destination address of the branch. The 2 \acsp{LSB} are not stored as are they are useless for 32-bit instructions, but can save a significant amount of area if the \ac{BTB} contains many entries.
+\end{itemize}
+When the \texttt{del\_entry} signal is asserted all three fields of the addressed entry are reset to zero.
+
+The \ac{BTB} is perhaps one of the blocks that can organized and optimized in the most number of ways, starting from the mapping of the cache to the information stored. Some variants of the design store the actual target instruction instead of the address to allow for some advanced techniques such as branch folding \cite{perleberg93}. Being LEN5 an exploratory experiment on processor design, the choice has been made to keep the organization simple and so implement the \ac{BTB} as a direct mapped cache described as a register file.
+
+For this reason, the same principles presented in \cref{sec:gshare} apply here, namely that the \ac{BTB} allows synchronous write and asynchronous read that in turn imply that a prediction and an update can be completed during the same cycle.
 
 \section{Branch unit}

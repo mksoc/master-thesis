@@ -304,9 +304,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="378.92771"
-     inkscape:cy="327.3776"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="455.41654"
+     inkscape:cy="373.87417"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -336,7 +336,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -464,12 +464,12 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="58.142204"
-       y="52.591137"
+       y="53.120304"
        id="text26007"><tspan
          sodipodi:role="line"
          id="tspan26005"
          x="58.142204"
-         y="52.591137"
+         y="53.120304"
          style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">1</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -484,14 +484,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="79.034836"
+       x="73.743164"
        y="53.252598"
        id="text26007-4"><tspan
          sodipodi:role="line"
          id="tspan26005-8"
-         x="79.034836"
+         x="73.743164"
          y="53.252598"
-         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">XLEN-BTB_BITS</tspan></text>
+         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">XLEN-BTB_BITS-OFFSET</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 84.931264,50.937497 2.645829,-2.64583"
@@ -505,14 +505,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="120.56493"
-       y="52.708782"
+       x="113.15662"
+       y="53.237949"
        id="text26007-8"><tspan
          sodipodi:role="line"
          id="tspan26005-85"
-         x="120.56493"
-         y="52.708782"
-         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">XLEN</tspan></text>
+         x="113.15662"
+         y="53.237949"
+         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">XLEN-OFFSET</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 119.04371,51.055144 2.64583,-2.64583"

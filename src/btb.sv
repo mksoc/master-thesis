@@ -33,9 +33,9 @@ module btb
   localparam BTB_ROWS = 1 << BTB_BITS;
 
   struct packed {
-    logic                                   valid;
-    logic [XLEN - BTB_BITS - OFFSET - 1:0]  tag;
-    logic [XLEN-1:0]                        target;
+    logic                             valid;
+    logic [XLEN-BTB_BITS-OFFSET-1:0]  tag;
+    logic [XLEN-OFFSET-1:0]           target;
   } btb_d[BTB_ROWS], btb_q[BTB_ROWS];
 
   logic [BTB_BITS-1:0]              addr_r, addr_w;
@@ -59,7 +59,7 @@ module btb
       end else begin
         btb_d[addr_w].valid = 'b1;
         btb_d[addr_w].tag = tag_w;
-        btb_d[addr_w].target = res_target_i;
+        btb_d[addr_w].target = res_target_i[XLEN-OFFSET-1:0];
       end
     end
   end
