@@ -12,21 +12,20 @@
 // Author: Marco Andorno
 // Date: 09/10/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module branch_unit_cu
 (
-  input   logic clk_i,
-  input   logic rst_n_i,
-  input   logic ops_valid_i,
-  input   logic taken_i,
-  input   logic wrong_taken_i,
-  input   logic wrong_target_i,
+  input   logic         clk_i,
+  input   logic         rst_n_i,
+  input   logic         ops_valid_i,
+  input   logic         taken_i,
+  input   logic         wrong_taken_i,
+  input   logic         wrong_target_i,
 
-  output  logic ops_ready_o,
-  output  logic res_valid_o,
-  output  logic res_taken_o,
-  output  logic res_mispredict_o
+  output  logic         ops_ready_o,
+  output  resolution_t  res_o
 );
 
   typedef enum logic [2:0] { RESET, WAIT_OPS, GOOD_T, GOOD_NT, BAD_T, BAD_NT } state_t;
@@ -42,6 +41,7 @@ module branch_unit_cu
     end
   end
 
+  /* verilator lint_off CASEINCOMPLETE */
   // State update
   always_comb begin
     // Defaults
@@ -93,10 +93,10 @@ module branch_unit_cu
   // Output update
   always_comb begin
     // Defaults
-    ops_ready_o = '0;
-    res_valid_o = '0;
-    res_taken_o = '0;
-    res_mispredict_o = '0;
+    ops_ready_o       = '0;
+    res_o.valid       = '0;
+    res_o.taken       = '0;
+    res_o.mispredict  = '0;
 
     case (present_state)
       WAIT_OPS: begin
@@ -104,29 +104,34 @@ module branch_unit_cu
       end
 
       GOOD_T: begin
-        res_taken_o = '1;
-        res_mispredict_o = '0;
-        res_valid_o = '1;
+        res_o.taken       = '1;
+        res_o.mispredict  = '0;
+        res_o.valid       = '1;
       end
 
       GOOD_NT: begin
-        res_taken_o = '0;
-        res_mispredict_o = '0;
-        res_valid_o = '1;
+        res_o.taken       = '0;
+        res_o.mispredict  = '0;
+        res_o.valid       = '1;
       end
 
       BAD_T: begin
-        res_taken_o = '1;
-        res_mispredict_o = '1;
-        res_valid_o = '1;
+        res_o.taken       = '1;
+        res_o.mispredict  = '1;
+        res_o.valid       = '1;
       end
 
       BAD_NT: begin
-        res_taken_o = '0;
-        res_mispredict_o = '1;
-        res_valid_o = '1;
+        res_o.taken       = '0;
+        res_o.mispredict  = '1;
+        res_o.valid       = '1;
       end
     endcase
   end
+  /* verilator lint_on CASEINCOMPLETE */
+
+  // Assign unused struct outputs
+  assign res_o.pc = '0;
+  assign res_o.target = '0;
   
 endmodule

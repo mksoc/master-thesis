@@ -377,9 +377,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="310.26859"
-     inkscape:cy="166.98589"
+     inkscape:zoom="1.979899"
+     inkscape:cx="290.10582"
+     inkscape:cy="216.6145"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -495,7 +495,7 @@
          id="tspan3567-9"
          x="65.605194"
          y="41.436676"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_pc_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_i.pc</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-3)"
        d="M 96.661101,43 V 56.229166"
@@ -511,7 +511,7 @@
          id="tspan3567-2"
          x="86.50724"
          y="41.436672"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_target_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_i.target</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -623,7 +623,7 @@
          id="tspan3567-22-6"
          x="111.90736"
          y="41.436672"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_taken_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">pred_i.taken</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 72.824542,49.614583 2.64584,-2.645833"
@@ -645,7 +645,7 @@
          id="tspan3567-7-7"
          x="-57.781013"
          y="137.78418"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_valid_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_o.valid</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-9-3-6)"
        d="m 83.180098,109.14583 v 13.22916"
@@ -662,7 +662,7 @@
          id="tspan3567-7-7-3"
          x="-42.652634"
          y="147.70079"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_pc_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_o.pc</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-9-3-68)"
        d="m 97.216184,109.14583 v 13.22916"
@@ -679,7 +679,7 @@
          id="tspan3567-7-7-6"
          x="-40.014946"
          y="157.28748"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_target_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_o.target</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-9-3-4)"
        d="m 111.37799,109.14583 v 13.22916"
@@ -696,7 +696,7 @@
          id="tspan3567-7-7-7"
          x="-27.932432"
          y="167.63278"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_taken_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_o.taken</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-9-3-17)"
        d="m 125.5398,109.14583 v 13.22916"
@@ -713,7 +713,7 @@
          id="tspan3567-7-7-61"
          x="-26.446989"
          y="177.67085"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_mispredict_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">res_o.mispredict</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26500002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-3-4)"
        d="m 134.9375,94.59375 h 15.87501"

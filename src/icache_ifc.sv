@@ -12,6 +12,7 @@
 // Author: Marco Andorno
 // Date: 02/10/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module icache_ifc
@@ -72,6 +73,7 @@ module icache_ifc
     end
   end
 
+  /* verilator lint_off CASEINCOMPLETE */
   // State update
   always_comb begin
     // Defaults
@@ -148,4 +150,5 @@ module icache_ifc
       end
     endcase
   end
+  /* verilator lint_on CASEINCOMPLETE */
 endmodule

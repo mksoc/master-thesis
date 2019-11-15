@@ -163,9 +163,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="340.48211"
-     inkscape:cy="18.512876"
+     inkscape:zoom="2.8"
+     inkscape:cx="202.97098"
+     inkscape:cy="117.45013"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -192,7 +192,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -304,7 +304,7 @@
          y="34.822094"
          x="57.138561"
          id="tspan3567"
-         sodipodi:role="line">res_valid_i</tspan></text>
+         sodipodi:role="line">res_i.valid</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path3565-7"
@@ -320,7 +320,7 @@
          y="34.82209"
          x="80.686455"
          id="tspan3567-9"
-         sodipodi:role="line">res_pc_i</tspan></text>
+         sodipodi:role="line">res_i.pc</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path3565-0"
@@ -336,7 +336,7 @@
          y="34.82209"
          x="100.53021"
          id="tspan3567-2"
-         sodipodi:role="line">res_taken_i</tspan></text>
+         sodipodi:role="line">res_i.taken</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path3565-0-2"

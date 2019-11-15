@@ -112,7 +112,7 @@ module ifu
   // ----------------
   // Presence checker
   // ----------------
-  presence_checker u_presence_checker
+  presence_check u_presence_check
   (
     .pc_i           (pc_i),
     .prev_pc_i      (prev_pc_q),

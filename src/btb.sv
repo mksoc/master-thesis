@@ -12,21 +12,22 @@
 // Author: Marco Andorno
 // Date: 2/8/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
+/* verilator lint_off BLKLOOPINIT */
 module btb
 (
-  input   logic             clk_i,
-  input   logic             rst_n_i,
-  input   logic             flush_i,
-  input   logic [XLEN-1:0]  pc_i,
-  input   logic             valid_i,
-  input   logic             del_entry_i,
-  input   logic [XLEN-1:0]  res_pc_i,
-  input   logic [XLEN-1:0]  res_target_i,
+  input   logic                   clk_i,
+  input   logic                   rst_n_i,
+  input   logic                   flush_i,
+  input   logic [XLEN-1:0]        pc_i,
+  input   logic                   valid_i,
+  input   logic                   del_entry_i,
+  input   resolution_t            res_i,
 
-  output  logic             hit_o,
-  output  logic [XLEN-1:0]  pred_target_o
+  output  logic                   hit_o,
+  output  logic [XLEN-OFFSET-1:0] target_o
 );
 
   // Definitions
@@ -45,8 +46,8 @@ module btb
   // Branch Target Buffer (BTB)
   // --------------------------
   // Write
-  assign addr_w = res_pc_i[BTB_BITS + OFFSET - 1:OFFSET];
-  assign tag_w = res_pc_i[XLEN - 1:BTB_BITS + OFFSET];
+  assign addr_w = res_i.pc[BTB_BITS + OFFSET - 1:OFFSET];
+  assign tag_w = res_i.pc[XLEN - 1:BTB_BITS + OFFSET];
 
   always_comb begin: btb_update
     // By default, store previous value
@@ -59,7 +60,7 @@ module btb
       end else begin
         btb_d[addr_w].valid = 'b1;
         btb_d[addr_w].tag = tag_w;
-        btb_d[addr_w].target = res_target_i[XLEN-OFFSET-1:0];
+        btb_d[addr_w].target = res_i.target[XLEN-OFFSET-1:0];
       end
     end
   end
@@ -83,6 +84,7 @@ module btb
   assign tag_r = pc_i[XLEN - 1:BTB_BITS + OFFSET];
   
   assign hit_o = btb_q[addr_r].valid & (btb_q[addr_r].tag == tag_r);
-  assign pred_target_o = btb_q[addr_r].target;
+  assign target_o = btb_q[addr_r].target;
   
 endmodule
+/* verilator lint_on BLKLOOPINIT */

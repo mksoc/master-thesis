@@ -12,8 +12,10 @@
 // Author: Marco Andorno
 // Date: 05/10/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
+/* verilator lint_off BLKANDNBLK */
 module branch_unit
 (
   input   logic             clk_i,
@@ -22,17 +24,11 @@ module branch_unit
   input   logic [XLEN-1:0]  rs2_i,
   input   logic [B_IMM-1:0] imm_i,
   input   logic             ops_valid_i,
-  input   logic [XLEN-1:0]  pred_pc_i,
-  input   logic [XLEN-1:0]  pred_target_i,
-  input   logic             pred_taken_i,
+  input   prediction_t      pred_i,
   input   branch_type_t     type_i,
 
   output  logic             ops_ready_o,
-  output  logic             res_valid_o,
-  output  logic [XLEN-1:0]  res_pc_o,
-  output  logic [XLEN-1:0]  res_target_o,
-  output  logic             res_taken_o,
-  output  logic             res_mispredict_o
+  output  resolution_t      res_o
 );
 
   // Signal declarations
@@ -48,6 +44,7 @@ module branch_unit
       bge:      taken = ($signed(rs1_i) >= $signed(rs2_i));
       bltu:     taken = (rs1_i < rs2_i);
       bgeu:     taken = (rs1_i >= rs2_i);
+      default:  taken = '0;
     endcase
   end
 
@@ -62,25 +59,26 @@ module branch_unit
     .wrong_target_i   (wrong_target),
 
     .ops_ready_o      (ops_ready_o),
-    .res_valid_o      (res_valid_o),
-    .res_taken_o      (res_taken_o),
-    .res_mispredict_o (res_mispredict_o)
+    .res_o            (res_o)
   );
 
   // Assignments
-  assign wrong_taken = pred_taken_i != taken;
-  assign target = (imm_i << 1) + pred_pc_i;
-  assign wrong_target = pred_target_i != target;
+  assign wrong_taken  = pred_i.taken != taken;
+  /* verilator lint_off WIDTH */
+  assign target       = (imm_i << 1) + pred_i.pc;
+  /* verilator lint_on WIDTH */
+  assign wrong_target = pred_i.target != target;
 
   // Output register
   always_ff @ (posedge clk_i or negedge rst_n_i) begin: out_reg
     if (!rst_n_i) begin
-      res_pc_o <= '0;
-      res_target_o <= '0;
+      res_o.pc <= '0;
+      res_o.target <= '0;
     end else if (ops_valid_i) begin
-      res_pc_o <= pred_pc_i;
-      res_target_o <= target;
+      res_o.pc <= pred_i.pc;
+      res_o.target <= target;
     end
   end: out_reg
   
 endmodule
+/* verilator lint_on BLKANDNBLK */

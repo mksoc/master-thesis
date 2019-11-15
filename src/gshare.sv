@@ -12,19 +12,19 @@
 // Author: Marco Andorno
 // Date: 26/07/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
+/* verilator lint_off BLKLOOPINIT */
 module gshare
 (
   input   logic             clk_i,
   input   logic             rst_n_i,
   input   logic             flush_i,
   input   logic [XLEN-1:0]  pc_i,
-  input   logic             res_valid_i,
-  input   logic [XLEN-1:0]  res_pc_i,
-  input   logic             res_taken_i,
+  input   resolution_t      res_i,
 
-  output  logic             taken_o,
+  output  logic             taken_o
 );
 
   // Definitions
@@ -44,8 +44,8 @@ module gshare
     end else begin
       if (flush_i) begin: bht_sync_flush
         history <= '0;
-      end else if (res_valid_i) begin: bht_shift
-        history <= {history[HLEN-1:1], res_taken_i};
+      end else if (res_i.valid) begin: bht_shift
+        history <= {history[HLEN-1:1], res_i.taken};
       end
     end
   end: bht
@@ -58,28 +58,28 @@ module gshare
     pht_d = pht_q;
 
     // If a valid branch resolution arrives, update counters
-    if (res_valid_i) begin: c2b_fsm
+    if (res_i.valid) begin: c2b_fsm
       case (pht_q[index_w])
         SNT: begin
-          if (taken_i)
+          if (res_i.taken)
             pht_d[index_w] = WNT;
           else pht_d[index_w] = SNT;
         end
 
         WNT: begin
-          if (taken_i)
+          if (res_i.taken)
             pht_d[index_w] = WT;
           else pht_d[index_w] = SNT;
         end
 
         WT: begin
-          if (taken_i)
+          if (res_i.taken)
             pht_d[index_w] = ST;
           else pht_d[index_w] = WNT;
         end
 
         ST: begin
-          if (taken_i)
+          if (res_i.taken)
             pht_d[index_w] = ST;
           else pht_d[index_w] = WT;
         end
@@ -105,7 +105,8 @@ module gshare
     
   // Assignments
   assign index_r = history ^ pc_i[HLEN + OFFSET - 1:OFFSET]; // XOR hashing
-  assign index_w = history ^ res_pc_i[HLEN + OFFSET - 1:OFFSET];
+  assign index_w = history ^ res_i.pc[HLEN + OFFSET - 1:OFFSET];
   assign taken_o = pht_q[index_r][1];
 
 endmodule
+/* verilator lint_on BLKLOOPINIT */

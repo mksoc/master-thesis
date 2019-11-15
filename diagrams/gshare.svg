@@ -330,9 +330,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="314.77185"
-     inkscape:cy="322.57736"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="282.84504"
+     inkscape:cy="112.83842"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -430,7 +430,7 @@
          id="tspan3567-2"
          x="111.45864"
          y="35.069565"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_taken_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.taken</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579)"
        d="M 81.883357,13.895836 V 27.125002"
@@ -446,7 +446,7 @@
          id="tspan3567"
          x="63.615685"
          y="12.332508"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_valid_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.valid</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -581,7 +581,7 @@
          id="tspan22915"
          x="57.488274"
          y="180.97878"
-         style="font-size:3.52777767px;fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_taken_o</tspan></text>
+         style="font-size:3.52777767px;fill:#c80000;fill-opacity:1;stroke-width:0.26458332">  taken_o</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -927,7 +927,7 @@
        id="tspan11492-1-8-9"
        x="9.9000092"
        y="47.492302"
-       style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_pc_i</tspan></text>
+       style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.pc</tspan></text>
   <path
      style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 46.687876,124.07057 2.64583,-2.64583"

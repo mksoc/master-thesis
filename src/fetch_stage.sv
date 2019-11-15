@@ -12,6 +12,7 @@
 // Author: Marco Andorno
 // Date: 07/10/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module fetch_stage
@@ -36,18 +37,10 @@ module fetch_stage
   input   logic             issue_ready_i,
   output  logic             issue_valid_o,
   output  logic [ILEN-1:0]  instruction_o,
-  output  logic [XLEN-1:0]  pred_pc_o,
-  output  logic [HLEN-1:0]  pred_index_o,
-  output  logic [XLEN-1:0]  pred_target_o,
-  output  logic             pred_taken_o,
+  output  prediction_t      pred_o,
 
   // From branch unit (ex stage)
-  input   logic             res_valid_i,
-  input   logic [XLEN-1:0]  res_pc_i,
-  input   logic [HLEN-1:0]  res_index_i,
-  input   logic [XLEN-1:0]  res_target_i,
-  input   logic             res_taken_i,
-  input   logic             res_mispredict_i
+  input   resolution_t      res_i  
 );
 
   // Signal declarations
@@ -107,25 +100,17 @@ module fetch_stage
   // ---------
   bpu u_bpu
   (
-    .clk_i            (clk_i),
-    .rst_n_i          (rst_n_i),
-    .flush_i          (bpu_flush),
-    .pc_i             (pc_i),
-    .res_valid_i      (res_valid_i),
-    .res_pc_i         (res_pc_i),
-    .res_index_i      (res_index_i),
-    .res_target_i     (res_target_i),
-    .res_taken_i      (res_taken_i),
-    .res_mispredict_i (res_mispredict_i),
+    .clk_i    (clk_i),
+    .rst_n_i  (rst_n_i),
+    .flush_i  (bpu_flush),
+    .pc_i     (pc_i),
+    .res_i    (res_i),
 
-    .pred_pc_o        (pred_pc_o),
-    .pred_index_o     (pred_index_o),
-    .pred_target_o    (pred_target_o),
-    .pred_taken_o     (pred_taken_o)
+    .pred_o   (pred_o)
   );
 
   // If the flush is caused by a misprediction,
   // there no need to flush the BPU, just update it
-  assign bpu_flush = flush_i & ~res_mispredict_i;
+  assign bpu_flush = flush_i & ~res_i.mispredict;
 
 endmodule

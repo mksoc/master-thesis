@@ -224,8 +224,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="283.92644"
-     inkscape:cy="141.66161"
+     inkscape:cx="299.07873"
+     inkscape:cy="179.54233"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -253,7 +253,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -359,7 +359,7 @@
          id="tspan3567"
          x="59.825771"
          y="99.878151"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_valid_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.valid</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-1)"
        d="M 115.35844,28.977093 V 41.941678"
@@ -381,7 +381,7 @@
          id="tspan3567-2"
          x="81.231613"
          y="121.19946"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_taken_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.taken</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3579-1-8)"
        d="M 105.03939,80.502387 V 93.731553"
@@ -402,7 +402,7 @@
          id="tspan3567-2-9"
          x="144.45105"
          y="97.459862"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_taken_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_o.taken</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 79.374981,71.771135 2.645834,-2.645833"
@@ -435,7 +435,7 @@
          id="tspan3567-8"
          x="51.696075"
          y="91.582474"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_pc_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.pc</tspan></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot54558"
@@ -478,7 +478,7 @@
          id="tspan3567-2-1"
          x="71.731941"
          y="111.65582"
-         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_target_i</tspan></text>
+         style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">res_i.target</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 127.52931,35.0625 2.64583,-2.645833"
@@ -511,7 +511,7 @@
          x="91.084183"
          y="131.304"
          style="fill:#0000c8;fill-opacity:1;stroke-width:0.26458332"
-         id="tspan56568">res_mispredict_i</tspan></text>
+         id="tspan56568">res_i.mispredict</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#c80000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -522,7 +522,7 @@
          id="tspan3567-9-2-0"
          x="96.008499"
          y="97.45343"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_pc_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_o.pc</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 103.78351,85.787624 2.64585,-2.645833"
@@ -554,7 +554,7 @@
          id="tspan3567-2-9-6"
          x="116.68649"
          y="97.380341"
-         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_target_o</tspan></text>
+         style="fill:#c80000;fill-opacity:1;stroke-width:0.26458332">pred_o.target</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 127.01675,85.714539 2.64583,-2.645833"

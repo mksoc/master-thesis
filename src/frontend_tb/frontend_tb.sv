@@ -54,12 +54,15 @@ module frontend_tb;
   (
     .clk_i            (clk),
     .rst_n_i          (rst_n),
-    .pred_taken_i     (pred_taken),
-    .pred_target_i    (pred_target),
+    .except_i         (except),
+    .except_pc_i      (except_pc),
     .res_valid_i      (res_valid),
+    .res_pc_i         (res_pc),
     .res_taken_i      (res_taken),
     .res_target_i     (res_target),
     .res_mispredict_i (res_mispredict),
+    .pred_taken_i     (pred_taken),
+    .pred_target_i    (pred_target),
     .fetch_ready_i    (fetch_ready),
 
     .pc_o             (pc)

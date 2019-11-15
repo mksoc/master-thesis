@@ -55,6 +55,22 @@ package mmm_pkg;
   typedef enum logic [1:0] { current_pc = 'h0, prev_pc = 'h1, line_pc = 'h2 } pc_src_t;
   typedef enum logic [1:0] { cache_out = 'h0, line_reg = 'h1, line_bak = 'h2 } line_src_t;
 
+  // prediction structure
+  typedef struct packed {
+    logic [XLEN-1:0]  pc;
+    logic [XLEN-1:0]  target;
+    logic             taken;
+  } prediction_t;
+
+  // resolution structure
+  typedef struct packed {
+    logic             valid;
+    logic [XLEN-1:0]  pc;
+    logic [XLEN-1:0]  target;
+    logic             taken;
+    logic             mispredict;
+  } resolution_t;
+
   // -----------
   // Branch unit
   // -----------

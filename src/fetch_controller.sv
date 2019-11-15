@@ -12,6 +12,7 @@
 // Author: Marco Andorno
 // Date: 27/09/2019
 
+`include "mmm_pkg.sv"
 import mmm_pkg::*;
 
 module fetch_controller
@@ -48,8 +49,8 @@ module fetch_controller
     end
   end
 
-  // State update
   /* verilator lint_off CASEINCOMPLETE */
+  // State update
   always_comb begin
     // Defaults
     next_state = RESET;
