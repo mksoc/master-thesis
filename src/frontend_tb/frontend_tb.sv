@@ -102,23 +102,22 @@ module frontend_tb;
     .addr_ready_o (addr_ready)
   );
 
-  dummy_queue u_dummy_queue
-  (
-    .issue_valid_i  (issue_valid),
-    .issue_ready_o  (issue_ready)
-  );
-
   // PC jumps
   initial begin
-    repeat(3) @(posedge clk);
+    /*repeat(5) @(posedge clk);
     except = '1;
     except_pc = 'd100;
     @(posedge clk);
-    except_pc = 'd200;
-    @(posedge clk);
-    except_pc = 'd300;
-    @(posedge clk);
-    except_pc = 'd400;
+    except_pc = 'd12;*/
+  end
+
+  // Dummy issue queue
+  initial begin
+    issue_ready = '1;
+    repeat(7) @(posedge clk);
+    issue_ready = '0;
+    repeat(2) @(posedge clk);
+    issue_ready = '1;
   end
 
 endmodule
