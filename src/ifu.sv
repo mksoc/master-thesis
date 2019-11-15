@@ -128,12 +128,11 @@ module ifu
   // --------------------
   instr_sel u_instr_sel
   (
-    .cache_out_i    (cache_out_i.line),
-    .line_reg_i     (line_reg.line),
-    .line_bak_i     (line_bak.line),
-    .pc_i           (pc_i[ICACHE_OFFSET-1:0]),
-    .prev_pc_i      (prev_pc_q[ICACHE_OFFSET-1:0]),
-    .line_pc_i      (line_reg.pc[ICACHE_OFFSET-1:0]),
+    .cache_out_i    (cache_out_i),
+    .line_reg_i     (line_reg),
+    .line_bak_i     (line_bak),
+    .pc_i           (pc_i[ICACHE_OFFSET+OFFSET-1:OFFSET]),
+    .prev_pc_i      (prev_pc_q[ICACHE_OFFSET+OFFSET-1:OFFSET]),
     .pc_sel_i       (pc_sel),
     .line_sel_i     (line_sel),
 

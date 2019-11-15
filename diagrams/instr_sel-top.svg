@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="isntr_sel-top.svg">
+   sodipodi:docname="instr_sel-top.svg">
   <defs
      id="defs2">
     <marker
@@ -239,9 +239,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="263.85315"
-     inkscape:cy="126.02687"
+     inkscape:zoom="1.979899"
+     inkscape:cx="314.31607"
+     inkscape:cy="115.32266"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -268,7 +268,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -419,14 +419,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777791px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="151.40036"
+       x="156.69196"
        y="99.329102"
        id="text2844-6-2-1"><tspan
          sodipodi:role="line"
          id="tspan2842-7-9-2"
-         x="151.40036"
+         x="156.69196"
          y="99.329102"
-         style="font-size:3.52777791px;text-align:end;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">line_pc_i</tspan></text>
+         style="font-size:3.52777791px;text-align:end;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">line_reg_i.pc</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 144.1979,87.97917 2.64585,-2.64583"
@@ -515,14 +515,14 @@
     <text
        id="text1314"
        y="39.797859"
-       x="156.69196"
+       x="165.68767"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777791px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
          style="font-size:3.52777791px;text-align:end;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.26458332"
          y="39.797859"
-         x="156.69196"
+         x="165.68767"
          id="tspan1312"
-         sodipodi:role="line">line_bak_i</tspan></text>
+         sodipodi:role="line">line_bak_i.line</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path1316"
@@ -536,14 +536,14 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777791px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="128.71974"
+       x="132.42386"
        y="39.766106"
        id="text1322"><tspan
          sodipodi:role="line"
          id="tspan1320"
-         x="128.71974"
+         x="132.42386"
          y="39.766106"
-         style="font-size:3.52777791px;text-align:end;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">line_reg_i</tspan></text>
+         style="font-size:3.52777791px;text-align:end;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.26458332">line_reg_i.line</tspan></text>
     <path
        style="fill:none;stroke:#4b4b4b;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 117.73953,49.614583 2.64584,-2.645832"
@@ -564,7 +564,7 @@
          y="39.766106"
          x="101.46454"
          id="tspan1328"
-         sodipodi:role="line">cache_out_i</tspan></text>
+         sodipodi:role="line">cache_out_i.line</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path1332"
@@ -573,35 +573,35 @@
     <text
        id="text1336"
        y="52.514259"
-       x="70.65464"
+       x="66.95047"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
          style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332"
          y="52.514259"
-         x="70.65464"
+         x="66.95047"
          id="tspan1334"
-         sodipodi:role="line">ICACHE_LINE_LEN</tspan></text>
+         sodipodi:role="line">ICACHE_INSTR*ILEN</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="97.112976"
+       x="94.467163"
        y="52.514259"
-       id="text1340"><tspan
+       id="text417"><tspan
          sodipodi:role="line"
-         id="tspan1338"
-         x="97.112976"
+         id="tspan415"
+         x="94.467163"
          y="52.514259"
-         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">ICACHE_LINE_LEN</tspan></text>
+         style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332">ICACHE_INSTR*ILEN</tspan></text>
     <text
-       id="text1344"
+       id="text421"
        y="52.514259"
-       x="123.57127"
+       x="120.92551"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#4b4b4b;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
          style="fill:#4b4b4b;fill-opacity:1;stroke-width:0.26458332"
          y="52.514259"
-         x="123.57127"
-         id="tspan1342"
-         sodipodi:role="line">ICACHE_LINE_LEN</tspan></text>
+         x="120.92551"
+         id="tspan419"
+         sodipodi:role="line">ICACHE_INSTR*ILEN</tspan></text>
   </g>
 </svg>

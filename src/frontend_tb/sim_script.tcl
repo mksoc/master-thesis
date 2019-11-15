@@ -14,4 +14,4 @@ vsim work.frontend_tb
 do wave.do
 
 # Run simulation
-run 200 ns
+run -all

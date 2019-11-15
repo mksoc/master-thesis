@@ -56,7 +56,7 @@ module icache_ifc
   
   // ========= Control unit ===========
   // State definition
-  typedef enum logic [1:0] { RESET, WAIT_ADDR, ADDR_BUSY, WAIT_DATA } state_t;
+  typedef enum logic [1:0] { RESET, WAIT_REQ, ADDR_BUSY, WAIT_DATA } state_t;
   state_t present_state, next_state;
 
   // State transition
@@ -66,7 +66,7 @@ module icache_ifc
       present_state <= RESET;
     end else begin
       if (flush_i) begin
-        present_state <= WAIT_ADDR;
+        present_state <= WAIT_REQ;
       end else begin
         present_state <= next_state;
       end
@@ -81,10 +81,10 @@ module icache_ifc
 
     case (present_state)
       RESET: begin
-        next_state = WAIT_ADDR;
+        next_state = WAIT_REQ;
       end
 
-      WAIT_ADDR: begin
+      WAIT_REQ: begin
         if (read_req_i) begin
           if (addr_ready_i) begin
             next_state = WAIT_DATA;
@@ -92,7 +92,7 @@ module icache_ifc
             next_state = ADDR_BUSY;
           end
         end else begin // idle loop until req arrives
-          next_state = WAIT_ADDR;
+          next_state = WAIT_REQ;
         end
       end
 
@@ -108,7 +108,15 @@ module icache_ifc
 
       WAIT_DATA: begin
         if (data_valid_i) begin
-          next_state = WAIT_ADDR;
+          if (~read_req_i) begin
+            next_state = WAIT_REQ;
+          end else begin
+            if (addr_ready_i) begin
+              next_state = WAIT_DATA;
+            end else begin
+              next_state = ADDR_BUSY;
+            end
+          end
         end else begin
           next_state = WAIT_DATA;
         end
@@ -125,7 +133,7 @@ module icache_ifc
     addr_sel = 'b0;
 
     case (present_state)
-      WAIT_ADDR: begin
+      WAIT_REQ: begin
         if (read_req_i) begin
           addr_valid_o = 'b1;
         end
@@ -143,7 +151,12 @@ module icache_ifc
 
       WAIT_DATA: begin
         if (data_valid_i) begin
-          read_done_o = 'b1;
+          if (~read_req_i) begin
+            read_done_o = 'b1;
+          end else begin
+            read_done_o = 'b1;
+            addr_valid_o = 'b1;
+          end
         end
         // Moore output
         data_ready_o = 'b1;

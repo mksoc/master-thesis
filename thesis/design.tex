@@ -120,6 +120,8 @@ For what concerns data signals, the line received from the is directly connected
 \end{figure}
 The control unit of this block is a simple Mealy \acs{FSM} (\cref{fig:icache_ifc_fsm}) that after reset waits for a read request from the \ac{IFU}, then checks if the instruction cache is ready to receive an address and finally waits for a valid cache line to be read.
 
+Read requests can be accepted both in the idle \texttt{WAIT\_REQ} state and in the \texttt{WAIT\_DATA} state, in order to ensure maximum throughput by initiating the next memory access in the same clock cycle as the data handshake of the previous one.
+
 \begin{figure}[hbt]
   \centering
   \includegraphics{img/cache01.pdf}
@@ -134,7 +136,7 @@ The control unit of this block is a simple Mealy \acs{FSM} (\cref{fig:icache_ifc
   \caption{Cache not ready on address}
   \label{fig:cache02}
 \end{figure}
-\Cref{fig:cache02} shows another possibility when the instruction cache is not ready to receive an address at the time when a request arrives. In this case the \acs{FSM} waits until the cache become ready in the \texttt{ADDR\_BUSY} state. The state machine could just as well wait in the \texttt{WAIT\_ADDR} state, but the additional state was introduced for robustness with \texttt{addr\_valid} as a Moore output, so that this way there is no need for the \texttt{read\_req} signal to stay active until the cache is ready. This is another point in favor of a Mealy \acs{FSM} instead of the connection of combinational outputs externally. Moreover, if the \acs{FSM} loops in this waiting state, the registered address is selected for the handshake, as the original program counter could have changed by that point. 
+\Cref{fig:cache02} shows another possibility when the instruction cache is not ready to receive an address at the time when a request arrives. In this case the \acs{FSM} waits until the cache become ready in the \texttt{ADDR\_BUSY} state. The state machine could just as well wait in the \texttt{WAIT\_REQ} state, but the additional state was introduced for robustness with \texttt{addr\_valid} as a Moore output, so that this way there is no need for the \texttt{read\_req} signal to stay active until the cache is ready. This is another point in favor of a Mealy \acs{FSM} instead of the connection of combinational outputs externally. Moreover, if the \acs{FSM} loops in this waiting state, the registered address is selected for the handshake, as the original program counter could have changed by that point. 
 
 \begin{figure}[hbt]
   \centering

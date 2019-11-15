@@ -36,13 +36,12 @@ package mmm_pkg;
   // I-cache
   // --------------
   localparam ICACHE_OFFSET = 4; // for 16-instruction lines
-  localparam ICACHE_INSTR = 2 << ICACHE_OFFSET;
-  localparam ICACHE_LINE_LEN = ICACHE_INSTR * ILEN;
+  localparam ICACHE_INSTR = 1 << ICACHE_OFFSET;
 
   // icache output struct
   typedef struct packed {
-    logic [XLEN-1:0]            pc;
-    logic [ICACHE_LINE_LEN-1:0] line;
+    logic [XLEN-1:0]                    pc;
+    logic [ICACHE_INSTR-1:0][ILEN-1:0]  line;
   } icache_out_t;
 
   // --------------

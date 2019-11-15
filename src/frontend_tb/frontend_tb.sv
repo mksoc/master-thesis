@@ -19,16 +19,11 @@ import mmm_pkg::*;
 module frontend_tb;
 
   // Declarations
-  localparam PERIOD = 10;
-  logic clk = '1;
-  logic rst_n = '0;
-  logic flush = '0;
-  logic pred_taken;
-  logic [XLEN-1:0] pred_pc, pred_target;
-  logic [HLEN-1:0] pred_index;
-  logic res_valid, res_taken, res_mispredict;
-  logic [XLEN-1:0] res_pc, res_target;
-  logic [HLEN-1:0] res_index;
+  logic clk;
+  logic rst_n;
+  logic flush;
+  logic except;
+  logic [XLEN-1:0] except_pc;
   logic fetch_ready;
   logic [XLEN-1:0] pc;
   logic [XLEN-1:0] addr;
@@ -41,31 +36,23 @@ module frontend_tb;
   logic issue_valid;
   logic [ILEN-1:0] instruction;
 
-  // Clock generator
-  always #(PERIOD/2) clk = ~clk;
-
-  // Reset
+  // Initial values 
   initial begin
-    #11 rst_n = '1;
+    flush = '0;
   end
 
   // DUTs instantiations
   pc_gen_stage dut_pc_gen_stage
   (
-    .clk_i            (clk),
-    .rst_n_i          (rst_n),
-    .except_i         (except),
-    .except_pc_i      (except_pc),
-    .res_valid_i      (res_valid),
-    .res_pc_i         (res_pc),
-    .res_taken_i      (res_taken),
-    .res_target_i     (res_target),
-    .res_mispredict_i (res_mispredict),
-    .pred_taken_i     (pred_taken),
-    .pred_target_i    (pred_target),
-    .fetch_ready_i    (fetch_ready),
+    .clk_i          (clk),
+    .rst_n_i        (rst_n),
+    .except_i       (except),
+    .except_pc_i    (except_pc),
+    .res_i          ('0),
+    .pred_i         ('0),
+    .fetch_ready_i  (fetch_ready),
 
-    .pc_o             (pc)
+    .pc_o           (pc)
   );
 
   fetch_stage dut_fetch_stage
@@ -90,52 +77,48 @@ module frontend_tb;
     .issue_ready_i    (issue_ready),
     .issue_valid_o    (issue_valid),
     .instruction_o    (instruction),
-    .pred_pc_o        (pred_pc),
-    .pred_index_o     (pred_index),
-    .pred_target_o    (pred_target),
-    .pred_taken_o     (pred_taken),
+    //.pred_o           (pred),
 
     // From branch unit (ex stage)
-    .res_valid_i      (res_valid),
-    .res_pc_i         (res_pc),
-    .res_index_i      (res_index),
-    .res_target_i     (res_target),
-    .res_taken_i      (res_taken),
-    .res_mispredict_i (res_mispredict)
+    .res_i            ('0)
   );
 
-  // Dummy icache
-  always_comb begin
-    data.pc = pc;
-    // addr_ready = '1;
-    // data_valid = '1;
-    for (int i = 0; i < ICACHE_INSTR; i += 1) begin
-      data.line[ILEN*i +: ILEN] = i + 1;
-    end
-    //data.line = {ICACHE_INSTR{NOP}};
-  end
+  // Testbench module instantiations
+  clk_gen u_clk_gen
+  (
+    .clk_o    (clk),
+    .rst_n_o  (rst_n)
+  );
 
+  dummy_icache u_dummy_icache
+  (
+    .clk_i        (clk),
+    .addr_i       (addr),
+    .addr_valid_i (addr_valid),
+    .data_ready_i (data_ready),
+
+    .data_o       (data),
+    .data_valid_o (data_valid),
+    .addr_ready_o (addr_ready)
+  );
+
+  dummy_queue u_dummy_queue
+  (
+    .issue_valid_i  (issue_valid),
+    .issue_ready_o  (issue_ready)
+  );
+
+  // PC jumps
   initial begin
-    for (int i = 0; i < 6; i += 1) begin
-      @(posedge clk);
-    end
-    addr_ready = '1;
-    @(posedge clk)
-    data_valid = '1;
-  end
-
-
-  // Dummy issue queue
-  assign issue_ready = '1;
-
-  // Dummy branch unit
-  always_comb begin
-    res_valid = '0;
-    res_pc = '0;
-    res_index = '0;
-    res_target = '0;
-    res_taken = '0;
-    res_mispredict = '0;
+    repeat(3) @(posedge clk);
+    except = '1;
+    except_pc = 'd100;
+    @(posedge clk);
+    except_pc = 'd200;
+    @(posedge clk);
+    except_pc = 'd300;
+    @(posedge clk);
+    except_pc = 'd400;
   end
 
 endmodule
