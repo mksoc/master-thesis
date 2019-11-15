@@ -65,28 +65,31 @@ The selection of the next \ac{PC} is based on the following list of priorities, 
 \Cref{fig:pc_gen_stage} shows the diagram of this stage. This and all the following diagrams in this document are color coded so that input signals are in {\color{input_blue}{blue}}, output signals are in {\color{output_red}{red}}, internal signals in black and bit widths are in {\color{width_gray}{gray}}.
 
 The heart of the \ac{PC} gen stage is the \texttt{pc\_priority\_enc} block, which is an encoder that takes as inputs all the status signals indicating a behavior different from the default and all the corresponding potential next \acp{PC}. In behavioral SystemVerilog (\cref{code:priorityenc}) it is described as a if-then-else chain, which gets synthesized as a list of cascading multiplexers implementing the desired priority\footnote{As opposed to the description using a case statement, which leads to a single parallel mux, with no priority encoded.}.
-\begin{lstlisting}[
-  language=Verilog,
-  caption={\texttt{pc\_priority\_enc} description},
-  captionpos=b,
-  label=code:priorityenc
-]
-  always_comb begin: pc_priority_enc
-    if (except_i) begin
-      next_pc = except_pc_i;
-    end else if (res_valid_i && res_mispredict_i) begin
-      if (res_taken_i) begin
-        next_pc = res_target_i;
+
+\begin{minipage}{\textwidth}
+  \begin{lstlisting}[
+    language=Verilog,
+    caption={\texttt{pc\_priority\_enc} description},
+    captionpos=b,
+    label=code:priorityenc
+  ]
+    always_comb begin: pc_priority_enc
+      if (except_i) begin
+        next_pc = except_pc_i;
+      end else if (res_i.valid && res_i.mispredict) begin
+        if (res_i.taken) begin
+          next_pc = res_i.target;
+        end else begin
+          next_pc = adder_out;
+        end
+      end else if (pred_i.taken) begin
+        next_pc = pred_i.target;
       end else begin
         next_pc = adder_out;
       end
-    end else if (pred_taken_i) begin
-      next_pc = pred_target_i;
-    end else begin
-      next_pc = adder_out;
-    end
-  end: pc_priority_enc
-\end{lstlisting}
+    end: pc_priority_enc
+  \end{lstlisting}
+\end{minipage}
 
 In order to save resources, a single adder is used to generate both the next sequential address and the next \ac{PC} after a mispredicted not taken branch. A multiplexer driven by the misprediction signals is used to select the right operand.
 
