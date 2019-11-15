@@ -60,7 +60,7 @@ module btb
       end else begin
         btb_d[addr_w].valid = 'b1;
         btb_d[addr_w].tag = tag_w;
-        btb_d[addr_w].target = res_i.target[XLEN-OFFSET-1:0];
+        btb_d[addr_w].target = res_i.target[XLEN-1:OFFSET];
       end
     end
   end

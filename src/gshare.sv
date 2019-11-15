@@ -45,7 +45,7 @@ module gshare
       if (flush_i) begin: bht_sync_flush
         history <= '0;
       end else if (res_i.valid) begin: bht_shift
-        history <= {history[HLEN-1:1], res_i.taken};
+        history <= {history[HLEN-2:0], res_i.taken};
       end
     end
   end: bht

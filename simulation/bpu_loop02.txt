@@ -1,0 +1,178 @@
+Reading pref.tcl
+
+# 2019.2
+
+# do sim_script.tcl
+# Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+# Start time: 19:03:57 on Nov 15,2019
+# vlog ../../mmm_pkg.sv 
+# -- Compiling package mmm_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 19:03:57 on Nov 15,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+# Start time: 19:03:57 on Nov 15,2019
+# vlog ../../bpu.sv ../../branch_unit.sv ../../branch_unit_cu.sv ../../btb.sv ../../fetch_controller.sv ../../fetch_stage.sv ../../gshare.sv ../../icache_ifc.sv ../../ifu.sv ../../instr_sel.sv ../../mmm_pkg.sv ../../pc_gen_stage.sv ../../presence_check.sv 
+# -- Compiling package mmm_pkg
+# ** Warning: ../../bpu.sv(24): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package bpu_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module bpu
+# ** Warning: ../../bpu.sv(24): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../branch_unit.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../branch_unit.sv(27): (vlog-13314) Defaulting port 'pred_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package branch_unit_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module branch_unit
+# ** Warning: ../../branch_unit.sv(27): (vlog-13314) Defaulting port 'pred_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../branch_unit_cu.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# -- Compiling package branch_unit_cu_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module branch_unit_cu
+# ** Warning: ** while parsing file included at ../../btb.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../btb.sv(27): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package btb_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module btb
+# ** Warning: ../../btb.sv(27): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../fetch_controller.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# -- Compiling package fetch_controller_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module fetch_controller
+# ** Warning: ** while parsing file included at ../../fetch_stage.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../fetch_stage.sv(32): (vlog-13314) Defaulting port 'data_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../fetch_stage.sv(43): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package fetch_stage_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module fetch_stage
+# ** Warning: ../../fetch_stage.sv(32): (vlog-13314) Defaulting port 'data_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../fetch_stage.sv(43): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../gshare.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../gshare.sv(25): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package gshare_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module gshare
+# ** Warning: ../../gshare.sv(25): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../icache_ifc.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../icache_ifc.sv(34): (vlog-13314) Defaulting port 'data_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package icache_ifc_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module icache_ifc
+# ** Warning: ../../icache_ifc.sv(34): (vlog-13314) Defaulting port 'data_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../ifu.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../ifu.sv(29): (vlog-13314) Defaulting port 'cache_out_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package ifu_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module ifu
+# ** Warning: ../../ifu.sv(29): (vlog-13314) Defaulting port 'cache_out_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../instr_sel.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../instr_sel.sv(20): (vlog-13314) Defaulting port 'cache_out_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../instr_sel.sv(21): (vlog-13314) Defaulting port 'line_reg_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../instr_sel.sv(22): (vlog-13314) Defaulting port 'line_bak_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package instr_sel_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module instr_sel
+# ** Warning: ../../instr_sel.sv(20): (vlog-13314) Defaulting port 'cache_out_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../instr_sel.sv(21): (vlog-13314) Defaulting port 'line_reg_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../instr_sel.sv(22): (vlog-13314) Defaulting port 'line_bak_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ** while parsing file included at ../../pc_gen_stage.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# ** Warning: ../../pc_gen_stage.sv(24): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../pc_gen_stage.sv(25): (vlog-13314) Defaulting port 'pred_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# -- Compiling package pc_gen_stage_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module pc_gen_stage
+# ** Warning: ../../pc_gen_stage.sv(24): (vlog-13314) Defaulting port 'res_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../../pc_gen_stage.sv(25): (vlog-13314) Defaulting port 'pred_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ** while parsing file included at ../../presence_check.sv(15)
+# ** at ../../mmm_pkg.sv(20): (vlog-2275) 'mmm_pkg' already exists and will be overwritten.
+# -- Compiling package mmm_pkg
+# -- Compiling package presence_check_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module presence_check
+# 
+# Top level modules:
+# 	branch_unit
+# 	fetch_stage
+# 	pc_gen_stage
+# End time: 19:03:58 on Nov 15,2019, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 38
+# Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+# Start time: 19:03:58 on Nov 15,2019
+# vlog ../clk_gen.sv 
+# -- Compiling module clk_gen
+# 
+# Top level modules:
+# 	clk_gen
+# End time: 19:03:58 on Nov 15,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+# Start time: 19:03:58 on Nov 15,2019
+# vlog bpu_tb.sv 
+# -- Compiling package bpu_tb_sv_unit
+# -- Importing package mmm_pkg
+# -- Compiling module bpu_tb
+# 
+# Top level modules:
+# 	bpu_tb
+# End time: 19:03:58 on Nov 15,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim work.bpu_tb 
+# Start time: 19:03:58 on Nov 15,2019
+# Loading sv_std.std
+# Loading work.mmm_pkg
+# Loading work.bpu_tb_sv_unit
+# Loading work.bpu_tb
+# Loading work.bpu_sv_unit
+# Loading work.bpu
+# Loading work.gshare_sv_unit
+# Loading work.gshare
+# Loading work.btb_sv_unit
+# Loading work.btb
+# Loading work.clk_gen
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/librt.so.1 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/libdl.so.2 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/libm.so.6 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/libpthread.so.0 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/libc.so.6 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /lib/ld-linux.so.2 : module was loaded at an absolute address.
+# ** Warning: (vsim-3116) Problem reading symbols from /usr/lib32/libnss_files.so.2 : module was loaded at an absolute address.
+# Time 30 ns - Misprediction on outer loop (address 10)
+# Time 50 ns - Misprediction on inner loop (address 80)
+# Time 70 ns - Misprediction on inner loop (address 80)
+# Time 90 ns - Misprediction on inner loop (address 80)
+# Time 130 ns - Misprediction on outer loop (address 10)
+# Time 150 ns - Misprediction on inner loop (address 80)
+# Time 170 ns - Misprediction on inner loop (address 80)
+# Time 190 ns - Misprediction on inner loop (address 80)
+# Time 230 ns - Misprediction on outer loop (address 10)
+# Time 250 ns - Misprediction on inner loop (address 80)
+# Time 270 ns - Misprediction on inner loop (address 80)
+# Time 2030 ns - Misprediction on outer loop (address 10)
+# ** Note: $finish    : bpu_tb.sv(98)
+#    Time: 2040 ns  Iteration: 1  Instance: /bpu_tb
+# End time: 19:03:58 on Nov 15,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 7

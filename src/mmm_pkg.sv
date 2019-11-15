@@ -47,8 +47,8 @@ package mmm_pkg;
   // --------------
   // Frontend
   // --------------
-  localparam HLEN = 16;    // length of the history register
-  localparam BTB_BITS = 10; // BTB has  2**BTB_BITS entries
+  localparam HLEN = 4;    // length of the history register
+  localparam BTB_BITS = 4; // BTB has  2**BTB_BITS entries
 
   // instruction selector enums
   typedef enum logic [1:0] { current_pc = 'h0, prev_pc = 'h1, line_pc = 'h2 } pc_src_t;
@@ -63,10 +63,10 @@ package mmm_pkg;
 
   // resolution structure
   typedef struct packed {
-    logic             valid;
     logic [XLEN-1:0]  pc;
     logic [XLEN-1:0]  target;
     logic             taken;
+    logic             valid;
     logic             mispredict;
   } resolution_t;
 
