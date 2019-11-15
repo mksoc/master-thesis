@@ -24,9 +24,13 @@ package mmm_pkg;
   localparam OFFSET = $clog2(ILEN/8); // 2 LSB of addresses are always 0, so no use in using them for indexing
   localparam XLEN = 64;
   localparam FLEN = 64;
-  localparam logic [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
-  localparam B_IMM = 12; // B-type immediate length
-  localparam logic [ILEN-1:0] NOP = 'h13;
+  logic [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
+  localparam B_IMM = 12;    // B-type immediate length
+  localparam I_IMM = 12;    // I-type immediate length
+  localparam S_IMM = I_IMM; // S-type immediate length
+  localparam U_IMM = 20;    // U-type immediate length
+  localparam J_IMM = U_IMM; // J-type immediate length
+  logic [ILEN-1:0] NOP = 'h13;
 
   // --------------
   // I-cache
@@ -44,8 +48,8 @@ package mmm_pkg;
   // --------------
   // Frontend
   // --------------
-  localparam HLEN = 4 ;    // length of the history register
-  localparam BTB_BITS = 4; // BTB has  2**BTB_BITS entries
+  localparam HLEN = 16;    // length of the history register
+  localparam BTB_BITS = 10; // BTB has  2**BTB_BITS entries
 
   // instruction selector enums
   typedef enum logic [1:0] { current_pc = 'h0, prev_pc = 'h1, line_pc = 'h2 } pc_src_t;
@@ -54,7 +58,7 @@ package mmm_pkg;
   // -----------
   // Branch unit
   // -----------
-  typedef enum logic [3:0] {
+  typedef enum logic [5:0] {
     beq   = 'h0,
     bne   = 'h1,
     blt   = 'h2,
@@ -80,8 +84,14 @@ package mmm_pkg;
   //------------------------------\\
   
   // GLOBAL
-  localparam XREG_NUM = 32; // number of gp integer registers
+  localparam XREG_NUM = 32; // number of integer gp registers
   localparam REG_IDX_LEN = $clog2(XREG_NUM); // Register file address width
+
+  localparam FREG_NUM = 32; // number of floating-point registers
+  localparam FREG_IDX_LEN = $clog2(FREG_NUM); // Floating point register file address width
+
+  // Number of execution units (and reservation stations)
+  localparam EU_N = 8; // load buffer, store buffer, branch unit, ALU, MULT, DIV, FPU, operands only
 
   // ISSUE QUEUE
   localparam IQ_DEPTH = 8; // number of entries in the issue queue. This may or may not be a power of 2 (power of 2 recommended)

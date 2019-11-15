@@ -28,7 +28,7 @@ This handshake mechanism is based on the {\smaller AXI} valid/ready protocol des
 In each communication the source of data generates a \emph{valid} signal to indicate that the information is available, while the destination generates a \emph{ready} signal to indicate that it can accept such information \cite[p.~A3-41]{axi}. The handshake takes place and the information is successfully exchanged only at the rising clock edge when both valid and ready are asserted. For example, in \cref{fig:axi}, the handshake happens at the third rising edge of the clock.
 \begin{figure}[hbt]
   \centering
-  \includegraphics{img/axi.pdf}
+  \includegraphics[scale=.9]{img/axi.pdf}
   \caption{AXI handshake protocol}
   \label{fig:axi}
 \end{figure}
@@ -45,12 +45,12 @@ When a source has information available (\cref{fig:axi_valid_ready}), it must as
   \caption{Possible handshake timings}
   \label{fig:axi_timings}
 \end{figure}
-On the other hand (\cref{fig:axi_ready_valid}), a destination is allowed to wait for its valid before asserting ready and it can also deassert ready before a corresponding valid arrives.
+On the other hand (\cref{fig:axi_ready_valid}), a destination is allowed to wait for its valid before asserting ready and it can also deassert ready before a corresponding valid arrives, which is necessary if the destination becomes busy for other reasons.
 
 \section{\acs{PC} gen stage}
 The selection of the next \ac{PC} is based on the following list of priorities, from highest to lowest:
 \begin{enumerate}
-  \item \textbf{Exception}: if an exception occurs, the \ac{PC} gen stage will receive the next starting address as the base address present in the vector table provided by the {\smaller CSR} unit.
+  \item \textbf{Exception}\footnote{Or interrupt. The two terms can be used almost interchangeably in \riscv.}: if an exception occurs, the \ac{PC} gen stage will receive the next starting address as the base address present in the vector table provided by the {\smaller CSR} unit.
   \item \textbf{Misprediction}: if a resolved branch is discovered to have been mispredicted, then the \ac{PC} gen stage resumes execution from the correct target if the branch was actually taken, or from the next sequential address from the branch \ac{PC} if it was actually not taken.
   \item \textbf{Branch prediction}: if the \ac{BPU} predicts a taken branch for the current \ac{PC} then it provides this stage with the predicted target address (see \cref{sec:btb}), which will be fetched at the next cycle, thus allowing for zero penalty branches when predicted correctly.
   \item \textbf{Default assignment}: if none of the conditions before occur, then the next \ac{PC} is selected as usual as the next sequential address, which corresponds to the current \ac{PC}+4 for word-aligned 32-bit instructions.
