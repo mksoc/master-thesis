@@ -24,13 +24,13 @@ package mmm_pkg;
   localparam OFFSET = $clog2(ILEN/8); // 2 LSB of addresses are always 0, so no use in using them for indexing
   localparam XLEN = 64;
   localparam FLEN = 64;
-  logic [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
+  localparam [XLEN-1:0] BOOT_PC = 'h0; // starting PC (to be defined)
   localparam B_IMM = 12;    // B-type immediate length
   localparam I_IMM = 12;    // I-type immediate length
   localparam S_IMM = I_IMM; // S-type immediate length
   localparam U_IMM = 20;    // U-type immediate length
   localparam J_IMM = U_IMM; // J-type immediate length
-  logic [ILEN-1:0] NOP = 'h13;
+  localparam [ILEN-1:0] NOP = 'h13;
 
   // --------------
   // I-cache
@@ -47,9 +47,6 @@ package mmm_pkg;
   // --------------
   // Frontend
   // --------------
-  localparam HLEN = 4;    // length of the history register
-  localparam BTB_BITS = 4; // BTB has  2**BTB_BITS entries
-
   // instruction selector enums
   typedef enum logic [1:0] { current_pc = 'h0, prev_pc = 'h1, line_pc = 'h2 } pc_src_t;
   typedef enum logic [1:0] { cache_out = 'h0, line_reg = 'h1, line_bak = 'h2 } line_src_t;

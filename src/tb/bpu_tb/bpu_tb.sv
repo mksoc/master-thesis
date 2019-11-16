@@ -27,7 +27,10 @@ module bpu_tb;
   int addr_fd, res_fd, scan;
 
   // DUT instantiation
-  bpu dut
+  bpu #(
+    .HLEN(4),
+    .BTB_BITS(4)
+  ) dut
   (
     .clk_i    (clk),
     .rst_n_i  (rst_n),

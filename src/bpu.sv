@@ -16,6 +16,10 @@
 import mmm_pkg::*;
 
 module bpu
+#(
+  parameter HLEN = 4,
+  parameter BTB_BITS = 4
+)
 (
   input   logic             clk_i,
   input   logic             rst_n_i,
@@ -32,7 +36,7 @@ module bpu
   logic [XLEN-OFFSET-1:0] btb_target;
 
   // Module instantiations
-  gshare u_gshare
+  gshare #(.HLEN(HLEN)) u_gshare
   (
     .clk_i          (clk_i),
     .rst_n_i        (rst_n_i),
@@ -43,7 +47,7 @@ module bpu
     .taken_o        (gshare_taken)
   );
 
-  btb u_btb
+  btb #(.BTB_BITS(BTB_BITS)) u_btb
   (
     .clk_i            (clk_i),
     .rst_n_i          (rst_n_i),

@@ -17,6 +17,9 @@ import mmm_pkg::*;
 
 /* verilator lint_off BLKLOOPINIT */
 module gshare
+#(
+  parameter HLEN = 4
+)
 (
   input   logic             clk_i,
   input   logic             rst_n_i,
