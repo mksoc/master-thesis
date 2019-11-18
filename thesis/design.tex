@@ -23,7 +23,7 @@ The latency of this stage is at least two clock cycles (see \cref{sec:ifu}); in 
 \subsection{Handshake signals}\label{sec:handshake}
 The communication between each stage is always bidirectional, because in case of a stall, caused for instance by a cache miss, by a full issue queue or by some other exceptional behavior down the pipeline, the \ac{PC} generation process must be interrupted along with the fetch. In order to do so, a handshake process handles the communication between each stage as well as between the instruction cache interface and the actual cache.
 
-This handshake mechanism is based on the {\smaller AXI} valid/ready protocol described below, even if it is not compliant with all the {\smaller AXI} specifications.
+This handshake mechanism is based on the AXI valid/ready protocol described below, even if it is not compliant with all the AXI specifications.
 
 In each communication the source of data generates a \emph{valid} signal to indicate that the information is available, while the destination generates a \emph{ready} signal to indicate that it can accept such information \cite[p.~A3-41]{axi}. The handshake takes place and the information is successfully exchanged only at the rising clock edge when both valid and ready are asserted. For example, in \cref{fig:axi}, the handshake happens at the third rising edge of the clock.
 \begin{figure}[hbt]
@@ -50,7 +50,7 @@ On the other hand (\cref{fig:axi_ready_valid}), a destination is allowed to wait
 \section{\acs{PC} gen stage}
 The selection of the next \ac{PC} is based on the following list of priorities, from highest to lowest:
 \begin{enumerate}
-  \item \textbf{Exception}\footnote{Or interrupt. The two terms can be used almost interchangeably in \riscv.}: if an exception occurs, the \ac{PC} gen stage will receive the next starting address as the base address present in the vector table provided by the {\smaller CSR} unit.
+  \item \textbf{Exception}\footnote{Or interrupt. The two terms can be used almost interchangeably in \riscv.}: if an exception occurs, the \ac{PC} gen stage will receive the next starting address as the base address present in the vector table provided by the CSR unit.
   \item \textbf{Misprediction}: if a resolved branch is discovered to have been mispredicted, then the \ac{PC} gen stage resumes execution from the correct target if the branch was actually taken, or from the next sequential address from the branch \ac{PC} if it was actually not taken.
   \item \textbf{Branch prediction}: if the \ac{BPU} predicts a taken branch for the current \ac{PC} then it provides this stage with the predicted target address (see \cref{sec:btb}), which will be fetched at the next cycle, thus allowing for zero penalty branches when predicted correctly.
   \item \textbf{Default assignment}: if none of the conditions before occur, then the next \ac{PC} is selected as usual as the next sequential address, which corresponds to the current \ac{PC}+4 for word-aligned 32-bit instructions.
@@ -242,7 +242,7 @@ The main difficulties reside in high number of possible combinations of events t
   \item \texttt{SEL\_IN\_BACKUP}: this state is the dual of \texttt{SEL\_IN\_LINE} meaning that the \acs{FSM} loops here when the issue queue is full and goes to \texttt{CACHE\_REQ} if the next instruction is not saved anywhere, but with the difference that, if the \texttt{here} signal is asserted, the next state is \texttt{SEL\_IN\_LINE}, where the instruction will be selected in the line register.
 \end{itemize}
 
-\subsubsection{Timing diagrams}
+\subsubsection{Timing diagrams}\label{sec:frontend_timings}
 To better understand the behavior of the fetch controller \acs{FSM}, a list of timing diagrams covering a number of possible scenarios is now presented.
 
 \begin{figure}[hbt]
@@ -323,7 +323,6 @@ The situation shown in \cref{fig:fetch08} is similar to the previous one, but th
 \end{figure}
 Finally, \cref{fig:fetch10} shows the last timing under analysis, that is the situation in which the issue is not ready when the instruction has to be selected inside the backup register. In similar manner to \cref{fig:fetch03}, here the stall does not cause any issues and the fetch resumes exactly as before when the queue turns ready again.
 
-\pagebreak
 \section{\acf{BPU}}
 As seen in \cref{fig:frontend}, the \ac{BPU} resides in the fetch stage and works in parallel with the \ac{IFU} on each address coming from the \ac{PC} gen stage. This unit, as shown in the high level scheme of \cref{fig:bpu-idea}, is composed of two main blocks:
 \begin{figure}[hbt]
@@ -416,7 +415,7 @@ To update the \ac{PHT} when a branch is resolved the correct 2-bit counter has t
 
 If branches were resolved \ooo, on the other hand, to restore the correct address to the \ac{PHT} the index at the moment of the prediction would need to be passed along in the pipeline to return at the moment of the resolution. \todo{So why in-order branches?}
 
-The initial version of the design also accounted for a column of valid bits in the \ac{PHT} to indicate if the prediction coming from each 2-bit counter is valid (i.e. if that 2-bit counter has already been used at least once). This is useful to prevent taken misprediction if the 2-bit counters are initialized in the weakly or strongly taken state. However, if the counters are instead initialized in a not taken state, then the first time they are accessed the prediction will always be ``not taken'' just as if the valid bit was included, so this bit becomes redundant and only wastes area. After a more thorough analysis, presented in \cref{sec:}, it was decided to remove the valid bits from the \ac{PHT}.
+The initial version of the design also accounted for a column of valid bits in the \ac{PHT} to indicate if the prediction coming from each 2-bit counter is valid (i.e. if that 2-bit counter has already been used at least once). This is useful to prevent taken misprediction if the 2-bit counters are initialized in the weakly or strongly taken state. However, if the counters are instead initialized in a not taken state, then the first time they are accessed the prediction will always be ``not taken'' just as if the valid bit was included, so this bit becomes redundant and only wastes area. After a more thorough analysis, presented in \cref{sec:gshare_bench}, it was decided to remove the valid bits from the \ac{PHT}.
 
 \subsection{\acf{BTB}}\label{sec:btb}
 \begin{figure}[hbt]

@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : area
+Design : bpu_HLEN4_BTB_BITS9
+Version: M-2016.12
+Date   : Sun Nov 17 11:11:23 2019
+****************************************
+
+Library(s) Used:
+
+    uk65lscllmvbbr_120c25_tc (File: /software/dk/umc65/Core-lib_LL_Multi-Voltage_Reg.Vt/synopsys/uk65lscllmvbbr_120c25_tc.db)
+
+Number of ports:                          789
+Number of nets:                        247589
+Number of cells:                       189238
+Number of combinational cells:         129807
+Number of sequential cells:             59429
+Number of macros/black boxes:               0
+Number of buf/inv:                      25742
+Number of references:                       7
+
+Combinational area:             324717.127916
+Buf/Inv area:                    42643.801490
+Noncombinational area:          512826.500019
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                837543.627935
+Total area:                 undefined
+1

@@ -1,0 +1,58 @@
+Information: Updating design information... (UID-85)
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : bpu_HLEN4_BTB_BITS2
+Version: M-2016.12
+Date   : Sun Nov 17 08:27:22 2019
+****************************************
+
+Operating Conditions: uk65lscllmvbbr_120c25_tc   Library: uk65lscllmvbbr_120c25_tc
+Wire Load Model Mode: top
+
+  Startpoint: pc_i[3] (input port clocked by clk_i)
+  Endpoint: pred_o[taken]
+            (output port clocked by clk_i)
+  Path Group: clk_i
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  bpu_HLEN4_BTB_BITS2
+                     wl0                   uk65lscllmvbbr_120c25_tc
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.50       0.50 f
+  pc_i[3] (in)                             0.00       0.50 f
+  u_btb/pc_i[3] (btb_BTB_BITS2)            0.00       0.50 f
+  u_btb/U290/Z (MXB4M1RA)                  0.08       0.58 f
+  u_btb/U110/Z (CKXOR2M4RA)                0.08       0.66 r
+  u_btb/U114/Z (ND4M8R)                    0.05       0.71 f
+  u_btb/U298/Z (NR2M6R)                    0.03       0.75 r
+  u_btb/U303/Z (ND4M6R)                    0.05       0.80 f
+  u_btb/U949/Z (NR2M4R)                    0.04       0.83 r
+  u_btb/hit_o (btb_BTB_BITS2)              0.00       0.83 r
+  U9/Z (AN2M6R)                            0.04       0.87 r
+  pred_o[taken] (out)                      0.00       0.87 r
+  data arrival time                                   0.87
+
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       -0.07      -0.07
+  output external delay                   -0.50      -0.57
+  data required time                                 -0.57
+  -----------------------------------------------------------
+  data required time                                 -0.57
+  data arrival time                                  -0.87
+  -----------------------------------------------------------
+  slack (VIOLATED)                                   -1.44
+
+
+1

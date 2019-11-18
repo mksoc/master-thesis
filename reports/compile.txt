@@ -1,0 +1,19 @@
+Information: Checking out the license 'DesignWare'. (SEC-104)
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | M-2016.12-DWBB_201612.0 |     *     |
+| Licensed DW Building Blocks        | Z-2007.03-DWBB_0704     |     *     |
+============================================================================
+
+
+Information: There are 261 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'btb_BTB_BITS10'
+Information: Added key list 'DesignWare' to design 'btb_BTB_BITS10'. (DDB-72)

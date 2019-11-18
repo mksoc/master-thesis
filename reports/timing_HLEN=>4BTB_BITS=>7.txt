@@ -1,0 +1,70 @@
+Information: Updating design information... (UID-85)
+Warning: Design 'bpu_HLEN4_BTB_BITS7' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : bpu_HLEN4_BTB_BITS7
+Version: M-2016.12
+Date   : Sun Nov 17 09:01:08 2019
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: uk65lscllmvbbr_120c25_tc   Library: uk65lscllmvbbr_120c25_tc
+Wire Load Model Mode: top
+
+  Startpoint: pc_i[4] (input port clocked by clk_i)
+  Endpoint: pred_o[taken]
+            (output port clocked by clk_i)
+  Path Group: clk_i
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  bpu_HLEN4_BTB_BITS7
+                     wl0                   uk65lscllmvbbr_120c25_tc
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.50       0.50 f
+  pc_i[4] (in)                             0.00       0.50 f
+  u_btb/pc_i[4] (btb_BTB_BITS7)            0.00       0.50 f
+  u_btb/U1578/Z (AN2M16RA)                 0.03       0.53 f
+  u_btb/U1555/Z (CKND2M12R)                0.02       0.55 r
+  u_btb/U135/Z (INVM24R)                   0.02       0.57 f
+  u_btb/U73/Z (BUFM32RA)                   0.06       0.64 f
+  u_btb/U134/Z (AOI22M2R)                  0.06       0.70 r
+  u_btb/U574/Z (AN2M4R)                    0.05       0.75 r
+  u_btb/U1762/Z (ND3M2R)                   0.04       0.79 f
+  u_btb/U757/Z (OAI21M4R)                  0.04       0.83 r
+  u_btb/U1575/Z (ND4M4R)                   0.05       0.88 f
+  u_btb/U162/Z (NR4M2R)                    0.08       0.96 r
+  u_btb/U748/Z (XOR2M3RA)                  0.07       1.03 r
+  u_btb/U783/Z (ND4M8R)                    0.05       1.08 f
+  u_btb/U711/Z (NR3M8R)                    0.04       1.12 r
+  u_btb/U847/Z (ND4M4R)                    0.04       1.16 f
+  u_btb/U846/Z (NR2M4R)                    0.04       1.20 r
+  u_btb/hit_o (btb_BTB_BITS7)              0.00       1.20 r
+  U7/Z (AN2M6R)                            0.04       1.24 r
+  pred_o[taken] (out)                      0.00       1.24 r
+  data arrival time                                   1.24
+
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       -0.07      -0.07
+  output external delay                   -0.50      -0.57
+  data required time                                 -0.57
+  -----------------------------------------------------------
+  data required time                                 -0.57
+  data arrival time                                  -1.24
+  -----------------------------------------------------------
+  slack (VIOLATED)                                   -1.81
+
+
+1

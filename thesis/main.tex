@@ -16,6 +16,7 @@
 \usepackage{amssymb}
 \usepackage{inconsolata}
 \usepackage{anyfontsize}
+\usepackage{siunitx}
 
 %%% Colors %%%
 \usepackage[dvipsnames,svgnames,x11names,hyperref,table]{xcolor}
@@ -53,8 +54,7 @@
 \usepackage{multirow}
 
 %%% Acronyms %%%
-\usepackage{relsize}
-\usepackage[printonlyused,nohyperlinks,smaller]{acronym}
+\usepackage[printonlyused,nohyperlinks]{acronym}
 
 %%% Code listing %%%
 \usepackage{listings}
@@ -64,11 +64,10 @@
   commentstyle=\color{gray}
 }
 
-%%% Subfigures %%%
-\usepackage{subfig}
-
-%%% Force figure position %%%
+%%% Figures %%%
 %\usepackage{float}
+\usepackage{subfig}
+\usepackage{rotating}
 
 %%% Utils (can be removed at the end) %%%
 \usepackage{lipsum}
@@ -119,10 +118,10 @@ Thanks everybody!
 %\lstlistoflistings
 
 %%% Chapters %%%
-\input{introduction.tex}
-\input{sota.tex}
-\input{bp.tex}
-\input{design.tex}
+% \input{introduction.tex}
+% \input{sota.tex}
+% \input{bp.tex}
+% \input{design.tex}
 \input{results.tex}
 \input{conclusions.tex}
 
