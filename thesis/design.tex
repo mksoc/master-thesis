@@ -62,9 +62,9 @@ The selection of the next \ac{PC} is based on the following list of priorities, 
   \caption{\acs{PC} gen stage diagram}
   \label{fig:pc_gen_stage}
 \end{figure}
-\Cref{fig:pc_gen_stage} shows the diagram of this stage. This and all the following diagrams in this document are color coded so that input signals are in {\color{input_blue}{blue}}, output signals are in {\color{output_red}{red}}, internal signals in black and bit widths are in {\color{width_gray}{gray}}.
+\Cref{fig:pc_gen_stage} shows the diagram of this stage. This and all the following diagrams in this document are color coded so that input signals are in {\color{input_blue}{blue}} and have the suffix \texttt{\_i}, output signals are in {\color{output_red}{red}} and have the suffix \texttt{\_o}, internal signals in black and bit widths are in {\color{width_gray}{gray}}.
 
-The heart of the \ac{PC} gen stage is the \texttt{pc\_priority\_enc} block, which is an encoder that takes as inputs all the status signals indicating a behavior different from the default and all the corresponding potential next \acp{PC}. In behavioral SystemVerilog (\cref{code:priorityenc}) it is described as a if-then-else chain, which gets synthesized as a list of cascading multiplexers implementing the desired priority\footnote{As opposed to the description using a case statement, which leads to a single parallel mux, with no priority encoded.}.
+The heart of the \ac{PC} gen stage is the \texttt{pc\_priority\_enc} block, which is an encoder that takes as inputs all the status signals indicating a behavior different from the default and all the corresponding potential next \acp{PC}. In behavioral SystemVerilog (\cref{code:priorityenc}) it is described as an if-then-else chain, which gets synthesized as a list of cascading multiplexers implementing the desired priority\footnote{As opposed to the description using a case statement, which leads to a single parallel mux, with no priority encoded.}.
 
 \begin{minipage}{\textwidth}
   \begin{lstlisting}[
@@ -93,7 +93,7 @@ The heart of the \ac{PC} gen stage is the \texttt{pc\_priority\_enc} block, whic
 
 In order to save resources, a single adder is used to generate both the next sequential address and the next \ac{PC} after a mispredicted not taken branch. A multiplexer driven by the misprediction signals is used to select the right operand.
 
-The final selected next \ac{PC} is fed into the \texttt{pc\_reg} output register for the later stages. The enable of this register is controlled by the signal \texttt{fetch\_ready\_i} which comes from the fetch stage and disables the \ac{PC} generation if a stall occurs. This is part of the handshake mechanism described in \cref{sec:handshake}, even if there is no \emph{valid} signal from the \ac{PC} gen stage, as it is redundant due to the fact that a valid new \ac{PC} is always present at the output register.
+The final chosen next \ac{PC} is fed into the \texttt{pc\_reg} output register for the later stages. The enable of this register is controlled by the signal \texttt{fetch\_ready} which comes from the fetch stage and disables the \ac{PC} generation if a stall occurs. This is part of the handshake mechanism described in \cref{sec:handshake}, even if there is no \emph{valid} signal from the \ac{PC} gen stage, as it is redundant due to the fact that a valid new \ac{PC} is always present at the output register.
 
 \section{Instruction cache interface}
 \todo{Talk about FSM coding style}
@@ -103,7 +103,7 @@ The final selected next \ac{PC} is fed into the \texttt{pc\_reg} output register
   \caption{Instruction cache interface module ports}
   \label{fig:icache_ifc-top}
 \end{figure}
-The instruction cache interface (\cref{fig:icache_ifc-top}) is responsible for translating the fetch requests coming from the \ac{IFU} into compliant valid/ready handshake signals for both address and data to the instruction cache. This unit basically provides two main benefits. First, it simplifies the control of the \ac{IFU}, by delegating the handshake process. Second, and more important, it provides an additional separation layer between the core frontend and the instruction cache with modularity in mind so that, should the cache block be modified, only this interface block needs to be updated, while the signals coming from the \ac{IFU} module would remain unchanged.
+The instruction cache interface (\cref{fig:icache_ifc-top}) is responsible for translating the fetch requests coming from the \ac{IFU} into compliant valid/ready handshake signals for both address and data to the instruction cache. This unit basically provides two main benefits. First, it simplifies the control of the \ac{IFU}, by delegating the handshake process. Second, and more important, it provides an additional separation layer between the core frontend and the instruction cache with modularity in mind so that, should the cache block be modified, only this interface unit needs to be updated, while the signals coming from the \ac{IFU} module would remain unchanged.
 
 \subsection{Datapath}
 \begin{figure}[hbt]
@@ -112,12 +112,13 @@ The instruction cache interface (\cref{fig:icache_ifc-top}) is responsible for t
   \caption{Instruction cache interface datapath}
   \label{fig:icache_ifc}
 \end{figure}
-For what concerns data signals, the line received from the is directly connected with the \texttt{cache\_out} output, as the instruction cache is responsible for keeping its output valid until the handshake occurs. On the other hand, no assumption can be done on the timing of the input address other than the fact that it will be valid in the same cycle when \texttt{read\_req} is asserted. For this reason, given the possibility for the \ac{PC} to change at the following cycle, the requested address must be retained inside the interface by means of a register, as shown in \cref{fig:icache_ifc}. The multiplexer selects the input address if the cache is ready to receive the address in the cycle the request is sent, otherwise it selects the registered address in the following cycles.
+For what concerns data signals, the line received from the instruction cache is directly connected with the \texttt{cache\_out} output, as it is the cache itself that is responsible for keeping its output valid until the handshake occurs. On the other hand, no assumption can be done on the timing of the input address other than the fact that it will be valid in the same cycle when \texttt{read\_req} is asserted. For this reason, given the possibility for the \ac{PC} to change at the following cycle, the requested address must be retained inside the interface by means of a register, as shown in \cref{fig:icache_ifc}. The multiplexer selects the input address if the cache is ready to receive the address in the cycle the request is sent, otherwise it selects the registered address in the following cycles.
 
+%%% HERE
 \subsection{Control \acs{FSM} and timing}
 \begin{figure}[hbt]
   \centering
-  \includegraphics[scale=.8]{img/icache_ifc_fsm.pdf}
+  \includegraphics[scale=1]{img/icache_ifc_fsm.pdf}
   \caption{Instruction cache interface \acs{FSM}}
   \label{fig:icache_ifc_fsm}
 \end{figure}
