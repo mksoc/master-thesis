@@ -1,12 +1,12 @@
 \chapter{Experimental results}
 This chapter presents the results obtained from the design, starting from functional verification of the correctness of the implementation, to synthesis and benchmarking. The entire design has been described in SystemVerilog using hierarchical modules and behavioral constructs when possible. This both helps readability and leaves to the EDA tools the freedom of performing optimizations.
 
-Each module has been verified locally using Verilator\footnote{\url{https://www.veripool.org/wiki/verilator}} for linting and Mentor ModelSim Intel \acs{FPGA} Starter Edition for simulation. Synthesis has been carried out with Synopsys Design Compiler, on the the VLSI server provided by Politecnico di Torino.
+Each module has been verified locally using Verilator\footnote{\url{https://www.veripool.org/wiki/verilator}} for linting and Mentor ModelSim Intel FPGA Starter Edition for simulation. Synthesis has been carried out with Synopsys Design Compiler, on the the VLSI server provided by Politecnico di Torino.
 
 \section{Simulation}
 The choice of tools mentioned above was made because one of the pros of Verilator is that it has been found to be more verbose than ModelSim when performing syntax check and lint, thus reducing the number of possible issues during compilation and simulation. Moreover, it is completely free and open source, which nicely couples with the philosophy of the LEN5 project.
 
-ModelSim was in the end chosen as the main simulation tool, because it is much more familiar to the designer and the limited time did not allow to learn Verilator for simulation, given that it uses a completely different paradigm, based on translating \acs{HDL} to C language and using testbench templates in C as well.
+ModelSim was in the end chosen as the main simulation tool, because it is much more familiar to the designer and the limited time did not allow to learn Verilator for simulation, given that it uses a completely different paradigm, based on translating HDL to C language and using testbench templates in C as well.
 
 The following sections focus on the test strategies used for the \ac{BPU}, which is almost as important as a standalone design, and the top-level frontend.
 
@@ -250,7 +250,7 @@ Synthesis has been carried out using Synopsys Design Compiler on the UMC \SI{65}
   \item Ideal clock definition (\texttt{set\_ideal\_network} and \texttt{set\_dont\_touch\_network}) in order to avoid optimizations on the clock tree, which has to be defined in later place and route stages, and remove warnings about its high fanout.
   \item Clock uncertainty (skew) \SI{0.07}{ns}
   \item Maximum input and output delay \SI{0.5}{ns}
-  \item Output load of a buffer on all ports (\texttt{BUFM10R}, \SI{2.1}{\pico\farad})
+  \item Output load of a buffer on all ports (\texttt{BUFM10R}, \SI{2.1}{\femto\farad})
   \item DC Expert compilation (\texttt{compile} command)
 \end{itemize}
 
@@ -267,6 +267,8 @@ The total area of the \ac{BPU} depends almost exclusively on the size of the gsh
   \label{fig:bpu_area}
 \end{figure}
 This effect is evident in \cref{fig:bpu_area}, which shows the synthesized values of total cell area, demonstrating the expected exponential growth (linear on this logarithmic $z$ axis) with respect to the length of the \ac{BTB} index. The history length has the effect of slightly increasing the cell area (bending the plane) for low values of the \ac{BTB} bits, but that effect vanishes for larger buffers and in the end the final area in the case of large \acp{BTB} is constant regardless of history length.
+
+Actually, for such large predictor structures, an implementation as register files becomes infeasible and the better way to synthesize them would be to use a memory compiler and a small SRAM to store the \ac{PHT} and \ac{BTB}.
 
 \subsubsection{Timing}
 For what concerns timing, the critical path was reported to be the \ac{BTB} and in particular the path going from the \ac{BTB} address part of the \ac{PC} to the \texttt{hit} signal, to the \texttt{taken} output. Presumably, this corresponds to the decoding network inferred to correctly select the \ac{BTB} entry. For this reason, \ac{BTB} size and thus the complexity of such decoder was consistently reported as the only timing critical part of the design, while no variation whatsoever was noted increasing the history bits.

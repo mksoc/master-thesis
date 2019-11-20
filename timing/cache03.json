@@ -1,7 +1,7 @@
 {"signal": 
 	[
     {"name": "clk",               "wave": "p.|."},
-    {"name": "state",             "wave": "==|.", "data": ["WAIT_ADDR", "WAIT_DATA                            "]},
+    {"name": "state",             "wave": "==|.", "data": ["WAIT_REQ", "WAIT_DATA                            "]},
     {"name": "read_req",          "wave": "1x|."},
     {"name": "pc",                "wave": "=x|.", "data": ["A0", "A1", "A2"]},
     {"name": "saved_pc",	      "wave": "x.|.", "data": ["A0", "A1", "A2"]},

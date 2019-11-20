@@ -1,3 +1,18 @@
 \chapter{Concluding remarks}
+This work provided a basic implementation of an \ooo processor, based on the \riscv \ac{ISA}. Although numeric results are not bad, for instance with the branch predictor reaching easily over 99\% accuracy, they are nowhere near the ones provided by modern state-of-the-art processor architectures, which offer much better performance for lower area. These processors, however, are the result of many years of incremental optimizations and advancements in technical know-how of industry leader companies. 
+
+The aim of LEN5 was never to compete with the giants, but to be an exploratory experiment able to provide valuable insights on the challenges that such complex designs pose and hopefully serve as the starting point for future \riscv projects.
 
 \section{Future work}
+From an architectural standpoint, there are a number of improvements that the frontend of LEN5 could benefit from, for example:
+\begin{itemize}
+  \item A better but more complex branch predictor could be implemented. For example, modern variations of the \ac{TAGE} predictor, such as \cite{parasanna17} and \cite{michaud18}, can achieve almost ten MPKI less than gshare for the same hardware budget.
+  \item Avoid stalling and pausing cache requests when the issue queue is busy, in order to save time on the next read and mask a potential cache miss latency.
+  \item Push to the issue queue more than one instruction in parallel, to increase the issue width.
+\end{itemize}
+
+In any case, the most important future developments concern putting together the final design by merging the three parts developed separately. Then, LEN5 could be used for teaching advanced processor architectures hands on, allowing to see every detail of the internal organization, which usually are well hidden in commercial products.
+
+Moreover, thanks to the many \ac{ISA} extensions of \riscv, LEN5 could also be improved for research applications, such as machine learning accelerators, by implementing dedicated vector and possibly matrix units.
+
+On a final personal note, my fellow designers and I hope that this first open processor experiment carried out at Politecnico di Torino will be able to become a relevant project within our university, with future students improving this basic design and exploring future applications and developments.
