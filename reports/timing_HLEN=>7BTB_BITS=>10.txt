@@ -1,0 +1,82 @@
+Information: Updating design information... (UID-85)
+Warning: Design 'bpu_HLEN7_BTB_BITS10' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : bpu_HLEN7_BTB_BITS10
+Version: M-2016.12
+Date   : Mon Nov 18 12:45:02 2019
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: uk65lscllmvbbr_120c25_tc   Library: uk65lscllmvbbr_120c25_tc
+Wire Load Model Mode: top
+
+  Startpoint: pc_i[4] (input port clocked by clk_i)
+  Endpoint: pred_o[taken]
+            (output port clocked by clk_i)
+  Path Group: clk_i
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  bpu_HLEN7_BTB_BITS10
+                     wl0                   uk65lscllmvbbr_120c25_tc
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.50       0.50 r
+  pc_i[4] (in)                             0.00       0.50 r
+  u_btb/pc_i[4] (btb_BTB_BITS10)           0.00       0.50 r
+  u_btb/U79/Z (INVM40R)                    0.00       0.50 f
+  u_btb/U3058/Z (AN2M16RA)                 0.03       0.54 f
+  u_btb/U1383/Z (CKND2M12R)                0.02       0.55 r
+  u_btb/U3559/Z (INVM12R)                  0.01       0.56 f
+  u_btb/U892/Z (BUFM12R)                   0.04       0.60 f
+  u_btb/U2948/Z (CKBUFM32R)                0.03       0.63 f
+  u_btb/U3049/Z (BUFM8R)                   0.04       0.67 f
+  u_btb/U895/Z (BUFM12R)                   0.04       0.71 f
+  u_btb/U22856/Z (BUFM2R)                  0.04       0.75 f
+  u_btb/U17903/Z (BUFM2R)                  0.08       0.83 f
+  u_btb/U163016/Z (AOI22M2R)               0.06       0.89 r
+  u_btb/U163012/Z (ND4M2R)                 0.05       0.94 f
+  u_btb/U163006/Z (OAI21M2R)               0.05       0.99 r
+  u_btb/U1551/Z (ND2M2R)                   0.04       1.03 f
+  u_btb/U1549/Z (NR2M4R)                   0.04       1.07 r
+  u_btb/U4247/Z (ND2M4R)                   0.03       1.10 f
+  u_btb/U4289/Z (NR2M8R)                   0.04       1.13 r
+  u_btb/U4117/Z (NR2B1M12RA)               0.02       1.15 f
+  u_btb/U3971/Z (NR2M8R)                   0.02       1.17 r
+  u_btb/U3890/Z (ND2M4R)                   0.02       1.19 f
+  u_btb/U3827/Z (XOR2M2RA)                 0.05       1.25 f
+  u_btb/U3797/Z (NR2M6R)                   0.03       1.27 r
+  u_btb/U1332/Z (ND4M4R)                   0.05       1.32 f
+  u_btb/U3442/Z (NR2M4R)                   0.04       1.36 r
+  u_btb/U3774/Z (ND2M4R)                   0.03       1.39 f
+  u_btb/U3416/Z (NR2M6R)                   0.02       1.42 r
+  u_btb/hit_o (btb_BTB_BITS10)             0.00       1.42 r
+  U6/Z (ND2M4R)                            0.02       1.44 f
+  U5/Z (CKINVM4R)                          0.02       1.45 r
+  pred_o[taken] (out)                      0.00       1.45 r
+  data arrival time                                   1.45
+
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       -0.07      -0.07
+  output external delay                   -0.50      -0.57
+  data required time                                 -0.57
+  -----------------------------------------------------------
+  data required time                                 -0.57
+  data arrival time                                  -1.45
+  -----------------------------------------------------------
+  slack (VIOLATED)                                   -2.02
+
+
+1

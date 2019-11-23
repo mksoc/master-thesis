@@ -1,0 +1,95 @@
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS7' with
+	the parameters "HLEN=13". (HDL-193)
+Warning:  ../src/gshare.sv:65: DEFAULT branch of CASE statement cannot be reached. (ELAB-311)
+
+Statistics for case statements in always block at line 59 in file
+	'../src/gshare.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            65            |    auto/auto     |
+===============================================
+Error:  ../src/gshare.sv:97: Loop exceeded maximum iteration limit. (ELAB-900)
+*** Presto compilation terminated with 1 errors. ***
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS7' with
+	the parameters "HLEN=13". (HDL-193)
+Warning: Unable to resolve reference 'gshare' in 'bpu_HLEN13_BTB_BITS7'. (LINK-5)
+Warning: Design 'bpu_HLEN13_BTB_BITS7' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Information: Updating design information... (UID-85)
+Warning: Design 'bpu_HLEN13_BTB_BITS7' contains 2 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : bpu_HLEN13_BTB_BITS7
+Version: M-2016.12
+Date   : Thu Nov 21 09:08:05 2019
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: uk65lscllmvbbr_120c25_tc   Library: uk65lscllmvbbr_120c25_tc
+Wire Load Model Mode: top
+
+  Startpoint: pc_i[5] (input port clocked by clk_i)
+  Endpoint: pred_o[taken]
+            (output port clocked by clk_i)
+  Path Group: clk_i
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  bpu_HLEN13_BTB_BITS7
+                     wl0                   uk65lscllmvbbr_120c25_tc
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.50       0.50 r
+  pc_i[5] (in)                             0.00       0.50 r
+  u_btb/pc_i[5] (btb_BTB_BITS7)            0.00       0.50 r
+  u_btb/U1643/Z (INVM20R)                  0.00       0.50 f
+  u_btb/U1649/Z (CKAN2M4R)                 0.04       0.55 f
+  u_btb/U1644/Z (AN2M16RA)                 0.05       0.60 f
+  u_btb/U269/Z (CKINVM16R)                 0.03       0.62 r
+  u_btb/U1397/Z (INVM8R)                   0.03       0.65 f
+  u_btb/U1417/Z (BUFM40RA)                 0.05       0.70 f
+  u_btb/U3393/Z (ND2M4R)                   0.02       0.73 r
+  u_btb/U3244/Z (ND2M4R)                   0.02       0.75 f
+  u_btb/U3245/Z (AOI21M4R)                 0.03       0.77 r
+  u_btb/U3246/Z (ND2M4R)                   0.02       0.79 f
+  u_btb/U577/Z (NR2M2R)                    0.04       0.83 r
+  u_btb/U53/Z (AOI21M3R)                   0.04       0.87 f
+  u_btb/U576/Z (NR2M4R)                    0.04       0.91 r
+  u_btb/U923/Z (ND3M4RA)                   0.04       0.95 f
+  u_btb/U922/Z (NR2M4R)                    0.03       0.98 r
+  u_btb/U2807/Z (XNR2M2RA)                 0.05       1.03 r
+  u_btb/U1304/Z (ND2M4R)                   0.02       1.05 f
+  u_btb/U2756/Z (NR2M6R)                   0.03       1.08 r
+  u_btb/U2749/Z (ND2M4R)                   0.03       1.10 f
+  u_btb/U2747/Z (NR2M6R)                   0.03       1.13 r
+  u_btb/U2/Z (ND2M6R)                      0.02       1.16 f
+  u_btb/U2743/Z (NR2M6R)                   0.02       1.18 r
+  u_btb/hit_o (btb_BTB_BITS7)              0.00       1.18 r
+  U6/Z (ND2M4R)                            0.02       1.20 f
+  U5/Z (CKINVM3R)                          0.02       1.22 r
+  pred_o[taken] (out)                      0.00       1.22 r
+  data arrival time                                   1.22
+
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       -0.07      -0.07
+  output external delay                   -0.50      -0.57
+  data required time                                 -0.57
+  -----------------------------------------------------------
+  data required time                                 -0.57
+  data arrival time                                  -1.22
+  -----------------------------------------------------------
+  slack (VIOLATED)                                   -1.79
+
+
+1

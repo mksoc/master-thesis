@@ -1,0 +1,80 @@
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS3' with
+	the parameters "HLEN=13". (HDL-193)
+Warning:  ../src/gshare.sv:65: DEFAULT branch of CASE statement cannot be reached. (ELAB-311)
+
+Statistics for case statements in always block at line 59 in file
+	'../src/gshare.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            65            |    auto/auto     |
+===============================================
+Error:  ../src/gshare.sv:97: Loop exceeded maximum iteration limit. (ELAB-900)
+*** Presto compilation terminated with 1 errors. ***
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS3' with
+	the parameters "HLEN=13". (HDL-193)
+Warning: Unable to resolve reference 'gshare' in 'bpu_HLEN13_BTB_BITS3'. (LINK-5)
+Warning: Design 'bpu_HLEN13_BTB_BITS3' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Information: Updating design information... (UID-85)
+Warning: There are infeasible paths detected in your design that were ignored during optimization. Please run 'report_timing -attributes' and/or 'create_qor_snapshot/query_qor_snapshot -infeasible_paths' to identify these paths.  (OPT-1721)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : bpu_HLEN13_BTB_BITS3
+Version: M-2016.12
+Date   : Thu Nov 21 08:36:49 2019
+****************************************
+
+Operating Conditions: uk65lscllmvbbr_120c25_tc   Library: uk65lscllmvbbr_120c25_tc
+Wire Load Model Mode: top
+
+  Startpoint: pc_i[3] (input port clocked by clk_i)
+  Endpoint: pred_o[taken]
+            (output port clocked by clk_i)
+  Path Group: clk_i
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  bpu_HLEN13_BTB_BITS3
+                     wl0                   uk65lscllmvbbr_120c25_tc
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.50       0.50 r
+  pc_i[3] (in)                             0.00       0.50 r
+  u_btb/pc_i[3] (btb_BTB_BITS3)            0.00       0.50 r
+  u_btb/U1273/Z (INVM48R)                  0.01       0.51 f
+  u_btb/U143/Z (ND3M16RA)                  0.02       0.53 r
+  u_btb/U142/Z (INVM48R)                   0.03       0.57 f
+  u_btb/U68/Z (AOI22M1R)                   0.05       0.62 r
+  u_btb/U195/Z (ND4M2R)                    0.06       0.68 f
+  u_btb/U19/Z (XOR2M3RA)                   0.07       0.75 r
+  u_btb/U218/Z (ND4M4R)                    0.05       0.80 f
+  u_btb/U226/Z (NR2M4R)                    0.03       0.83 r
+  u_btb/U216/Z (AN3M6R)                    0.06       0.89 r
+  u_btb/U62/Z (ND2M6R)                     0.02       0.91 f
+  u_btb/U127/Z (NR2M6R)                    0.03       0.94 r
+  u_btb/hit_o (btb_BTB_BITS3)              0.00       0.94 r
+  U6/Z (AN2M6R)                            0.04       0.98 r
+  pred_o[taken] (out)                      0.00       0.98 r
+  data arrival time                                   0.98
+
+  clock clk_i (rise edge)                  0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       -0.07      -0.07
+  output external delay                   -0.50      -0.57
+  data required time                                 -0.57
+  -----------------------------------------------------------
+  data required time                                 -0.57
+  data arrival time                                  -0.98
+  -----------------------------------------------------------
+  slack (VIOLATED)                                   -1.55
+
+
+1

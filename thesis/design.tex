@@ -191,7 +191,7 @@ All the instructions belonging to the same cache line have the same most signifi
 \end{equation*}
 So, to check whether two instructions belong to the same line, a comparison between the $64-N$ (or more generally $\texttt{XLEN}-N$, where \texttt{XLEN} is the parallelism of the processor) most significant bits of their addresses is sufficient. That is what the presence checker does as shown in \cref{fig:presence_check}.
 
-\subsection{Instruction selector}
+\subsection{Instruction selector}\label{sec:instrsel}
 \begin{figure}[hbt]
   \centering
   \includegraphics{img/instr_sel-top.pdf}
@@ -464,7 +464,7 @@ A unit that was not talked about until now and that is not shown in \cref{fig:fr
   \caption{Branch unit module ports}
   \label{fig:branch_unit-top}
 \end{figure}
-\Cref{fig:branch_unit-top} shows the interface ports of this unit. It receives the register operands \texttt{rs1} and \texttt{rs2}, the immediate field \texttt{imm} the branch type, encoded on three bits, and the prediction information from the corresponding reservation station, to and from which it communicates via the handshake signals \texttt{ops\_valid} and \texttt{ops\_ready} as usual.
+\Cref{fig:branch_unit-top} shows the interface ports of this unit. It receives the register operands \texttt{rs1} and \texttt{rs2}, the immediate field \texttt{imm}, the branch type, encoded on three bits, and the prediction information from the corresponding reservation station, to and from which it communicates via the handshake signals \texttt{ops\_valid} and \texttt{ops\_ready} as usual.
 
 Its outputs are the information on the branch resolution, which is passed forward to the commit stage and back to the frontend to update the \ac{BPU} and potentially stall in case of misprediction.
 
@@ -496,5 +496,5 @@ At the following clock cycle after the ALUs have obtained the results, the contr
   \caption{Branch unit control unit}
   \label{fig:branch_unit_fsm}
 \end{figure}
-The control unit of this module is a Moore machine that after reset starts waiting for valid operands from the reservation station in the \texttt{WAIT\_OPS} state. When they arrive, in the same clock cycle the datapath performs the required computation, so that according to the value of the control signals, the \acs{FSM} can move to one of the states named \texttt{{GOOD,BAD}\_{T,NT}}, based on whether there was misprediction and whether the branch was actually taken or not. In these states, the correct output signals are driven and then the state machine moves back to the waiting loop.
+The control unit of this module is a Moore machine that after reset starts waiting for valid operands from the reservation station in the \texttt{WAIT\_OPS} state. When they arrive, in the same clock cycle the datapath performs the required computation, so that according to the value of the control signals, the \acs{FSM} can move to one of the states named \texttt{\{GOOD,BAD\}\_\{T,NT\}}, based on whether there was misprediction and whether the branch was actually taken or not. In these states, the correct output signals are driven and then the state machine moves back to the waiting loop.
 \todo{Aggiungere timing dopo modifica}

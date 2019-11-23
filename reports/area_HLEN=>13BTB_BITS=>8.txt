@@ -1,0 +1,33 @@
+Warning: Design 'bpu_HLEN13_BTB_BITS8' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
+ 
+****************************************
+Report : area
+Design : bpu_HLEN13_BTB_BITS8
+Version: M-2016.12
+Date   : Thu Nov 21 09:52:19 2019
+****************************************
+
+Library(s) Used:
+
+    uk65lscllmvbbr_120c25_tc (File: /software/dk/umc65/Core-lib_LL_Multi-Voltage_Reg.Vt/synopsys/uk65lscllmvbbr_120c25_tc.db)
+
+Number of ports:                          590
+Number of nets:                        121759
+Number of cells:                        92713
+Number of combinational cells:          62758
+Number of sequential cells:             29954
+Number of macros/black boxes:               0
+Number of buf/inv:                      10547
+Number of references:                       5
+
+Combinational area:             158820.843856
+Buf/Inv area:                    16956.360585
+Noncombinational area:          258187.689955
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                417008.533810
+Total area:                 undefined
+
+Information: This design contains black box (unknown) components. (RPT-8)
+1

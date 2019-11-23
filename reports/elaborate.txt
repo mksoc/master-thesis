@@ -5,9 +5,9 @@ Loading db file '/software/synopsys/2016-17/RHELx86/SYN_2016.12/libraries/syn/st
 Running PRESTO HDLC
 Presto compilation completed successfully.
 Elaborated 1 design.
-Current design is now 'bpu_HLEN4_BTB_BITS10'.
-Information: Building the design 'gshare' instantiated from design 'bpu_HLEN4_BTB_BITS10' with
-	the parameters "HLEN=4". (HDL-193)
+Current design is now 'bpu_HLEN13_BTB_BITS9'.
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS9' with
+	the parameters "HLEN=13". (HDL-193)
 Warning:  ../src/gshare.sv:65: DEFAULT branch of CASE statement cannot be reached. (ELAB-311)
 
 Statistics for case statements in always block at line 59 in file
@@ -17,50 +17,29 @@ Statistics for case statements in always block at line 59 in file
 ===============================================
 |            65            |    auto/auto     |
 ===============================================
+Error:  ../src/gshare.sv:97: Loop exceeded maximum iteration limit. (ELAB-900)
+*** Presto compilation terminated with 1 errors. ***
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS9' with
+	the parameters "HLEN=13". (HDL-193)
+Information: Building the design 'btb' instantiated from design 'bpu_HLEN13_BTB_BITS9' with
+	the parameters "BTB_BITS=9". (HDL-193)
 
 Inferred memory devices in process
-	in routine gshare_HLEN4 line 44 in file
-		'../src/gshare.sv'.
+	in routine btb_BTB_BITS9 line 71 in file
+		'../src/btb.sv'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
-|     history_reg     | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
-===============================================================================
-
-Inferred memory devices in process
-	in routine gshare_HLEN4 line 95 in file
-		'../src/gshare.sv'.
-===============================================================================
-|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
-===============================================================================
-|      pht_q_reg      | Flip-flop |  32   |  Y  | N  | Y  | N  | N  | N  | N  |
+|      btb_q_reg      | Flip-flop | 59392 |  Y  | N  | Y  | N  | N  | N  | N  |
 ===============================================================================
 Statistics for MUX_OPs
 ======================================================
 | block name/line  | Inputs | Outputs | # sel inputs |
 ======================================================
-| gshare_HLEN4/65  |   16   |    2    |      4       |
-| gshare_HLEN4/112 |   16   |    1    |      4       |
+| btb_BTB_BITS9/89 |  512   |    1    |      9       |
+| btb_BTB_BITS9/89 |  512   |   53    |      9       |
+| btb_BTB_BITS9/90 |  512   |   62    |      9       |
 ======================================================
 Presto compilation completed successfully.
-Information: Building the design 'btb' instantiated from design 'bpu_HLEN4_BTB_BITS10' with
-	the parameters "BTB_BITS=10". (HDL-193)
-
-Inferred memory devices in process
-	in routine btb_BTB_BITS10 line 71 in file
-		'../src/btb.sv'.
-================================================================================
-|    Register Name    |   Type    | Width  | Bus | MB | AR | AS | SR | SS | ST |
-================================================================================
-|      btb_q_reg      | Flip-flop | 117760 |  Y  | N  | Y  | N  | N  | N  | N  |
-================================================================================
-Statistics for MUX_OPs
-=======================================================
-| block name/line   | Inputs | Outputs | # sel inputs |
-=======================================================
-| btb_BTB_BITS10/89 |  1024  |    1    |      10      |
-| btb_BTB_BITS10/89 |  1024  |   52    |      10      |
-| btb_BTB_BITS10/90 |  1024  |   62    |      10      |
-=======================================================
-Presto compilation completed successfully.
+Warning: Design 'bpu_HLEN13_BTB_BITS9' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
 1

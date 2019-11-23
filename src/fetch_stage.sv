@@ -16,6 +16,10 @@
 import mmm_pkg::*;
 
 module fetch_stage
+#(
+  parameter HLEN = 4,
+  parameter BTB_BITS = 4
+)
 (
   input   logic             clk_i,
   input   logic             rst_n_i,
@@ -98,7 +102,10 @@ module fetch_stage
   // ---------
   //    BPU
   // ---------
-  bpu u_bpu
+  bpu #(
+    .HLEN     (HLEN),
+    .BTB_BITS (BTB_BITS)
+  ) u_bpu
   (
     .clk_i    (clk_i),
     .rst_n_i  (rst_n_i),

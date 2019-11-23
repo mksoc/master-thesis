@@ -1,3 +1,4 @@
+Warning: Design 'bpu_HLEN13_BTB_BITS9' has '1' unresolved references. For more detailed information, use the "link" command. (UID-341)
 Information: Checking out the license 'DesignWare'. (SEC-104)
 Information: Evaluating DesignWare library utilization. (UISN-27)
 
@@ -9,11 +10,56 @@ Information: Evaluating DesignWare library utilization. (UISN-27)
 ============================================================================
 
 
-Information: There are 261 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+Information: There are 274 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
 
 
 
   Beginning Pass 1 Mapping
   ------------------------
-  Processing 'btb_BTB_BITS10'
-Information: Added key list 'DesignWare' to design 'btb_BTB_BITS10'. (DDB-72)
+  Processing 'btb_BTB_BITS9'
+Information: Added key list 'DesignWare' to design 'btb_BTB_BITS9'. (DDB-72)
+  Processing 'bpu_HLEN13_BTB_BITS9'
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS9' with
+	the parameters "HLEN=13". (HDL-193)
+Warning:  ../src/gshare.sv:65: DEFAULT branch of CASE statement cannot be reached. (ELAB-311)
+
+Statistics for case statements in always block at line 59 in file
+	'../src/gshare.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            65            |    auto/auto     |
+===============================================
+Error:  ../src/gshare.sv:97: Loop exceeded maximum iteration limit. (ELAB-900)
+*** Presto compilation terminated with 1 errors. ***
+Information: Building the design 'gshare' instantiated from design 'bpu_HLEN13_BTB_BITS9' with
+	the parameters "HLEN=13". (HDL-193)
+Warning: Unable to resolve reference 'gshare' in 'bpu_HLEN13_BTB_BITS9'. (LINK-5)
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Implementation Selection
+  ----------------------------------
+
+  Beginning Mapping Optimizations  (Medium effort)
+  -------------------------------
+Information: compile falsified 2864 infeasible paths. (OPT-1720)
+  Mapping Optimization (Phase 1)
+  Mapping Optimization (Phase 2)
+  Mapping Optimization (Phase 3)
+
+                                  TOTAL                                      
+   ELAPSED            WORST NEG   SETUP    DESIGN                            
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:38:32  992711.9   2724.25  663320.6 18844708.0                          
+    0:38:32  992711.9   2724.25  663320.6 18844708.0                          
+    0:39:06 1133365.7   2724.25  289733.9 18835252.0                          
+    0:39:10 1160441.6   2724.25  274780.6 18835242.0                          
+    0:39:16 1186578.7   2724.25  265145.2 18835234.0                          
+    0:43:40 1280648.9      2.05   92884.8       0.0                          
+    0:47:56 1206829.1      2.05  135724.2       0.0                          
+    0:47:56 1206829.1      2.05  135724.2       0.0                          
+    1:09:35 1206829.1      2.05  135724.2       0.0                          
+    1:09:40 1206829.1      2.05  135724.3       0.0                          

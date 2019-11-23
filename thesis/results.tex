@@ -255,7 +255,7 @@ Synthesis has been carried out using Synopsys Design Compiler on the UMC \SI{65}
 \end{itemize}
 
 \subsection{\acs{BPU}}
-The \ac{BPU} was synthesized in different configurations of history register length and \ac{BTB} size, in order to evaluate the effect of these parameters variations on the design metrics. In particular, from the considerations and the results obtained during benchmarking, the history length was varied between 2 and 16 bits and the \ac{BTB} index length from 2 to 12 bits. Given that the size of the \ac{BPU} grows exponentially with both these parameters, the syntheses, executed with a batch script, took several days to complete.
+The \ac{BPU} was synthesized in different configurations of history register length and \ac{BTB} size, in order to evaluate the effect of these parameters variations on the design metrics. In particular, from the considerations and the results obtained during benchmarking, the aim was to vary the history length between 2 and 16 bits and the \ac{BTB} index length from 2 to 12 bits. However, when trying to go past 12 bits of history and 10 for the \ac{BTB} index, Design Compiler could not sustain the exponential size of the register files and gave up with errors about exceeding the maximum loop iterations possible, nonetheless the results are still significant. Even then, the syntheses, executed with a batch script, took several days to complete.
 
 \subsubsection{Area}
 The total area of the \ac{BPU} depends almost exclusively on the size of the gshare \ac{PHT} and the \ac{BTB}, which are determined by the history length and the \ac{BTB} index bits. More specifically, given that each entry of the \ac{BTB} easily contains more than 100 bits compared to the 2 bits of a \ac{PHT} entry, the effect of the \ac{BTB} size will weigh 100 times more than the history length on the overall result. In other words, the length of the history register matters only with small \acp{BTB}, while it becomes negligible alongside large buffers.
@@ -284,3 +284,25 @@ For what concerns timing, the critical path was reported to be the \ac{BTB} and 
 In the end, the actual size of the \ac{BTB} must be chosen by keeping into account the design constraints both in terms of area budget and of target clock frequency, trading them off with the prediction accuracy and hit rate. History bits, on the other hand, do not influence timing at all.
 
 \subsection{Frontend}
+Given the considerations of the previous section, the entire frontend was then synthesized using 8 bits for both the \ac{BPU} history length and the \ac{BTB}, in order to have a configuration of average complexity. \Cref{tab:frontend} summarizes the results.
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+                                & \textbf{BPU only}           & \textbf{Whole frontend}     \\ \midrule
+    \textbf{Area}               & \SI{433233}{\micro\meter^2} & \SI{451526}{\micro\meter^2} \\ \midrule
+    \textbf{Maximum frequency}  & \SI{540}{MHz}               & \SI{537}{MHz}               \\
+    \bottomrule
+  \end{tabular}
+  \caption{Comparison of BPU and frontend synthesis results}
+  \label{tab:frontend}
+\end{table}
+
+It is evident that the \ac{BPU} is by far the limiting element of the frontend, both in terms of area and timing. Given its large data structures, the surrounding logic of the rest of the frontend becomes almost negligible and represents only 4\% of the total area for this parameter configuration.
+
+The same can be concluded for timing, as the decoding of the \ac{BTB} is unfortunately the critical path even in the whole frontend, which leads to almost the same clock frequency in both situations.
+
+To solve this issue, which could really hinder the performance of the entire design, a better implementation, as mentioned before, would employ a SRAM memory with optimized decoding networks instead of a slow large register file. This synthesis must be then only considered as indicative and preliminary, because more advanced tools and compilers could lead to better results.
+
+On a final note, the fact that the instruction selector multiplexer could become quite large with many cache instructions per line, as anticipated in \cref{sec:instrsel}, does not incur any issue. This is because this multiplexer grows linearly with the width of the cache line, so its effect is completely masked by the exponential growth of the \ac{BPU} structures.

@@ -5,7 +5,8 @@
   %libro,
   twoside,
   %numerazioneromana,
-  %cucitura=7mm
+  %cucitura=7mm,
+  english
 ]{toptesi}
 
 %%% Font %%%
@@ -71,7 +72,6 @@
 \usepackage{rotating}
 
 %%% Utils (can be removed at the end) %%%
-\usepackage{lipsum}
 \usepackage{todonotes} % pass option 'disable' to hide
 
 \begin{document}
@@ -82,6 +82,7 @@
 \TesiDiLaurea{Master Thesis}
 \CandidateName{Candidate}
 \AdvisorName{Supervisor}
+\def\Candidato{Candidate}
 
 \begin{frontespizio}
     %\ateneo{Politecnico di Torino}
@@ -119,12 +120,12 @@ Thanks everybody!
 %\lstlistoflistings
 
 %%% Chapters %%%
-% \input{introduction.tex}
-% \input{sota.tex}
-% \input{bp.tex}
+\input{introduction.tex}
+\input{sota.tex}
+\input{bp.tex}
 \input{design.tex}
-% \input{results.tex}
-% \input{conclusions.tex}
+\input{results.tex}
+\input{conclusions.tex}
 
 %%% Bibliography %%%
 \input{biblio.tex}
