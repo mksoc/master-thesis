@@ -97,20 +97,37 @@
 
 %%% Abstract %%%
 \begin{abstract}
-\riscv is a free and open source Instruction Set Architecture, which has sparked interest all over the community of computer architects, as it paves the way for a previously unseen era of extensible software and hardware design freedom. One of its main strength points is the vast modularity implemented in terms of different ISA extensions, which aim to cover a very broad range of applications. This allows designers to tailor the architecture according to their specific needs, without constraining them to support unnecessary instructions.
+\riscv is a free and open source Instruction Set Architecture, which has sparked interest all over the community of computer architects, as it paves the way for a previously unseen era of extensible software and hardware design freedom, being based on modular and optional ISA extensions, that allow designers to tailor the architecture to their specific needs.
 
-Being \riscv a relatively new ISA, a limited number of cores is available at the moment, and in particular very few of them are open sourced. So the main motivation for this work is the contribution to this open source hardware community, by means of the design of an Out-of-Order \riscv core as general purpose as possible.
+LEN5 is an an open source \riscv core implementing the RV64G instruction set (integer, multiply and divide, floating point and atomic operations), based on Tomasulo's algorithm to schedule its \ooo execution. This choice was made based on the fact that many modern microprocessor feature a dynamically scheduled pipeline, which offers the best performance and ILP exploitation at the cost, however, of high hardware complexity. This work in particular focuses on the frontend of LEN5, that is the part of the core responsible of generating addresses, predicting next directions and fetching instructions from memory to be issued to the execution stages.
 
-The core is a 64-bit processor, supporting the G extension, which is a short- hand for the base integer (I), multiply and divide (M), floating point (F) and atomic (A) extensions. One goal of this project, which will be carried out alongside two colleagues, is to eventually include support also for the operating system, by implementing the yet unstandardized Privileged ISA, for the experimental vector extension (V) and possibly for a matrix extension to be defined from scratch. These last design choices are motivated by the lack of open source cores supporting them, and the great advantage that such vectorized computation can provide in a world where the popularity and the performance needs of artificial intelligence and machine learning are ever-growing.
+The Instruction Fetch Unit (IFU) receives the current PC and interfaces with the instruction cache to read at the required address. Previously read cache lines are saved into line registers which reduce the total number of memory accesses, by allowing next sequential instructions to be immediately read from those registers. Moreover, this unit features a controller which handles both normal fetch operations and pipeline stalls in case of exceptional behavior, cache misses or busy issue queue.
 
-Moreover, the choice of designing an \ooo core arises mainly as all modern processors are of such kind, as it has been the best compromise to efficiently exploit instruction level parallelism for decades. The goal is to implement both instruction issue and execution to be performed Out-of-Order, because this allows the highest performance gain. This design choice, of course, comes with a series of implications that will need accurate analysis and bench- marking, possibly by keeping everything as parametric and modular as possible: branch prediction, instruction queue management, memory hierarchy and cache organization are just some examples.
+Another significant part of the frontend is the Branch Prediction Unit (BPU), which predicts the direction of branch instructions in order to continue fetching immediately from the next predicted path of instructions. In order to accomplish that, it features a gshare branch predictor, which employs a subset of bits of the current PC and a global history of branch outcomes to perform a prediction. Furthermore, along with branch \emph{direction}, also the branch \emph{destination} address is predicted thanks to a Branch Target Buffer (BTB), which is a small direct mapped cache storing the next address after taken branches, to allow for zero latency branch instructions.
 
-The final outcome of this work will be an in-depth exploration of the design space offered by such complex architectures, to actually experience firsthand the main issues and tradeoffs designers must face and to be prepared to offer a significant contribution to the state of the art of processor design. Moreover, the common hope is for this project to serve as the basis for future in-house development of a complete \riscv-based platform here at Politecnico di Torino. As mentioned above, the entire work will be open source and available on a GitHub repository.
+This work is intended as an exploration of such complex \ooo architectures, to actually experience firsthand the main issues and tradeoffs designers must face and to contribute to the growing panorama of open source cores. Moreover, the common hope is for this project to serve as the basis for future in-house development of a complete \riscv-based platform here at Politecnico di Torino, which could be relevant both in teaching and research. As mentioned before, the entire work will be open sourced and available in a GitHub repository.
 \end{abstract}
 
 %%% Acknowledgements %%%
+\italiano
 \ringraziamenti
-Thanks everybody!
+Ripensando al percorso che mi ha portato fino a questo punto, mi sento di ringraziare innanzitutto tutti i professori di cui ho avuto la possibilità di seguire i corsi per le conoscenze e le competenze che mi hanno aiutato ad acquisire e che saranno alla base della mia futura carriera. In particolare il professor Martina, per avermi dato la possibilità di lavorare a questo stimolante progetto e per aver ascoltato con pazienza i problemi con cui mi sono scontrato, sapendo sempre guidarmi verso la strada migliore.
+
+In seguito, un grazie è dovuto ad Andrea, che dal cuore della Silicon Valley ha avuto l’idea per questo progetto su \riscv e che ha sempre saputo gestire l’andamento dei lavori in modo corretto.
+
+Un grazie particolare lo rivolgo ai miei compagni di viaggio in questo progetto Matteo e Michele, così come a tutti gli altri miei colleghi di questi anni, perché tutte le volte che abbiamo consegnato un lavoro alle due di notte o abbiamo avuto paura insieme per gli esami il giorno dopo, alla fine ci siamo sempre divertiti e abbiamo vissuto momenti che ricorderemo per molto tempo.
+
+Fuori dal mondo accademico, grazie ai miei genitori per il supporto incondizionato che mi hanno sempre offerto in ogni mia scelta, per i saggi consigli che mi hanno saputo dispensare e per avermi messo in condizione di poter portare a termine al meglio questo percorso, concentrandomi esclusivamente sui miei obiettivi.
+
+Grazie a Noemi, per essere stata sempre al mio fianco e per aver gioito con me ad ogni successo, per avermi sempre messo di fronte la realtà in modo obiettivo quando mi sono trovato a prendere delle decisioni e per avermi sopportato nei momenti di massimo impegno.
+
+Infine grazie a tutti i nonni, quelli che non ci sono più, ma che avrebbero voluto vedermi ancora una volta raggiungere un traguardo così importante e quelli che ci sono ancora e che costantemente mi fanno sentire il loro amore e il loro appoggio.
+\vspace{1.5cm}
+\begin{flushright}
+  Marco
+\end{flushright}
+
+\english
 
 %%% Indices %%%
 \figurespagetrue
