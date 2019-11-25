@@ -96,7 +96,6 @@ In order to save resources, a single adder is used to generate both the next seq
 The final chosen next \ac{PC} is fed into the \texttt{pc\_reg} output register for the later stages. The enable of this register is controlled by the signal \texttt{fetch\_ready} which comes from the fetch stage and disables the \ac{PC} generation if a stall occurs. This is part of the handshake mechanism described in \cref{sec:handshake}, even if there is no \emph{valid} signal from the \ac{PC} gen stage, as it is redundant due to the fact that a valid new \ac{PC} is always present at the output register.
 
 \section{Instruction cache interface}
-\todo{Talk about FSM coding style}
 \begin{figure}[hbt]
   \centering
   \includegraphics{img/icache_ifc-top.pdf}
@@ -127,7 +126,7 @@ Read requests can be accepted both in the idle \texttt{WAIT\_REQ} state and in t
 
 \begin{figure}[hbt]
   \centering
-  \includegraphics{img/cache01.pdf}
+  \includegraphics[scale=.9]{img/cache01.pdf}
   \caption{Normal cache read}
   \label{fig:cache01}
 \end{figure}
@@ -148,6 +147,8 @@ Read requests can be accepted both in the idle \texttt{WAIT\_REQ} state and in t
   \label{fig:cache03}
 \end{figure}
 Finally, \cref{fig:cache03} shows the case of a cache miss, in which the \acs{FSM} waits while keeping \texttt{data\_ready} asserted. This state could potentially last for many clock cycles.
+
+From a description standpoint, this and all the following FSMs were coded in SystemVerilog using three different \texttt{always} blocks, one for the state update register, one for the state transition \texttt{case} and one for the output update \texttt{case}. This style, as evidenced in \cite{fsm}, leads both to less lines of code and better synthesis results in terms of timing and area.
 
 \section{\acf{IFU}}\label{sec:ifu}
 \begin{figure}[hbt]
@@ -225,6 +226,7 @@ Finally, the \texttt{fetch\_ready} signal is used in the \ac{PC} gen stage as th
 
 \subsubsection{Control unit}
 The main difficulties reside in high number of possible combinations of events that can occur simultaneously. For instance the issue queue could become full while a memory access is being completed, or on the other hand while an instruction is being selected in the line register. These different conditions must be handled in a per-case manner and that is what the Mealy machine of \cref{fig:fetch_controller_fsm} manages. Here follows a summary of the purpose of each state:
+\pagebreak
 \begin{figure}[hbt]
   \centering
   \includegraphics[width=\textwidth]{img/fetch_controller_fsm.pdf}
@@ -237,11 +239,12 @@ The main difficulties reside in high number of possible combinations of events t
   
   When the miss is resolved or immediately in case of hit, the state machine checks if the issue queue is ready. If it is, then the instruction is pushed and according to the output of the presence checker in that cycle, the next state transition is determined. If \texttt{here} is asserted, it means that the next instruction is present in the previously saved cache line, so at the next cycle, when the cache line just read will be saved in the line register and the old line register will be saved into the line backup register, the instruction will be selected from the backup register (move to \texttt{SEL\_IN\_BACKUP} state). If \texttt{will\_be\_here} is asserted, it means that the next instruction belongs to the same line that was just read, so it will be selected from the line register at the next cycle (move to \texttt{SEL\_IN\_LINE} state). If otherwise none of these signals are active, the next instruction belongs to a totally different cache line and so another memory access is necessary and the \acs{FSM} stays in this state.
 
-  If the issue queue is full or busy, on the other hand, the cache output will be saved to the line register at the next cycle nonetheless, but the handshake with the queue does not take place and the state machine transitions to \texttt{SEL\_IN\_LINE} where it loops until the issue queue becomes ready again. During this time, the line register will not be updated anymore as the fetch is stalled and no new memory accesses can be performed. \todo{Solution to mask a potential cache miss here?}
+  If the issue queue is full or busy, on the other hand, the cache output will be saved to the line register at the next cycle nonetheless, but the handshake with the queue does not take place and the state machine transitions to \texttt{SEL\_IN\_LINE} where it loops until the issue queue becomes ready again. During this time, the line register will not be updated anymore as the fetch is stalled and no new memory accesses can be performed.
   \item \texttt{SEL\_IN\_LINE}: as mentioned above, in case the issue queue is busy, the \acs{FSM} loops in this state waiting. On the contrary, if the queue is ready, an instruction is pushed and then the state machine remains in this state if \texttt{here} is active, signaling that the next instruction will be selected from the same saved line, or moves to \texttt{CACHE\_REQ} otherwise to initiate a new cache request.
   \item \texttt{SEL\_IN\_BACKUP}: this state is the dual of \texttt{SEL\_IN\_LINE} meaning that the \acs{FSM} loops here when the issue queue is full and goes to \texttt{CACHE\_REQ} if the next instruction is not saved anywhere, but with the difference that, if the \texttt{here} signal is asserted, the next state is \texttt{SEL\_IN\_LINE}, where the instruction will be selected in the line register.
 \end{itemize}
 
+\pagebreak
 For the same reasons stated before, it should be easy to understand how a Moore machine would not suit this particular control unit. As an example, with a Moore machine, from the conclusion of a cache read to the push of the selected instruction to the issue queue one clock cycle is bound to be wasted, which would hinder the throughput of the \ac{IFU}.
 
 \subsubsection{Timing diagrams}\label{sec:frontend_timings}
@@ -255,40 +258,51 @@ To better understand the behavior of the fetch controller \acs{FSM}, a list of t
 \end{figure}
 \Cref{fig:fetch01} shows the boot up after the reset, where the first \ac{PC} needs a cache access and then the next instructions are fetched consecutively from the same line, now saved in the line register. This is the most ideal situation, with a cache hit and the issue queue ready. It is clear from this timing diagram that the \texttt{fetch\_ready} signal must be active during \texttt{STARTUP} even if the outcome of the cache request is not yet known. If this were not the case, there would be a one-cycle penalty every time.
 
+\pagebreak
+\vspace*{2cm}
 \begin{figure}[!ht]
   \centering
-  \includegraphics[scale=.6]{img/fetch02.pdf}
+  \includegraphics[width=\textwidth]{img/fetch02.pdf}
   \caption{Startup and cache not ready/miss}
   \label{fig:fetch02}
 \end{figure}
+\vspace{1cm}
 \Cref{fig:fetch02} shows what happens in the same situation if instead the cache is not ready or has a miss. This timing also explains why the instruction cache interface must save the address as soon as a read request is sent: if the address handshake does not occur at the second cycle when the request is made, then the address changes at the next clock and the read would happen at the new, wrong address.
 
-\begin{figure}[!hb]
+\clearpage
+\vspace*{1.5cm}
+\begin{figure}[!ht]
   \centering
-  \includegraphics[scale=.7]{img/fetch06.pdf}
+  \includegraphics[width=\textwidth]{img/fetch06.pdf}
   \caption{Saved line change}
   \label{fig:fetch06}
 \end{figure}
+\vspace{1cm}
 \Cref{fig:fetch06} shows the situation of a cache line change. At first instructions are read consecutively from the line register, then a branch for example makes the \ac{PC} jump to a location stored on a different cache line, so a read request is sent, the cache hits and the current instruction is read from the cache output. After that, fetch continues sequentially with the other instructions in the new saved line.
 
-\pagebreak
+\clearpage
+\vspace*{1cm}
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth]{img/fetch09.pdf}
   \caption{Line backup register purpose}
   \label{fig:fetch09}
 \end{figure}
+\vspace{1cm}
 The purpose of the line backup register is demonstrated in the timing of \cref{fig:fetch09}, when there is a jump back and forth between two cache lines: the \texttt{here} signal during the cache request makes the next instruction be selected from the backup register. Of course, as already mentioned, the limitation of this solution is that if the same jump were to happen just right after this scenario (e.g. if \texttt{PC5} arrived again instead of \texttt{PC18} at the last shown cycle) even the backup register would have been overwritten and so a new memory access would be needed anyway.
 
+\clearpage
+\vspace*{1cm}
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth]{img/fetch07.pdf}
   \caption{Cache read pipeline}
   \label{fig:fetch07}
 \end{figure}
+\vspace{1cm}
 \Cref{fig:fetch07} illustrates the ability to reach a throughput of one instruction per clock cycle in a pipeline fashion even while reading from the instruction cache, if the memory hits on every address. In this case instructions are always selected directly from the cache output.
 
-\pagebreak
+
 \begin{figure}[!ht]
   \centering
   \includegraphics[scale=.65]{img/fetch03.pdf}
@@ -301,7 +315,7 @@ The purpose of the line backup register is demonstrated in the timing of \cref{f
   \caption{Issue queue not ready during request}
   \label{fig:fetch04}
 \end{figure}
-\Cref{fig:fetch03,fig:fetch04} show the issue queue being not ready at two different instants. In \cref{fig:fetch03} the stall happens when the instruction is selected inside the line register and in this case no problem arises, as the fetch stage is simply stalled and no register changes until the issue queue becomes ready again. If the queue is busy when an address would require a cache read, as in \cref{fig:fetch04}, then the actual memory access is delayed until this stall is resolved. \todo{C'mon, solve this} In both cases, the \texttt{fetch\_ready} signal is deasserted to prevent the generation of new program counters.
+\Cref{fig:fetch03,fig:fetch04} show the issue queue being not ready at two different instants. In \cref{fig:fetch03} the stall happens when the instruction is selected inside the line register and in this case no problem arises, as the fetch stage is simply stalled and no register changes until the issue queue becomes ready again. If the queue is busy when an address would require a cache read, as in \cref{fig:fetch04}, then the actual memory access is delayed until this stall is resolved. In both cases, the \texttt{fetch\_ready} signal is deasserted to prevent the generation of new program counters.
 
 \pagebreak
 \begin{figure}[!ht]
@@ -496,5 +510,4 @@ At the following clock cycle after the ALUs have obtained the results, the contr
   \caption{Branch unit control unit}
   \label{fig:branch_unit_fsm}
 \end{figure}
-The control unit of this module is a Moore machine that after reset starts waiting for valid operands from the reservation station in the \texttt{WAIT\_OPS} state. When they arrive, in the same clock cycle the datapath performs the required computation, so that according to the value of the control signals, the \acs{FSM} can move to one of the states named \texttt{\{GOOD,BAD\}\_\{T,NT\}}, based on whether there was misprediction and whether the branch was actually taken or not. In these states, the correct output signals are driven and then the state machine moves back to the waiting loop.
-\todo{Aggiungere timing dopo modifica}
+The control unit of this module is a Moore machine that after reset starts waiting for valid operands from the reservation station in the \texttt{WAIT\_OPS} state. When they arrive, in the same clock cycle the datapath performs the required computation, so that according to the value of the control signals, the \acs{FSM} can move to one of the states named \texttt{\{GOOD,BAD\}\_\{T,NT\}}, based on whether there was misprediction and whether the branch was actually taken or not. In these states, the correct output signals are driven and then the state machine moves back to the waiting loop. \todo{Add timing}

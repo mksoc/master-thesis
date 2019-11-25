@@ -138,6 +138,7 @@ Finally as an example, \cref{fig:fetch03_conv} shows the situation in which the 
   \label{fig:fetch03_conv}
 \end{sidewaysfigure}
 
+\pagebreak
 \section{\acs{BPU} benchmarking}
 As mentioned before, the \ac{BPU} is one of the most configurable units in the design, where a number of parameters and design choices come into play. For this reason a software model of this module written in C has been developed, to allow for fast and simple exploration and benchmarking. The model implements the same functions as the hardware and reads an input text file in the form
 \begin{center}
@@ -145,7 +146,7 @@ As mentioned before, the \ac{BPU} is one of the most configurable units in the d
 \end{center}
 where the address is expressed in hexadecimal base and the outcome as 1 or 0 if the branch is taken or not.
 
-After significant efforts spent to find a way to extract \emph{branch traces} (i.e.\ the list of branch instructions and their result) from a compiled program, no feasible solution was found and so a decision was made to rely on the trace files provided by a laboratory exercise of the course \emph{Principles in Computer Architecture} held by Prof. Dean Tullsen of the University of California San Diego, available on GitHub\footnote{\url{https://github.com/prodromou87/CSE240A}}. These traces come from a series of benchmarks taken from the SPEC suite, listed in \ref{tab:benchmarks}.
+After significant efforts spent to find a way to extract \emph{branch traces} (i.e.\ the list of branch instructions and their result) from a compiled program, no feasible solution was found and so a decision was made to rely on the trace files provided by a laboratory exercise of the course \emph{Principles in Computer Architecture} held by Prof. Dean Tullsen of the University of California San Diego, available on GitHub\footnote{\url{https://github.com/prodromou87/CSE240A}}. These traces come from a series of benchmarks taken from the SPEC suite, listed in \cref{tab:benchmarks}.
 \begin{table}[hbt]
   \centering
   \begin{tabular}{lll}
@@ -214,6 +215,7 @@ In order to find the best initial value for the counters, each benchmark was run
   \label{tab:init16}
 \end{table}
 
+\pagebreak
 The results are summarized in \cref{tab:init8,tab:init16} for 8-bit and 16-bit history registers respectively, where blue cells represent the best accuracy achieved for each benchmark. It is clear that there is no single best initialization value for the 2-bit counters, but it depends heavily on both the benchmark and the history length. Even the most complex initialization to be performed in hardware, which is the alternate one, results the best only in a single case. In any case, there is not much of a difference among the various initial values, so the conclusion is to choose the simplest one, namely the strongly not taken state (i.e.\ 2-bit counters at zero).
 
 \subsubsection{Valid bit}
@@ -223,7 +225,63 @@ From the results of the previous analysis, it is obvious that the valid bit serv
 In order to find the best trade-off between the predictor accuracy and the size of the \ac{PHT}, all the benchmarks were run at increasingly longer history length.
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=\textwidth]{img/pht_size.pdf}
+%   \includegraphics[width=\textwidth]{img/pht_size.pdf}
+    \begin{tikzpicture}
+      \pgfplotsset{
+        width=0.75\textwidth,
+        height=0.5\textwidth,  
+        scale only axis,
+        xmin=1, xmax=20,
+      }
+      \begin{axis}[
+        ymin=50, ymax=100,
+        yticklabel={$\pgfmathprintnumber{\tick}$\%},
+        axis y line*=left,
+        xlabel={Global history length (bits)},
+        ylabel={Predictor accuracy},
+        xtick={1,5,10,15,20},
+        ytick={50,60,70,80,90,100}
+      ]
+      
+        \addplot[color=plot_blue,mark=triangle*,very thick]
+          table [x={hLen},y={fp_1}] {data/hlen.dat}; \label{fp_1}
+        \addplot[color=plot_blue,mark=diamond*,very thick]
+          table [x={hLen},y={fp_2}] {data/hlen.dat}; \label{fp_2}
+        \addplot[color=plot_yellow,mark=triangle*,very thick]
+          table [x={hLen},y={int_1}] {data/hlen.dat}; \label{int_1}
+        \addplot[color=plot_yellow,mark=diamond*,very thick]
+          table [x={hLen},y={int_2}] {data/hlen.dat}; \label{int_2}
+        \addplot[color=plot_green,mark=triangle*,very thick]
+          table [x={hLen},y={mm_1}] {data/hlen.dat}; \label{mm_1}
+        \addplot[color=plot_green,mark=diamond*,very thick]
+          table [x={hLen},y={mm_2}] {data/hlen.dat}; \label{mm_2}
+      \end{axis}
+
+      \begin{axis}[
+        ymin=0, ymax=300,
+        axis y line*=right,
+        axis x line=none,
+        legend style={
+          at={(0.5,1.2)},
+          anchor=north,
+          legend columns=7
+        },
+        ylabel={PHT size (KB)},
+        ytick={50,100,150,200,250,300},
+      ]
+      
+        \addlegendimage{/pgfplots/refstyle=fp_1}\addlegendentry{\texttt{fp\_1}}
+        \addlegendimage{/pgfplots/refstyle=fp_2}\addlegendentry{\texttt{fp\_2}}
+        \addlegendimage{/pgfplots/refstyle=int_1}\addlegendentry{\texttt{int\_1}}
+        \addlegendimage{/pgfplots/refstyle=int_2}\addlegendentry{\texttt{int\_2}}
+        \addlegendimage{/pgfplots/refstyle=mm_1}\addlegendentry{\texttt{mm\_1}}
+        \addlegendimage{/pgfplots/refstyle=mm_2}\addlegendentry{\texttt{mm\_2}}
+
+        \addplot[color=plot_red,mark=triangle*,very thick]
+          table [x={hLen},y={phtSize}] {data/hlen.dat};
+          \addlegendentry{PHT size}
+      \end{axis}
+    \end{tikzpicture}
   \caption{History register length versus predictor accuracy}
   \label{fig:pht_size}
 \end{figure}
@@ -236,13 +294,81 @@ Given the exponential relation between the history register length and the area 
 The \ac{BTB} on its own does not contribute to improving the overall prediction accuracy, which only comes from the gshare predictor itself, but instead removes the target computation latency from branch instructions. Thus, its presence can only lower the prediction accuracy with respect to the baseline of the gshare alone, because additional mispredictions are inserted due to \ac{BTB} misses, which occur when the \ac{BTB} does not have a valid entry for the selected address. Moreover, mispredictions take place even when the stored target is then discovered as incorrect, but as mentioned above the available branch traces do not contain the correct target, so the software model does not take this kind of mispredictions into account, which contribute only in small part anyway.
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=\textwidth]{img/btb_size.pdf}
+  % \includegraphics[width=\textwidth]{img/btb_size.pdf}
+  \begin{tikzpicture}
+    \pgfplotsset{
+      width=0.75\textwidth,
+      height=0.5\textwidth,  
+      scale only axis,
+      xmin=1, xmax=16,
+    }
+    \begin{axis}[
+      ymin=0, ymax=500,
+      axis y line*=left,
+      xlabel={BTB index length (bits)},
+      ylabel={Mispredictions per kilo instructions (MPKI)},
+      xtick={2,4,6,8,10,12,14,16},
+      ytick={0,100,200,300,400,500}
+    ]
+    
+      \addplot[color=plot_blue,mark=triangle*,very thick]
+        table [x={btbBits},y={fp_1}] {data/btb.dat}; \label{fp_1}
+      \addplot[color=plot_blue,dashed]
+        coordinates {(1, 8.478) (16, 8.478)};
+      \addplot[color=plot_blue,mark=diamond*,very thick]
+        table [x={btbBits},y={fp_2}] {data/btb.dat}; \label{fp_2}
+      \addplot[color=plot_blue,dashed]
+        coordinates {(1, 11.548) (16, 11.548)};
+      \addplot[color=plot_yellow,mark=triangle*,very thick]
+        table [x={btbBits},y={int_1}] {data/btb.dat}; \label{int_1}
+      \addplot[color=plot_yellow,dashed]
+        coordinates {(1, 102.991) (16, 102.991)};
+      \addplot[color=plot_yellow,mark=diamond*,very thick]
+        table [x={btbBits},y={int_2}] {data/btb.dat}; \label{int_2}
+      \addplot[color=plot_yellow,dashed]
+        coordinates {(1, 4.301) (16, 4.301)};
+      \addplot[color=plot_green,mark=triangle*,very thick]
+        table [x={btbBits},y={mm_1}] {data/btb.dat}; \label{mm_1}
+      \addplot[color=plot_green,dashed]
+        coordinates {(1, 38.844) (16, 38.844)};
+      \addplot[color=plot_green,mark=diamond*,very thick]
+        table [x={btbBits},y={mm_2}] {data/btb.dat}; \label{mm_2}
+      \addplot[color=plot_green,dashed]
+        coordinates {(1, 78.179) (16, 78.179)};
+    \end{axis}
+
+    \begin{axis}[
+      ymin=0, ymax=1000,
+      axis y line*=right,
+      axis x line=none,
+      legend style={
+        at={(0.5,1.2)},
+        anchor=north,
+        legend columns=7
+      },
+      ylabel={PHT size (KB)},
+      ytick={250,500,750,1000},
+    ]
+    
+      \addlegendimage{/pgfplots/refstyle=fp_1}\addlegendentry{\texttt{fp\_1}}
+      \addlegendimage{/pgfplots/refstyle=fp_2}\addlegendentry{\texttt{fp\_2}}
+      \addlegendimage{/pgfplots/refstyle=int_1}\addlegendentry{\texttt{int\_1}}
+      \addlegendimage{/pgfplots/refstyle=int_2}\addlegendentry{\texttt{int\_2}}
+      \addlegendimage{/pgfplots/refstyle=mm_1}\addlegendentry{\texttt{mm\_1}}
+      \addlegendimage{/pgfplots/refstyle=mm_2}\addlegendentry{\texttt{mm\_2}}
+
+      \addplot[color=plot_red,mark=triangle*,very thick]
+        table [x={btbBits},y={btbSize}] {data/btb.dat};
+        \addlegendentry{BTB size}
+    \end{axis}
+  \end{tikzpicture}
   \caption{\acs{BTB} index size versus MPKI}
   \label{fig:btb_size}
 \end{figure}
 
 \Cref{fig:btb_size} shows the results of the benchmarks with varying length of the \ac{BTB} index expressed as the number of mispredictions per a thousand instructions (MPKI), where dashed lines represent the baseline without \ac{BTB} for each benchmark. Some programs, like \texttt{mm\_1} and \texttt{mm\_2} suffer significantly with small \acs{BTB} and have unacceptably high misprediction rates, while other, notably \texttt{int\_2} seem almost unaffected by the presence of the \ac{BTB}. Anyway, around 10 or 12 bits for the \ac{BTB} index, i.e.\ in the range \SI{15}{KB} to \SI{60}{KB}, most of the benchmark have reached a MPKI very close to the baseline. Going past these values does not seem to offer a significant improvement and thus becomes unadvisable, regardless of the area constraints.
 
+\pagebreak
 \section{Synthesis}
 Synthesis has been carried out using Synopsys Design Compiler on the UMC \SI{65}{nm} low leakage (L65LL) technology library. In order to get reproducible results, scripting was heavily used to input commands to the tool and some notable parameters and settings used in the process are listed below:
 \begin{itemize}
@@ -283,6 +409,7 @@ For what concerns timing, the critical path was reported to be the \ac{BTB} and 
 
 In the end, the actual size of the \ac{BTB} must be chosen by keeping into account the design constraints both in terms of area budget and of target clock frequency, trading them off with the prediction accuracy and hit rate. History bits, on the other hand, do not influence timing at all.
 
+\pagebreak
 \subsection{Frontend}
 Given the considerations of the previous section, the entire frontend was then synthesized using 8 bits for both the \ac{BPU} history length and the \ac{BTB}, in order to have a configuration of average complexity. \Cref{tab:frontend} summarizes the results.
 
@@ -303,6 +430,7 @@ It is evident that the \ac{BPU} is by far the limiting element of the frontend, 
 
 The same can be concluded for timing, as the decoding of the \ac{BTB} is unfortunately the critical path even in the whole frontend, which leads to almost the same clock frequency in both situations.
 
+\pagebreak
 To solve this issue, which could really hinder the performance of the entire design, a better implementation, as mentioned before, would employ a SRAM memory with optimized decoding networks instead of a slow large register file. This synthesis must be then only considered as indicative and preliminary, because more advanced tools and compilers could lead to better results.
 
 On a final note, the fact that the instruction selector multiplexer could become quite large with many cache instructions per line, as anticipated in \cref{sec:instrsel}, does not incur any issue. This is because this multiplexer grows linearly with the width of the cache line, so its effect is completely masked by the exponential growth of the \ac{BPU} structures.
