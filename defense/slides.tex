@@ -1,0 +1,63 @@
+\documentclass{beamer}
+\usetheme[
+  numbering=fraction,
+  background=light
+]{metropolis} % Use metropolis theme
+
+\usepackage[scale=2]{ccicons}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\title{Design of the frontend for LEN5,\\a RISC-V Out-of-Order processor}
+% \subtitle{Master's Degree in Electronic Engineering}
+% \date{December 11, 2019}
+% \author{Marco Andorno}
+% \institute{Politecnico di Torino}
+
+\makeatletter
+\setbeamertemplate{title page}{
+  \begin{minipage}[b][\paperheight]{\textwidth}
+    \vfill%
+    \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi
+    \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+    \usebeamertemplate*{title separator}
+    \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+    %\ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+    \ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+    \vfill
+    \vspace*{6cm}
+  \end{minipage}
+}
+\makeatother
+
+\begin{document}
+\begin{frame}[plain]
+  \maketitle
+  \begin{tikzpicture}[overlay, remember picture]
+    \node at (current page.center) {\includegraphics[width=4.5cm]{img/out.png}};
+    \node[left=1cm of current page.center,align=left] {\small Candidate:\\Marco Andorno};
+  \end{tikzpicture}
+\end{frame}
+\addtocounter{framenumber}{-1}
+
+\section{First Section}
+
+\begin{frame}{First Frame}
+  Hello, world!
+\end{frame}
+
+\begin{frame}{Credits}
+
+  Get the source of this theme and the demo presentation from
+
+  \begin{center}\url{github.com/matze/mtheme}\end{center}
+
+  The theme \emph{itself} is licensed under a
+  \href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  Attribution-ShareAlike 4.0 International License}.
+
+  \begin{center}\ccbysa\end{center}
+
+\end{frame}
+
+\end{document}
