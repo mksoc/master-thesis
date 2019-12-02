@@ -11,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{fontawesome}
+\usepackage{pgfplots}
 
 \newcommand{\slideheight}{85.58mm}
 \newcommand{\slidewidth}{128mm}
@@ -52,8 +53,28 @@
 
 \section{LEN5 overview}
 
-\begin{frame}{First Frame}
-  Hello, world!
+\begin{frame}{RISC-V}
+  \begin{figure}
+    \centering
+    \includegraphics[width=.7\textwidth]{img/riscv.png}
+  \end{figure}
+
+  \begin{itemize}[<+->]
+    \item Open source ISA, which allows for open source hardware.
+    \item Modular ISA, that provides extensions to tailor the architecture to the design needs.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Speculative out-of-order core}
+  Used in every modern high-performance processor, because it allows the best exploitation of ILP.
+  \pause
+
+  Based on three pillars:
+  \begin{enumerate}[<+->]
+    \item Dynamic pipeline scheduling
+    \item Branch prediction
+    \item Speculative execution
+  \end{enumerate}
 \end{frame}
 
 \section{Frontend design}
@@ -158,5 +179,173 @@
 \end{frame}
 
 \section{Results}
+
+\begin{frame}{Gshare accuracy vs. History bits}
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \pgfplotsset{
+        mlineplot,
+        width=0.75\textwidth,
+        height=0.5\textwidth,  
+        scale only axis,
+        xmin=1, xmax=20,
+      }
+      \begin{axis}[
+        ymin=50, ymax=100,
+        yticklabel={$\pgfmathprintnumber{\tick}$\%},
+        axis y line*=left,
+        ylabel={Predictor accuracy},
+        xlabel={Global history length (bits)},
+        xtick={1,5,10,15,20},
+        ytick={50,60,70,80,90,100}
+      ]
+      
+        \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
+          table [x={hLen},y={fp_1}] {../thesis/data/hlen.dat};
+        \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
+          table [x={hLen},y={fp_2}] {../thesis/data/hlen.dat};
+        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+          table [x={hLen},y={int_1}] {../thesis/data/hlen.dat};
+        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+          table [x={hLen},y={int_2}] {../thesis/data/hlen.dat};
+        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+          table [x={hLen},y={mm_1}] {../thesis/data/hlen.dat};
+        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+          table [x={hLen},y={mm_2}] {../thesis/data/hlen.dat};
+      \end{axis}
+
+      \begin{axis}[
+        ymin=0, ymax=300,
+        axis y line*=right,
+        axis x line=none,
+        grid=none,
+        ylabel={PHT size (KB)},
+        ytick={50,100,150,200,250,300},
+      ]
+
+        \addplot[color=TolLightRed,mark=*,mark size=1.3pt]
+          table [x={hLen},y={phtSize}] {../thesis/data/hlen.dat};
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Misprediction penalty vs. BTB size}
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \pgfplotsset{
+        mlineplot,
+        width=0.75\textwidth,
+        height=0.5\textwidth,  
+        scale only axis,
+        xmin=1, xmax=16,
+      }
+      \begin{axis}[
+        ymin=0, ymax=500,
+        axis y line*=left,
+        xlabel={BTB index length (bits)},
+        ylabel={MPKI},
+        xtick={2,4,6,8,10,12,14,16},
+        ytick={0,100,200,300,400,500}
+      ]
+      
+        \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={fp_1}] {../thesis/data/btb.dat};
+        \addplot[color=TolDarkBlue,dashed]
+          coordinates {(1, 8.478) (16, 8.478)};
+        \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={fp_2}] {../thesis/data/btb.dat};
+        \addplot[color=TolDarkBlue,dashed]
+          coordinates {(1, 11.548) (16, 11.548)};
+        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={int_1}] {../thesis/data/btb.dat};
+        \addplot[color=TolLightBrown,dashed]
+          coordinates {(1, 102.991) (16, 102.991)};
+        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={int_2}] {../thesis/data/btb.dat};
+        \addplot[color=TolLightBrown,dashed]
+          coordinates {(1, 4.301) (16, 4.301)};
+        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={mm_1}] {../thesis/data/btb.dat};
+        \addplot[color=TolLightGreen,dashed]
+          coordinates {(1, 38.844) (16, 38.844)};
+        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={mm_2}] {../thesis/data/btb.dat};
+        \addplot[color=TolLightGreen,dashed]
+          coordinates {(1, 78.179) (16, 78.179)};
+      \end{axis}
+
+      \begin{axis}[
+        ymin=0, ymax=1000,
+        axis y line*=right,
+        axis x line=none,
+        grid=none,
+        ylabel={BTB size (KB)},
+        ytick={250,500,750,1000},
+      ]
+
+        \addplot[color=TolLightRed,mark=*,mark size=1.3pt]
+          table [x={btbBits},y={btbSize}] {../thesis/data/btb.dat};
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Synthesis area results}
+  \begin{tikzpicture}[overlay, remember picture]
+    \node[below=\southsep of current page.south,anchor=south] {
+      \includegraphics[keepaspectratio,
+                        width=\slidewidth,
+                        height=\slideheight]{img/bpu_area.pdf}
+    };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Synthesis frequency results}
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        mlineplot,
+        width=0.75\textwidth,
+        height=0.5\textwidth,  
+        xlabel={BTB index length (bits)},
+        ylabel={$f_{max}$ (MHz)},
+        ymin=0, ymax=700
+      ]
+        \addplot coordinates {
+          (2,684.9)
+          (3,657.9)
+          (4,621.1)
+          (5,598.8)
+          (6,581.4)
+          (7,552.5)
+          (8,526.3)
+          (9,515.5)
+          (10,492.6)
+        };
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+
+  \begin{itemize}
+    \item Frequency depends only on the size of the BTB
+    \item The BTB address decoding network is the critical path of the whole design
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Concluding remarks}
+  \begin{itemize}[<+->]
+    \item Even if results are not top-class, this exploratory work proved insightful.
+    \item Useful in teaching, to explore firsthand a real implementation of an out-of-order processor.
+    \item Academic potential, thanks to ISA extensions for parallel workloads (e.g. machine learning algorithms).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[standout]
+  Thank you for your attention!
+\end{frame}
 
 \end{document}
