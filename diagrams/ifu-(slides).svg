@@ -674,9 +674,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="305.90779"
-     inkscape:cy="148.17768"
+     inkscape:zoom="7.919596"
+     inkscape:cx="402.37295"
+     inkscape:cy="40.182562"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -704,7 +704,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1140,12 +1140,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:3.52777767px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke:none;stroke-width:0.213;stroke-miterlimit:4;stroke-dasharray:none"
-       x="103.39944"
+       x="102.43055"
        y="147.58823"
        id="text2844-6-9-7"><tspan
          sodipodi:role="line"
          id="tspan2842-7-1-5"
-         x="103.39944"
+         x="102.43055"
          y="147.58823"
          style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:3.52777767px;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#0000c8;fill-opacity:1;stroke-width:0.213;stroke-miterlimit:4;stroke-dasharray:none">issue_ready_i</tspan></text>
     <text

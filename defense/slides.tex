@@ -60,13 +60,13 @@
   \end{figure}
 
   \begin{itemize}[<+->]
-    \item Open source ISA, which allows for open source hardware.
-    \item Modular ISA, that provides extensions to tailor the architecture to the design needs.
+    \item \textbf{Open source} ISA, which allows for open source hardware.
+    \item \textbf{Modular} ISA, that provides extensions to tailor the architecture to the design needs.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Speculative out-of-order core}
-  Used in every modern high-performance processor, because it allows the best exploitation of ILP.
+  Used in every modern high-performance processor, because it allows the best \textbf{exploitation of ILP}.
   \pause
 
   Based on three pillars:
@@ -75,6 +75,8 @@
     \item Branch prediction
     \item Speculative execution
   \end{enumerate}
+
+  \onslide<+->{LEN5 uses \textbf{Tomasulo's algorithm}, with its distributed control approach.}
 \end{frame}
 
 \section{Frontend design}
@@ -187,7 +189,7 @@
       \pgfplotsset{
         mlineplot,
         width=0.75\textwidth,
-        height=0.5\textwidth,  
+        height=0.45\textwidth,  
         scale only axis,
         xmin=1, xmax=20,
       }
@@ -203,15 +205,18 @@
       
         \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
           table [x={hLen},y={fp_1}] {../thesis/data/hlen.dat};
+          \label{fp}
         \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
           table [x={hLen},y={fp_2}] {../thesis/data/hlen.dat};
-        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightBrown,mark=diamond*,mark size=1.3pt]
           table [x={hLen},y={int_1}] {../thesis/data/hlen.dat};
-        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+          \label{int}
+        \addplot[color=TolLightBrown,mark=diamond*,mark size=1.3pt]
           table [x={hLen},y={int_2}] {../thesis/data/hlen.dat};
-        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightGreen,mark=triangle*,mark size=1.3pt]
           table [x={hLen},y={mm_1}] {../thesis/data/hlen.dat};
-        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+          \label{mm}
+        \addplot[color=TolLightGreen,mark=triangle*,mark size=1.3pt]
           table [x={hLen},y={mm_2}] {../thesis/data/hlen.dat};
       \end{axis}
 
@@ -222,10 +227,20 @@
         grid=none,
         ylabel={PHT size (KB)},
         ytick={50,100,150,200,250,300},
+        legend style={
+          at={(0.5,1.2)},
+          anchor=north,
+          legend columns=4
+        }
       ]
+
+        \addlegendimage{/pgfplots/refstyle=fp}\addlegendentry{FP benchmarks}
+        \addlegendimage{/pgfplots/refstyle=int}\addlegendentry{INT benchmarks}
+        \addlegendimage{/pgfplots/refstyle=mm}\addlegendentry{MM benchmarks}
 
         \addplot[color=TolLightRed,mark=*,mark size=1.3pt]
           table [x={hLen},y={phtSize}] {../thesis/data/hlen.dat};
+          \addlegendentry{PHT size}
       \end{axis}
     \end{tikzpicture}
   \end{figure}
@@ -238,7 +253,7 @@
       \pgfplotsset{
         mlineplot,
         width=0.75\textwidth,
-        height=0.5\textwidth,  
+        height=0.45\textwidth,  
         scale only axis,
         xmin=1, xmax=16,
       }
@@ -253,25 +268,28 @@
       
         \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
           table [x={btbBits},y={fp_1}] {../thesis/data/btb.dat};
+          \label{fp}
         \addplot[color=TolDarkBlue,dashed]
           coordinates {(1, 8.478) (16, 8.478)};
         \addplot[color=TolDarkBlue,mark=*,mark size=1.3pt]
           table [x={btbBits},y={fp_2}] {../thesis/data/btb.dat};
         \addplot[color=TolDarkBlue,dashed]
           coordinates {(1, 11.548) (16, 11.548)};
-        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightBrown,mark=diamond*,mark size=1.3pt]
           table [x={btbBits},y={int_1}] {../thesis/data/btb.dat};
+          \label{int}
         \addplot[color=TolLightBrown,dashed]
           coordinates {(1, 102.991) (16, 102.991)};
-        \addplot[color=TolLightBrown,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightBrown,mark=diamond*,mark size=1.3pt]
           table [x={btbBits},y={int_2}] {../thesis/data/btb.dat};
         \addplot[color=TolLightBrown,dashed]
           coordinates {(1, 4.301) (16, 4.301)};
-        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightGreen,mark=triangle*,mark size=1.3pt]
           table [x={btbBits},y={mm_1}] {../thesis/data/btb.dat};
+          \label{mm}
         \addplot[color=TolLightGreen,dashed]
           coordinates {(1, 38.844) (16, 38.844)};
-        \addplot[color=TolLightGreen,mark=*,mark size=1.3pt]
+        \addplot[color=TolLightGreen,mark=triangle*,mark size=1.3pt]
           table [x={btbBits},y={mm_2}] {../thesis/data/btb.dat};
         \addplot[color=TolLightGreen,dashed]
           coordinates {(1, 78.179) (16, 78.179)};
@@ -284,23 +302,28 @@
         grid=none,
         ylabel={BTB size (KB)},
         ytick={250,500,750,1000},
+        legend style={
+          at={(0.5,1.2)},
+          anchor=north,
+          legend columns=4
+        }
       ]
+
+        \addlegendimage{/pgfplots/refstyle=fp}\addlegendentry{FP benchmarks}
+        \addlegendimage{/pgfplots/refstyle=int}\addlegendentry{INT benchmarks}
+        \addlegendimage{/pgfplots/refstyle=mm}\addlegendentry{MM benchmarks}
 
         \addplot[color=TolLightRed,mark=*,mark size=1.3pt]
           table [x={btbBits},y={btbSize}] {../thesis/data/btb.dat};
+          \addlegendentry{BTB size}
       \end{axis}
     \end{tikzpicture}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Synthesis area results}
-  \begin{tikzpicture}[overlay, remember picture]
-    \node[below=\southsep of current page.south,anchor=south] {
-      \includegraphics[keepaspectratio,
-                        width=\slidewidth,
-                        height=\slideheight]{img/bpu_area.pdf}
-    };
-  \end{tikzpicture}
+  Total cell area grows \textbf{exponentially} with the length of the \textbf{global history} and of the \textbf{BTB index} ($z$ axis in log scale).
+  \includegraphics[scale=.5]{img/bpu_area.pdf}
 \end{frame}
 
 \begin{frame}{Synthesis frequency results}
@@ -332,15 +355,33 @@
 
   \begin{itemize}
     \item Frequency depends only on the size of the BTB
-    \item The BTB address decoding network is the critical path of the whole design
+    \item The BTB address \textbf{decoding network is the critical path} of the whole design
   \end{itemize}
 \end{frame}
 
+\section{Wrap-up}
+
 \begin{frame}{Concluding remarks}
+  Frontend design:
   \begin{itemize}[<+->]
-    \item Even if results are not top-class, this exploratory work proved insightful.
-    \item Useful in teaching, to explore firsthand a real implementation of an out-of-order processor.
-    \item Academic potential, thanks to ISA extensions for parallel workloads (e.g. machine learning algorithms).
+    \item Address generation
+    \item Instruction fetch unit
+    \item Branch prediction unit
+  \end{itemize}
+
+  \onslide<+->{Insightful \textbf{exploratory work}, with several applications:}
+  \begin{itemize}[<+->]
+    \item Teaching and research
+    \item High-performance computing
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Future work}
+  Possible improvements:
+  \begin{itemize}[<+->]
+    \item More advanced branch prediction
+    \item SRAM data structures
+    \item ISA extensions
   \end{itemize}
 \end{frame}
 

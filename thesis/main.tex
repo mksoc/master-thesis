@@ -5,7 +5,7 @@
   %libro,
   twoside,
   %numerazioneromana,
-  %cucitura=7mm,
+  cucitura=7mm,
   english
 ]{toptesi}
 
@@ -78,7 +78,7 @@
 \pgfplotsset{width=10cm,compat=1.9}
 
 %%% Utils (can be removed at the end) %%%
-\usepackage{todonotes} % pass option 'disable' to hide
+% \usepackage{todonotes} % pass option 'disable' to hide
 
 \begin{document}
 \english 
@@ -94,12 +94,15 @@
     %\ateneo{Politecnico di Torino}
     \logosede[30mm]{img/polito_logo.png}
     \corsodilaurea{Electronic Engineering}
-    \titolo{Design of the frontend for LEN5, a RISC-V Out-of-Order processor}
+    \titolo{Design of the frontend for LEN5,\\a RISC-V Out-of-Order processor}
     %\sottotitolo{Sottotitolo}
     \relatore{Prof. Maurizio \textsc{Martina}}
     \sedutadilaurea{Academic year 2018-2019}
     \candidato{Marco \textsc{Andorno}}    
 \end{frontespizio}
+
+\shipout\null
+\stepcounter{page}
 
 %%% Abstract %%%
 \begin{abstract}
@@ -114,12 +117,15 @@ Another significant part of the frontend is the Branch Prediction Unit (BPU), wh
 This work is intended as an exploration of such complex \ooo architectures, to actually experience firsthand the main issues and tradeoffs designers must face and to contribute to the growing panorama of open source cores. Moreover, the common hope is for this project to serve as the basis for future in-house development of a complete \riscv-based platform here at Politecnico di Torino, which could be relevant both in teaching and research. As mentioned before, the entire work will be open sourced and available in a GitHub repository.
 \end{abstract}
 
+\shipout\null
+\stepcounter{page}
+
 %%% Acknowledgements %%%
 \italiano
 \ringraziamenti
 Ripensando al percorso che mi ha portato fino a questo punto, mi sento di ringraziare innanzitutto tutti i professori di cui ho avuto la possibilità di seguire i corsi per le conoscenze e le competenze che mi hanno aiutato ad acquisire e che saranno alla base della mia futura carriera. In particolare il professor Martina, per avermi dato la possibilità di lavorare a questo stimolante progetto e per aver ascoltato con pazienza i problemi con cui mi sono scontrato, sapendo sempre guidarmi verso la strada migliore.
 
-In seguito, un grazie è dovuto ad Andrea, che dal cuore della Silicon Valley ha avuto l’idea per questo progetto su \riscv e che ha sempre saputo gestire l’andamento dei lavori in modo corretto.
+In seguito, un grazie è dovuto ad Andrea, che dal cuore della Silicon Valley ha avuto l'idea per questo progetto su \riscv e che ha sempre saputo gestire l'andamento dei lavori in modo corretto.
 
 Un grazie particolare lo rivolgo ai miei compagni di viaggio in questo progetto Matteo e Michele, così come a tutti gli altri miei colleghi di questi anni, perché tutte le volte che abbiamo consegnato un lavoro alle due di notte o abbiamo avuto paura insieme per gli esami il giorno dopo, alla fine ci siamo sempre divertiti e abbiamo vissuto momenti che ricorderemo per molto tempo.
 
@@ -127,11 +133,15 @@ Fuori dal mondo accademico, grazie ai miei genitori per il supporto incondiziona
 
 Grazie a Noemi, per essere stata sempre al mio fianco e per aver gioito con me ad ogni successo, per avermi sempre messo di fronte la realtà in modo obiettivo quando mi sono trovato a prendere delle decisioni e per avermi sopportato nei momenti di massimo impegno.
 
-Infine grazie a tutti i nonni, quelli che non ci sono più, ma che avrebbero voluto vedermi ancora una volta raggiungere un traguardo così importante e quelli che ci sono ancora e che costantemente mi fanno sentire il loro amore e il loro appoggio.
+Infine grazie a tutti i nonni, quelli che non ci sono più, ma che avrebbero voluto vedermi ancora una volta raggiungere un traguardo così importante, e quelli che ci sono ancora e che costantemente mi fanno sentire il loro amore e il loro appoggio.
 \vspace{1.5cm}
 \begin{flushright}
   Marco
 \end{flushright}
+
+\newpage
+\thispagestyle{empty} % empty
+\mbox{}
 
 \english
 
